@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="None">
+  
+  <link rel="shortcut icon" href="img/favicon.ico">
+  <title>Home - PaddleSlim Docs</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Home";
+    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="js/jquery-2.1.1.min.js" defer></script>
+  <script src="js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="." class="icon icon-home"> PaddleSlim Docs</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href=".">Home</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#paddleslim">PaddleSlim</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#_1">功能</a></li>
+        
+            <li><a class="toctree-l3" href="#_2">安装</a></li>
+        
+            <li><a class="toctree-l3" href="#_3">使用</a></li>
+        
+            <li><a class="toctree-l3" href="#_4">贡献与反馈</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">教程</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="tutorials/quant_post_demo/">离线量化</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="tutorials/quant_aware_demo/">量化训练</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="tutorials/quant_embedding_demo/">Embedding量化</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="tutorials/nas_demo/">SA搜索</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">API</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="api/quantization_api/">量化</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="api/prune_api/">剪枝</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="api/analysis_api/">敏感度分析</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="api/single_distiller_api/">蒸馏</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="api/nas_api/">SA搜索</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="api/search_space/">搜索空间</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href=".">PaddleSlim Docs</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Home</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="paddleslim">PaddleSlim</h1>
+<p>PaddleSlim是PaddlePaddle框架的一个子模块，主要用于压缩图像领域模型。在PaddleSlim中，不仅实现了目前主流的网络剪枝、量化、蒸馏三种压缩策略，还实现了超参数搜索和小模型网络结构搜索功能。在后续版本中，会添加更多的压缩策略，以及完善对NLP领域模型的支持。</p>
+<h2 id="_1">功能</h2>
+<ul>
+<li>模型剪裁</li>
+<li>支持通道均匀模型剪裁（uniform pruning)</li>
+<li>基于敏感度的模型剪裁</li>
+<li>
+<p>基于进化算法的自动模型剪裁三种方式</p>
+</li>
+<li>
+<p>量化训练</p>
+</li>
+<li>在线量化训练（training aware）</li>
+<li>离线量化（post training）</li>
+<li>
+<p>支持对权重全局量化和Channel-Wise量化</p>
+</li>
+<li>
+<p>蒸馏</p>
+</li>
+<li>
+<p>轻量神经网络结构自动搜索（Light-NAS）</p>
+</li>
+<li>支持基于进化算法的轻量神经网络结构自动搜索（Light-NAS）</li>
+<li>支持 FLOPS / 硬件延时约束</li>
+<li>支持多平台模型延时评估</li>
+</ul>
+<h2 id="_2">安装</h2>
+<p>安装PaddleSlim前，请确认已正确安装Paddle1.6版本或更新版本。Paddle安装请参考：<a href="https://www.paddlepaddle.org.cn/install/quick">Paddle安装教程</a>。</p>
+<ul>
+<li>安装develop版本</li>
+</ul>
+<div class="codehilite"><pre><span></span>git clone https://github.com/PaddlePaddle/PaddleSlim.git
+cd PaddleSlim
+python setup.py install
+</pre></div>
+
+
+<ul>
+<li>安装官方发布的最新版本</li>
+</ul>
+<div class="codehilite"><pre><span></span>pip install paddleslim -i https://pypi.org/simple
+</pre></div>
+
+
+<ul>
+<li>安装历史版本</li>
+</ul>
+<p>请点击<a href="https://pypi.org/project/paddleslim/#history">pypi.org</a>查看可安装历史版本。</p>
+<h2 id="_3">使用</h2>
+<ul>
+<li><a href="doc/api_guide.md">API文档</a>：API使用介绍，包括<a href="">蒸馏</a>、<a href="">剪裁</a>、<a href="">量化</a>和<a href="">模型结构搜索</a>。</li>
+<li><a href="doc/demo_guide.md">示例</a>：基于mnist和cifar10等简单分类任务的模型压缩示例，您可以通过该部分快速体验和了解PaddleSlim的功能。</li>
+<li><a href="">实践教程</a>：经典模型的分析和压缩实验教程。</li>
+<li><a href="">模型库</a>：经过压缩的分类、检测、语义分割模型，包括权重文件、网络结构文件和性能数据。</li>
+<li><a href="">Paddle检测库</a>：介绍如何在检测库中使用PaddleSlim。</li>
+<li><a href="">Paddle分割库</a>：介绍如何在分割库中使用PaddleSlim。</li>
+<li><a href="">PaddleLite</a>：介绍如何使用预测库PaddleLite部署PaddleSlim产出的模型。</li>
+</ul>
+<h2 id="_4">贡献与反馈</h2>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tutorials/quant_post_demo/" class="btn btn-neutral float-right" title="离线量化">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+        <span style="margin-left: 15px"><a href="tutorials/quant_post_demo/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '.';</script>
+    <script src="js/theme.js" defer></script>
+      <script src="mathjax-config.js" defer></script>
+      <script src="MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
+      <script src="search/main.js" defer></script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 1.0.4
+Build Date UTC : 2019-12-16 13:47:19
+-->
