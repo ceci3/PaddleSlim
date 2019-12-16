@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>离线量化 - PaddleSlim Docs</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "\u79bb\u7ebf\u91cf\u5316";
+    var mkdocs_page_input_path = "tutorials/quant_post_demo.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> PaddleSlim Docs</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../index.md">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">教程</span>
+    <ul class="subnav">
+                <li class=" current">
+                    
+    <a class="current" href="./">离线量化</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#_1">离线量化示例</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#_2">接口介绍</a></li>
+        
+            <li><a class="toctree-l4" href="#_3">分类模型的离线量化流程</a></li>
+        
+        </ul>
+    
+
+    </ul>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../quant_aware_demo/">量化训练</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../quant_embedding_demo/">Embedding量化</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../nas_demo/">SA搜索</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">API</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../api/quantization_api/">量化</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../api/prune_api/">剪枝</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../api/analysis_api/">敏感度分析</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../api/single_distiller_api/">蒸馏</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../api/nas_api/">SA搜索</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../api/search_space/">搜索空间</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">PaddleSlim Docs</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>教程 &raquo;</li>
+        
+      
+    
+    <li>离线量化</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="_1">离线量化示例</h1>
+<p>本示例介绍如何使用离线量化接口<code>paddleslim.quant.quant_post</code>来对训练好的分类模型进行离线量化, 该接口无需对模型进行训练就可得到量化模型，减少模型的存储空间和显存占用。</p>
+<h2 id="_2">接口介绍</h2>
+<p>请参考 <a href='../../../paddleslim/quant/quantization_api_doc.md'>量化API文档</a>。</p>
+<h2 id="_3">分类模型的离线量化流程</h2>
+<h3 id="_4">准备数据</h3>
+<p>在当前文件夹下创建<code>data</code>文件夹，将<code>imagenet</code>数据集解压在<code>data</code>文件夹下，解压后<code>data</code>文件夹下应包含以下文件：
+- <code>'train'</code>文件夹，训练图片
+- <code>'train_list.txt'</code>文件
+- <code>'val'</code>文件夹，验证图片
+- <code>'val_list.txt'</code>文件</p>
+<h3 id="_5">准备需要量化的模型</h3>
+<p>因为离线量化接口只支持加载通过<code>fluid.io.save_inference_model</code>接口保存的模型，因此如果您的模型是通过其他接口保存的，那需要先将模型进行转化。本示例将以分类模型为例进行说明。</p>
+<p>首先在<a href="https://github.com/PaddlePaddle/models/tree/develop/PaddleCV/image_classification#%E5%B7%B2%E5%8F%91%E5%B8%83%E6%A8%A1%E5%9E%8B%E5%8F%8A%E5%85%B6%E6%80%A7%E8%83%BD">imagenet分类模型</a>中下载训练好的<code>mobilenetv1</code>模型。</p>
+<p>在当前文件夹下创建<code>'pretrain'</code>文件夹，将<code>mobilenetv1</code>模型在该文件夹下解压，解压后的目录为<code>pretrain/MobileNetV1_pretrained</code></p>
+<h3 id="_6">导出模型</h3>
+<p>通过运行以下命令可将模型转化为离线量化接口可用的模型：</p>
+<div class="codehilite"><pre><span></span>python export_model.py --model &quot;MobileNet&quot; --pretrained_model ./pretrain/MobileNetV1_pretrained --data imagenet
+</pre></div>
+
+
+<p>转化之后的模型存储在<code>inference_model/MobileNet/</code>文件夹下，可看到该文件夹下有<code>'model'</code>, <code>'weights'</code>两个文件。</p>
+<h3 id="_7">离线量化</h3>
+<p>接下来对导出的模型文件进行离线量化，离线量化的脚本为<a href="./quant_post.py">quant_post.py</a>，脚本中使用接口<code>paddleslim.quant.quant_post</code>对模型进行离线量化。运行命令为：</p>
+<div class="codehilite"><pre><span></span>python quant_post.py --model_path ./inference_model/MobileNet --save_path ./quant_model_train/MobileNet --model_filename model --params_filename weights
+</pre></div>
+
+
+<ul>
+<li><code>model_path</code>: 需要量化的模型坐在的文件夹</li>
+<li><code>save_path</code>: 量化后的模型保存的路径</li>
+<li><code>model_filename</code>: 如果需要量化的模型的参数文件保存在一个文件中，则设置为该模型的模型文件名称，如果参数文件保存在多个文件中，则不需要设置。</li>
+<li><code>params_filename</code>: 如果需要量化的模型的参数文件保存在一个文件中，则设置为该模型的参数文件名称，如果参数文件保存在多个文件中，则不需要设置。</li>
+</ul>
+<p>运行以上命令后，可在<code>${save_path}</code>下看到量化后的模型文件和参数文件。</p>
+<blockquote>
+<p>使用的量化算法为<code>'KL'</code>, 使用训练集中的160张图片进行量化参数的校正。</p>
+</blockquote>
+<h3 id="_8">测试精度</h3>
+<p>使用<a href="./eval.py">eval.py</a>脚本对量化前后的模型进行测试，得到模型的分类精度进行对比。</p>
+<p>首先测试量化前的模型的精度，运行以下命令：</p>
+<div class="codehilite"><pre><span></span>python eval.py --model_path ./inference_model/MobileNet --model_name model --params_name weights
+</pre></div>
+
+
+<p>精度输出为:</p>
+<div class="codehilite"><pre><span></span>top1_acc/top5_acc= [0.70913923 0.89548034]
+</pre></div>
+
+
+<p>使用以下命令测试离线量化后的模型的精度：</p>
+<div class="codehilite"><pre><span></span>python eval.py --model_path ./quant_model_train/MobileNet
+</pre></div>
+
+
+<p>精度输出为</p>
+<div class="codehilite"><pre><span></span>top1_acc/top5_acc= [0.70141864 0.89086477]
+</pre></div>
+
+
+<p>从以上精度对比可以看出，对<code>mobilenet</code>在<code>imagenet</code>上的分类模型进行离线量化后 <code>top1</code>精度损失为<code>0.77%</code>， <code>top5</code>精度损失为<code>0.46%</code>. </p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../quant_aware_demo/" class="btn btn-neutral float-right" title="量化训练">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+        <span style="margin-left: 15px"><a href="../quant_aware_demo/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../mathjax-config.js" defer></script>
+      <script src="../../MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
+      <script src="../../search/main.js" defer></script>
+
+</body>
+</html>

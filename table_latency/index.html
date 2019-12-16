@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>硬件延时评估表 - PaddleSlim Docs</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "\u786c\u4ef6\u5ef6\u65f6\u8bc4\u4f30\u8868";
+    var mkdocs_page_input_path = "table_latency.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> PaddleSlim Docs</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../index.md">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">教程</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../tutorials/quant_post_demo/">离线量化</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../tutorials/quant_aware_demo/">量化训练</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../tutorials/quant_embedding_demo/">Embedding量化</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../tutorials/nas_demo/">SA搜索</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">API</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../api/quantization_api/">量化</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../api/prune_api/">剪枝</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../api/analysis_api/">敏感度分析</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../api/single_distiller_api/">蒸馏</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../api/nas_api/">SA搜索</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../api/search_space/">搜索空间</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">PaddleSlim Docs</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>硬件延时评估表</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="_1">硬件延时评估表</h1>
+<p>硬件延时评估表用于快速评估一个模型在特定硬件环境和推理引擎上的推理速度。
+该文档主要用于定义PaddleSlim支持的硬件延时评估表的格式。</p>
+<h2 id="_2">概述</h2>
+<p>硬件延时评估表中存放着所有可能的操作对应的延时信息，该表中的一个操作包括操作类型和操作参数，比如：操作类型可以是<code>conv2d</code>，对应的操作参数有输入特征图的大小、卷积核个数、卷积核大小等。
+给定操作的延时依赖于硬件环境和推理引擎。</p>
+<h2 id="_3">整体格式</h2>
+<p>硬件延时评估表以文件或多行字符串的形式保存。</p>
+<p>硬件延时评估表第一行保存版本信息，后续每行为一个操作和对应的延时信息。</p>
+<h2 id="_4">版本信息</h2>
+<p>版本信息以英文字符逗号分割，内容依次为硬件环境名称、推理引擎名称和时间戳。</p>
+<ul>
+<li>
+<p><strong>硬件环境名称：</strong> 用于标识硬件环境，可以包含计算架构类型、版本号等信息。</p>
+</li>
+<li>
+<p><strong>推理引擎名称：</strong> 用于标识推理引擎，可以包含推理引擎名称、版本号、优化选项等信息。</p>
+</li>
+<li>
+<p><strong>时间戳：</strong> 该评估表的创建时间。</p>
+</li>
+</ul>
+<h2 id="_5">操作信息</h2>
+<p>操作信息字段之间以逗号分割。操作信息与延迟信息之间以制表符分割。</p>
+<h3 id="conv2d">conv2d</h3>
+<p><strong>格式</strong></p>
+<div class="codehilite"><pre><span></span>op_type,flag_bias,flag_relu,n_in,c_in,h_in,w_in,c_out,groups,kernel,padding,stride,dilation\tlatency
+</pre></div>
+
+
+<p><strong>字段解释</strong></p>
+<ul>
+<li><strong>op_type(str)</strong> - 当前op类型。</li>
+<li><strong>flag_bias (int)</strong> - 是否有 bias（0：无，1：有）。</li>
+<li><strong>flag_relu (int)</strong> - 是否有 relu（0：无，1：有）。</li>
+<li><strong>n_in (int)</strong> - 输入 Tensor 的批尺寸 (batch size)。</li>
+<li><strong>c_in (int)</strong> - 输入 Tensor 的通道 (channel) 数。</li>
+<li><strong>h_in (int)</strong> - 输入 Tensor 的特征高度。</li>
+<li><strong>w_in (int)</strong> - 输入 Tensor 的特征宽度。</li>
+<li><strong>c_out (int)</strong> - 输出 Tensor 的通道 (channel) 数。</li>
+<li><strong>groups (int)</strong> - 卷积二维层（Conv2D Layer）的组数。</li>
+<li><strong>kernel (int)</strong> - 卷积核大小。</li>
+<li><strong>padding (int)</strong> - 填充 (padding) 大小。</li>
+<li><strong>stride (int)</strong> - 步长 (stride) 大小。</li>
+<li><strong>dilation (int)</strong> - 膨胀 (dilation) 大小。</li>
+<li><strong>latency (float)</strong> - 当前op的延时时间</li>
+</ul>
+<h3 id="activation">activation</h3>
+<p><strong>格式</strong></p>
+<div class="codehilite"><pre><span></span>op_type,n_in,c_in,h_in,w_in\tlatency
+</pre></div>
+
+
+<p><strong>字段解释</strong></p>
+<ul>
+<li><strong>op_type(str)</strong> - 当前op类型。</li>
+<li><strong>n_in (int)</strong> - 输入 Tensor 的批尺寸 (batch size)。</li>
+<li><strong>c_in (int)</strong> - 输入 Tensor 的通道 (channel) 数。</li>
+<li><strong>h_in (int)</strong> - 输入 Tensor 的特征高度。</li>
+<li><strong>w_in (int)</strong> - 输入 Tensor 的特征宽度。</li>
+<li><strong>latency (float)</strong> - 当前op的延时时间</li>
+</ul>
+<h3 id="batch_norm">batch_norm</h3>
+<p><strong>格式</strong></p>
+<div class="codehilite"><pre><span></span>op_type,active_type,n_in,c_in,h_in,w_in\tlatency
+</pre></div>
+
+
+<p><strong>字段解释</strong></p>
+<ul>
+<li><strong>op_type(str)</strong> - 当前op类型。</li>
+<li><strong>active_type (string)</strong> - 激活函数类型，包含：relu, prelu, sigmoid, relu6, tanh。</li>
+<li><strong>n_in (int)</strong> - 输入 Tensor 的批尺寸 (batch size)。</li>
+<li><strong>c_in (int)</strong> - 输入 Tensor 的通道 (channel) 数。</li>
+<li><strong>h_in (int)</strong> - 输入 Tensor 的特征高度。</li>
+<li><strong>w_in (int)</strong> - 输入 Tensor 的特征宽度。</li>
+<li><strong>latency (float)</strong> - 当前op的延时时间</li>
+</ul>
+<h3 id="eltwise">eltwise</h3>
+<p><strong>格式</strong></p>
+<div class="codehilite"><pre><span></span>op_type,n_in,c_in,h_in,w_in\tlatency
+</pre></div>
+
+
+<p><strong>字段解释</strong></p>
+<ul>
+<li><strong>op_type(str)</strong> - 当前op类型。</li>
+<li><strong>n_in (int)</strong> - 输入 Tensor 的批尺寸 (batch size)。</li>
+<li><strong>c_in (int)</strong> - 输入 Tensor 的通道 (channel) 数。</li>
+<li><strong>h_in (int)</strong> - 输入 Tensor 的特征高度。</li>
+<li><strong>w_in (int)</strong> - 输入 Tensor 的特征宽度。</li>
+<li><strong>latency (float)</strong> - 当前op的延时时间</li>
+</ul>
+<h3 id="pooling">pooling</h3>
+<p><strong>格式</strong></p>
+<div class="codehilite"><pre><span></span>op_type,flag_global_pooling,n_in,c_in,h_in,w_in,kernel,padding,stride,ceil_mode,pool_type\tlatency
+</pre></div>
+
+
+<p><strong>字段解释</strong></p>
+<ul>
+<li><strong>op_type(str)</strong> - 当前op类型。</li>
+<li><strong>flag_global_pooling (int)</strong> - 是否为全局池化（0：不是，1：是）。</li>
+<li><strong>n_in (int)</strong> - 输入 Tensor 的批尺寸 (batch size)。</li>
+<li><strong>c_in (int)</strong> - 输入 Tensor 的通道 (channel) 数。</li>
+<li><strong>h_in (int)</strong> - 输入 Tensor 的特征高度。</li>
+<li><strong>w_in (int)</strong> - 输入 Tensor 的特征宽度。</li>
+<li><strong>kernel (int)</strong> - 卷积核大小。</li>
+<li><strong>padding (int)</strong> - 填充 (padding) 大小。</li>
+<li><strong>stride (int)</strong> - 步长 (stride) 大小。</li>
+<li><strong>ceil_mode (int)</strong> - 是否用 ceil 函数计算输出高度和宽度。0 表示使用 floor 函数，1 表示使用 ceil 函数。</li>
+<li><strong>pool_type (int)</strong> - 池化类型，其中 1 表示 pooling_max，2 表示 pooling_average_include_padding，3 表示 pooling_average_exclude_padding。</li>
+<li><strong>latency (float)</strong> - 当前op的延时时间</li>
+</ul>
+<h3 id="softmax">softmax</h3>
+<p><strong>格式</strong></p>
+<div class="codehilite"><pre><span></span>op_type,axis,n_in,c_in,h_in,w_in\tlatency
+</pre></div>
+
+
+<p><strong>字段解释</strong></p>
+<ul>
+<li><strong>op_type(str)</strong> - 当前op类型。</li>
+<li><strong>axis (int)</strong> - 执行 softmax 计算的维度索引，应该在 [−1，rank − 1] 范围内，其中 rank 是输入变量的秩。</li>
+<li><strong>n_in (int)</strong> - 输入 Tensor 的批尺寸 (batch size)。</li>
+<li><strong>c_in (int)</strong> - 输入 Tensor 的通道 (channel) 数。</li>
+<li><strong>h_in (int)</strong> - 输入 Tensor 的特征高度。</li>
+<li><strong>w_in (int)</strong> - 输入 Tensor 的特征宽度。</li>
+<li><strong>latency (float)</strong> - 当前op的延时时间</li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../mathjax-config.js" defer></script>
+      <script src="../MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>蒸馏 - PaddleSlim Docs</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "\u84b8\u998f";
+    var mkdocs_page_input_path = "api/single_distiller_api.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> PaddleSlim Docs</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../index.md">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">教程</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../tutorials/quant_post_demo/">离线量化</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../tutorials/quant_aware_demo/">量化训练</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../tutorials/quant_embedding_demo/">Embedding量化</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../tutorials/nas_demo/">SA搜索</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">API</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../quantization_api/">量化</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../prune_api/">剪枝</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../analysis_api/">敏感度分析</a>
+                </li>
+                <li class=" current">
+                    
+    <a class="current" href="./">蒸馏</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#paddleslimdist-api">paddleslim.dist API文档</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#mergeteacher_program-student_program-data_name_map-place-scopefluidglobal_scope-name_prefixteacher_">merge(teacher_program, student_program, data_name_map, place, scope=fluid.global_scope(), name_prefix='teacher_')</a></li>
+        
+            <li><a class="toctree-l4" href="#fsp_lossteacher_var1_name-teacher_var2_name-student_var1_name-student_var2_name-programfluiddefault_main_program">fsp_loss(teacher_var1_name, teacher_var2_name, student_var1_name, student_var2_name, program=fluid.default_main_program())</a></li>
+        
+            <li><a class="toctree-l4" href="#l2_lossteacher_var_name-student_var_name-programfluiddefault_main_program">l2_loss(teacher_var_name, student_var_name, program=fluid.default_main_program())</a></li>
+        
+            <li><a class="toctree-l4" href="#soft_label_lossteacher_var_name-student_var_name-programfluiddefault_main_program-teacher_temperature1-student_temperature1">soft_label_loss(teacher_var_name, student_var_name, program=fluid.default_main_program(), teacher_temperature=1., student_temperature=1.)</a></li>
+        
+            <li><a class="toctree-l4" href="#lossloss_func-programfluiddefault_main_program-kwargs">loss(loss_func, program=fluid.default_main_program(), **kwargs)</a></li>
+        
+            <li><a class="toctree-l4" href="#_1">注意事项</a></li>
+        
+        </ul>
+    
+
+    </ul>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../nas_api/">SA搜索</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../search_space/">搜索空间</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">PaddleSlim Docs</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>API &raquo;</li>
+        
+      
+    
+    <li>蒸馏</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="paddleslimdist-api">paddleslim.dist API文档</h1>
+<h2 id="mergeteacher_program-student_program-data_name_map-place-scopefluidglobal_scope-name_prefixteacher_">merge(teacher_program, student_program, data_name_map, place, scope=fluid.global_scope(), name_prefix='teacher_')</h2>
+<p>该方法将两个fluid program（teacher_program, student_program）融合为一个program，并将融合得到的program返回。在融合的program中，可以为其中合适的teacher特征图和student特征图添加蒸馏损失函数，从而达到用teacher模型的暗知识（Dark Knowledge）指导student模型学习的目的。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><strong>teacher_program</strong>(Program)-定义了teacher模型的paddle program</li>
+<li><strong>student_program</strong>(Program)-定义了student模型的paddle program</li>
+<li><strong>data_name_map</strong>(dict)-teacher输入接口名与student输入接口名的映射，key为teacher的输入名，value为student的输入名。merge函数将会把这两个模型的输入按对应关系合并在一起，保证teacher与student输入数据相同</li>
+<li><strong>place</strong>(fluid.CPUPlace()|fluid.CUDAPlace(N))-该参数表示程序运行在何种设备上，这里的N为GPU对应的ID</li>
+<li><strong>scope</strong>(Scope)-该参数表示teacher variables和student variables所使用的作用域，如果不指定将使用默认的全局作用域。默认值：fluid.global_scope()</li>
+<li><strong>name_prefix</strong>(str)-为了避免teacher variables和student variables存在同名变量而引起命名冲突，merge函数将统一为teacher variables添加一个名称前缀name_prefix，merge后的program中所有teacher variables都将带有这一名称前缀。默认值：'teacher_'</li>
+</ul>
+<p><strong>返回：</strong>由student_program和teacher_program merge得到的program</p>
+<p><strong>使用示例：</strong></p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">paddle.fluid</span> <span class="kn">as</span> <span class="nn">fluid</span>
+<span class="kn">import</span> <span class="nn">paddleslim.dist</span> <span class="kn">as</span> <span class="nn">dist</span>
+<span class="n">student_program</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">Program</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">fluid</span><span class="o">.</span><span class="n">program_guard</span><span class="p">(</span><span class="n">student_program</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">])</span>
+    <span class="n">conv</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">conv</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">teacher_program</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">Program</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">fluid</span><span class="o">.</span><span class="n">program_guard</span><span class="p">(</span><span class="n">teacher_program</span><span class="p">):</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">])</span>
+    <span class="n">conv</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">conv</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">conv</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">conv</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">data_name_map</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;y&#39;</span><span class="p">:</span><span class="s1">&#39;x&#39;</span><span class="p">}</span>
+<span class="n">USE_GPU</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">place</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">CUDAPlace</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">USE_GPU</span> <span class="k">else</span> <span class="n">fluid</span><span class="o">.</span><span class="n">CPUPlace</span><span class="p">()</span>
+<span class="n">main_program</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">teacher_program</span><span class="p">,</span> <span class="n">student_program</span><span class="p">,</span> <span class="n">data_name_map</span><span class="p">,</span> <span class="n">place</span><span class="p">)</span>
+</pre></div>
+
+
+<h2 id="fsp_lossteacher_var1_name-teacher_var2_name-student_var1_name-student_var2_name-programfluiddefault_main_program">fsp_loss(teacher_var1_name, teacher_var2_name, student_var1_name, student_var2_name, program=fluid.default_main_program())</h2>
+<p>fsp_loss为program内的teacher var和student var添加fsp loss，出自论文<a href="http://openaccess.thecvf.com/content_cvpr_2017/papers/Yim_A_Gift_From_CVPR_2017_paper.pdf">A Gift from Knowledge Distillation: Fast Optimization, Network Minimization and Transfer Learning</a></p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><strong>teacher_var1_name</strong>(str): teacher_var1的名称. 对应的variable是一个形为<code>[batch_size, x_channel, height, width]</code>的4-D特征图Tensor，数据类型为float32或float64</li>
+<li><strong>teacher_var2_name</strong>(str): teacher_var2的名称. 对应的variable是一个形为<code>[batch_size, y_channel, height, width]</code>的4-D特征图Tensor，数据类型为float32或float64。只有y_channel可以与teacher_var1的x_channel不同，其他维度必须与teacher_var1相同</li>
+<li><strong>student_var1_name</strong>(str): student_var1的名称. 对应的variable需与teacher_var1尺寸保持一致，是一个形为<code>[batch_size, x_channel, height, width]</code>的4-D特征图Tensor，数据类型为float32或float64</li>
+<li><strong>student_var2_name</strong>(str): student_var2的名称. 对应的variable需与teacher_var2尺寸保持一致，是一个形为<code>[batch_size, y_channel, height, width]</code>的4-D特征图Tensor，数据类型为float32或float64。只有y_channel可以与student_var1的x_channel不同，其他维度必须与student_var1相同</li>
+<li><strong>program</strong>(Program): 用于蒸馏训练的fluid program。默认值：fluid.default_main_program()</li>
+</ul>
+<p><strong>返回：</strong>由teacher_var1, teacher_var2, student_var1, student_var2组合得到的fsp_loss</p>
+<p><strong>使用示例：</strong></p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">paddle.fluid</span> <span class="kn">as</span> <span class="nn">fluid</span>
+<span class="kn">import</span> <span class="nn">paddleslim.dist</span> <span class="kn">as</span> <span class="nn">dist</span>
+<span class="n">student_program</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">Program</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">fluid</span><span class="o">.</span><span class="n">program_guard</span><span class="p">(</span><span class="n">student_program</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">])</span>
+    <span class="n">conv</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;s1&#39;</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">conv</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;s2&#39;</span><span class="p">)</span>
+<span class="n">teacher_program</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">Program</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">fluid</span><span class="o">.</span><span class="n">program_guard</span><span class="p">(</span><span class="n">teacher_program</span><span class="p">):</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">])</span>
+    <span class="n">conv</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;t1&#39;</span><span class="p">)</span>
+    <span class="n">conv</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">conv</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">conv</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;t2&#39;</span><span class="p">)</span>
+<span class="n">data_name_map</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;y&#39;</span><span class="p">:</span><span class="s1">&#39;x&#39;</span><span class="p">}</span>
+<span class="n">USE_GPU</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">place</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">CUDAPlace</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">USE_GPU</span> <span class="k">else</span> <span class="n">fluid</span><span class="o">.</span><span class="n">CPUPlace</span><span class="p">()</span>
+<span class="n">main_program</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">teacher_program</span><span class="p">,</span> <span class="n">student_program</span><span class="p">,</span> <span class="n">data_name_map</span><span class="p">,</span> <span class="n">place</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">fluid</span><span class="o">.</span><span class="n">program_guard</span><span class="p">(</span><span class="n">main_program</span><span class="p">):</span>
+    <span class="n">distillation_loss</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">fsp_loss</span><span class="p">(</span><span class="s1">&#39;teacher_t1.tmp_1&#39;</span><span class="p">,</span> <span class="s1">&#39;teacher_t2.tmp_1&#39;</span><span class="p">,</span> <span class="s1">&#39;s1.tmp_1&#39;</span><span class="p">,</span> <span class="s1">&#39;s2.tmp_1&#39;</span><span class="p">,</span> <span class="n">main_program</span><span class="p">)</span>
+</pre></div>
+
+
+<h2 id="l2_lossteacher_var_name-student_var_name-programfluiddefault_main_program">l2_loss(teacher_var_name, student_var_name, program=fluid.default_main_program())</h2>
+<p>l2_loss为program内的teacher var和student var添加l2 loss</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><strong>teacher_var_name</strong>(str): teacher_var的名称. </li>
+<li><strong>student_var_name</strong>(str): student_var的名称.</li>
+<li><strong>program</strong>(Program): 用于蒸馏训练的fluid program。默认值：fluid.default_main_program()</li>
+</ul>
+<p><strong>返回：</strong>由teacher_var, student_var组合得到的l2_loss</p>
+<p><strong>使用示例：</strong></p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">paddle.fluid</span> <span class="kn">as</span> <span class="nn">fluid</span>
+<span class="kn">import</span> <span class="nn">paddleslim.dist</span> <span class="kn">as</span> <span class="nn">dist</span>
+<span class="n">student_program</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">Program</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">fluid</span><span class="o">.</span><span class="n">program_guard</span><span class="p">(</span><span class="n">student_program</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">])</span>
+    <span class="n">conv</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;s1&#39;</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">conv</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;s2&#39;</span><span class="p">)</span>
+<span class="n">teacher_program</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">Program</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">fluid</span><span class="o">.</span><span class="n">program_guard</span><span class="p">(</span><span class="n">teacher_program</span><span class="p">):</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">])</span>
+    <span class="n">conv</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;t1&#39;</span><span class="p">)</span>
+    <span class="n">conv</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">conv</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">conv</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;t2&#39;</span><span class="p">)</span>
+<span class="n">data_name_map</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;y&#39;</span><span class="p">:</span><span class="s1">&#39;x&#39;</span><span class="p">}</span>
+<span class="n">USE_GPU</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">place</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">CUDAPlace</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">USE_GPU</span> <span class="k">else</span> <span class="n">fluid</span><span class="o">.</span><span class="n">CPUPlace</span><span class="p">()</span>
+<span class="n">main_program</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">teacher_program</span><span class="p">,</span> <span class="n">student_program</span><span class="p">,</span> <span class="n">data_name_map</span><span class="p">,</span> <span class="n">place</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">fluid</span><span class="o">.</span><span class="n">program_guard</span><span class="p">(</span><span class="n">main_program</span><span class="p">):</span>
+    <span class="n">distillation_loss</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">l2_loss</span><span class="p">(</span><span class="s1">&#39;teacher_t2.tmp_1&#39;</span><span class="p">,</span> <span class="s1">&#39;s2.tmp_1&#39;</span><span class="p">,</span> <span class="n">main_program</span><span class="p">)</span>
+</pre></div>
+
+
+<h2 id="soft_label_lossteacher_var_name-student_var_name-programfluiddefault_main_program-teacher_temperature1-student_temperature1">soft_label_loss(teacher_var_name, student_var_name, program=fluid.default_main_program(), teacher_temperature=1., student_temperature=1.)</h2>
+<p>soft_label_loss为program内的teacher var和student var添加soft label loss，出自论文<a href="https://arxiv.org/pdf/1503.02531.pdf">Distilling the Knowledge in a Neural Network</a></p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><strong>teacher_var_name</strong>(str): teacher_var的名称. </li>
+<li><strong>student_var_name</strong>(str): student_var的名称. </li>
+<li><strong>program</strong>(Program): 用于蒸馏训练的fluid program。默认值：fluid.default_main_program()</li>
+<li><strong>teacher_temperature</strong>(float): 对teacher_var进行soft操作的温度值，温度值越大得到的特征图越平滑 </li>
+<li><strong>student_temperature</strong>(float): 对student_var进行soft操作的温度值，温度值越大得到的特征图越平滑 </li>
+</ul>
+<p><strong>返回：</strong>由teacher_var, student_var组合得到的soft_label_loss</p>
+<p><strong>使用示例：</strong></p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">paddle.fluid</span> <span class="kn">as</span> <span class="nn">fluid</span>
+<span class="kn">import</span> <span class="nn">paddleslim.dist</span> <span class="kn">as</span> <span class="nn">dist</span>
+<span class="n">student_program</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">Program</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">fluid</span><span class="o">.</span><span class="n">program_guard</span><span class="p">(</span><span class="n">student_program</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">])</span>
+    <span class="n">conv</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;s1&#39;</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">conv</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;s2&#39;</span><span class="p">)</span>
+<span class="n">teacher_program</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">Program</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">fluid</span><span class="o">.</span><span class="n">program_guard</span><span class="p">(</span><span class="n">teacher_program</span><span class="p">):</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">])</span>
+    <span class="n">conv</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;t1&#39;</span><span class="p">)</span>
+    <span class="n">conv</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">conv</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">conv</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;t2&#39;</span><span class="p">)</span>
+<span class="n">data_name_map</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;y&#39;</span><span class="p">:</span><span class="s1">&#39;x&#39;</span><span class="p">}</span>
+<span class="n">USE_GPU</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">place</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">CUDAPlace</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">USE_GPU</span> <span class="k">else</span> <span class="n">fluid</span><span class="o">.</span><span class="n">CPUPlace</span><span class="p">()</span>
+<span class="n">main_program</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">teacher_program</span><span class="p">,</span> <span class="n">student_program</span><span class="p">,</span> <span class="n">data_name_map</span><span class="p">,</span> <span class="n">place</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">fluid</span><span class="o">.</span><span class="n">program_guard</span><span class="p">(</span><span class="n">main_program</span><span class="p">):</span>
+    <span class="n">distillation_loss</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">soft_label_loss</span><span class="p">(</span><span class="s1">&#39;teacher_t2.tmp_1&#39;</span><span class="p">,</span> <span class="s1">&#39;s2.tmp_1&#39;</span><span class="p">,</span> <span class="n">main_program</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
+</pre></div>
+
+
+<h2 id="lossloss_func-programfluiddefault_main_program-kwargs">loss(loss_func, program=fluid.default_main_program(), **kwargs)</h2>
+<p>loss函数支持对任意多对teacher_var和student_var使用自定义损失函数</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><strong>loss_func</strong>(python function): 自定义的损失函数，输入为teacher var和student var，输出为自定义的loss </li>
+<li><strong>program</strong>(Program): 用于蒸馏训练的fluid program。默认值：fluid.default_main_program()</li>
+<li><strong>**kwargs</strong>: loss_func输入名与对应variable名称</li>
+</ul>
+<p><strong>返回</strong>：自定义的损失函数loss</p>
+<p><strong>使用示例：</strong></p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">paddle.fluid</span> <span class="kn">as</span> <span class="nn">fluid</span>
+<span class="kn">import</span> <span class="nn">paddleslim.dist</span> <span class="kn">as</span> <span class="nn">dist</span>
+<span class="n">student_program</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">Program</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">fluid</span><span class="o">.</span><span class="n">program_guard</span><span class="p">(</span><span class="n">student_program</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">])</span>
+    <span class="n">conv</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;s1&#39;</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">conv</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;s2&#39;</span><span class="p">)</span>
+<span class="n">teacher_program</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">Program</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">fluid</span><span class="o">.</span><span class="n">program_guard</span><span class="p">(</span><span class="n">teacher_program</span><span class="p">):</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">])</span>
+    <span class="n">conv</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;t1&#39;</span><span class="p">)</span>
+    <span class="n">conv</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">conv</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">conv</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;t2&#39;</span><span class="p">)</span>
+<span class="n">data_name_map</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;y&#39;</span><span class="p">:</span><span class="s1">&#39;x&#39;</span><span class="p">}</span>
+<span class="n">USE_GPU</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">place</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">CUDAPlace</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">USE_GPU</span> <span class="k">else</span> <span class="n">fluid</span><span class="o">.</span><span class="n">CPUPlace</span><span class="p">()</span>
+<span class="n">main_program</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">teacher_program</span><span class="p">,</span> <span class="n">student_program</span><span class="p">,</span> <span class="n">data_name_map</span><span class="p">,</span> <span class="n">place</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">adaptation_loss</span><span class="p">(</span><span class="n">t_var</span><span class="p">,</span> <span class="n">s_var</span><span class="p">):</span>
+    <span class="n">teacher_channel</span> <span class="o">=</span> <span class="n">t_var</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">s_hint</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">s_var</span><span class="p">,</span> <span class="n">teacher_channel</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">hint_loss</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">s_hint</span> <span class="o">-</span> <span class="n">t_var</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">hint_loss</span>
+<span class="k">with</span> <span class="n">fluid</span><span class="o">.</span><span class="n">program_guard</span><span class="p">(</span><span class="n">main_program</span><span class="p">):</span>
+    <span class="n">distillation_loss</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">main_program</span><span class="p">,</span> <span class="n">adaptation_loss</span><span class="p">,</span> <span class="n">t_var</span><span class="o">=</span><span class="s1">&#39;teacher_t2.tmp_1&#39;</span><span class="p">,</span> <span class="n">s_var</span><span class="o">=</span><span class="s1">&#39;s2.tmp_1&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<h2 id="_1">注意事项</h2>
+<p>在添加蒸馏loss时会引入新的variable，需要注意新引入的variable不要与student variables命名冲突。这里建议两种用法：</p>
+<ol>
+<li>建议与student_program使用同一个命名空间，以避免一些未指定名称的variables(例如tmp_0, tmp_1...)多次定义为同一名称出现命名冲突</li>
+<li>建议在添加蒸馏loss时指定一个命名空间前缀，具体用法请参考Paddle官方文档<a href="https://www.paddlepaddle.org.cn/documentation/docs/zh/api_cn/fluid_cn/name_scope_cn.html#name-scope">fluid.name_scope</a></li>
+</ol>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../nas_api/" class="btn btn-neutral float-right" title="SA搜索">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../analysis_api/" class="btn btn-neutral" title="敏感度分析"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../analysis_api/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../nas_api/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../mathjax-config.js" defer></script>
+      <script src="../../MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
+      <script src="../../search/main.js" defer></script>
+
+</body>
+</html>
