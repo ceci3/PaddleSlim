@@ -121,6 +121,11 @@
     </ul>
 	    </li>
           
+            <li class="toctree-l1">
+		
+    <a class="" href="../../algo/algo/">算法原理</a>
+	    </li>
+          
         </ul>
       </div>
       &nbsp;
@@ -150,6 +155,9 @@
     <li>离线量化</li>
     <li class="wy-breadcrumbs-aside">
       
+        <a href="https://github.com/PaddlePaddle/PaddleSlim/edit/master/docs/tutorials/quant_post_demo.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
     </li>
   </ul>
   <hr/>
@@ -157,34 +165,32 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="_1">离线量化示例</h1>
+                <h1 id="_1">离线量化示例<a class="headerlink" href="#_1" title="Permanent link">#</a></h1>
 <p>本示例介绍如何使用离线量化接口<code>paddleslim.quant.quant_post</code>来对训练好的分类模型进行离线量化, 该接口无需对模型进行训练就可得到量化模型，减少模型的存储空间和显存占用。</p>
-<h2 id="_2">接口介绍</h2>
+<h2 id="_2">接口介绍<a class="headerlink" href="#_2" title="Permanent link">#</a></h2>
 <p>请参考 <a href='../../../paddleslim/quant/quantization_api_doc.md'>量化API文档</a>。</p>
-<h2 id="_3">分类模型的离线量化流程</h2>
-<h3 id="_4">准备数据</h3>
+<h2 id="_3">分类模型的离线量化流程<a class="headerlink" href="#_3" title="Permanent link">#</a></h2>
+<h3 id="_4">准备数据<a class="headerlink" href="#_4" title="Permanent link">#</a></h3>
 <p>在当前文件夹下创建<code>data</code>文件夹，将<code>imagenet</code>数据集解压在<code>data</code>文件夹下，解压后<code>data</code>文件夹下应包含以下文件：
 - <code>'train'</code>文件夹，训练图片
 - <code>'train_list.txt'</code>文件
 - <code>'val'</code>文件夹，验证图片
 - <code>'val_list.txt'</code>文件</p>
-<h3 id="_5">准备需要量化的模型</h3>
+<h3 id="_5">准备需要量化的模型<a class="headerlink" href="#_5" title="Permanent link">#</a></h3>
 <p>因为离线量化接口只支持加载通过<code>fluid.io.save_inference_model</code>接口保存的模型，因此如果您的模型是通过其他接口保存的，那需要先将模型进行转化。本示例将以分类模型为例进行说明。</p>
 <p>首先在<a href="https://github.com/PaddlePaddle/models/tree/develop/PaddleCV/image_classification#%E5%B7%B2%E5%8F%91%E5%B8%83%E6%A8%A1%E5%9E%8B%E5%8F%8A%E5%85%B6%E6%80%A7%E8%83%BD">imagenet分类模型</a>中下载训练好的<code>mobilenetv1</code>模型。</p>
 <p>在当前文件夹下创建<code>'pretrain'</code>文件夹，将<code>mobilenetv1</code>模型在该文件夹下解压，解压后的目录为<code>pretrain/MobileNetV1_pretrained</code></p>
-<h3 id="_6">导出模型</h3>
-<p>通过运行以下命令可将模型转化为离线量化接口可用的模型：</p>
-<div class="codehilite"><pre><span></span>python export_model.py --model &quot;MobileNet&quot; --pretrained_model ./pretrain/MobileNetV1_pretrained --data imagenet
+<h3 id="_6">导出模型<a class="headerlink" href="#_6" title="Permanent link">#</a></h3>
+<p>通过运行以下命令可将模型转化为离线量化接口可用的模型：
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">python</span> <span class="n">export_model</span><span class="p">.</span><span class="n">py</span> <span class="c1">--model &quot;MobileNet&quot; --pretrained_model ./pretrain/MobileNetV1_pretrained --data imagenet</span>
 </pre></div>
-
-
-<p>转化之后的模型存储在<code>inference_model/MobileNet/</code>文件夹下，可看到该文件夹下有<code>'model'</code>, <code>'weights'</code>两个文件。</p>
-<h3 id="_7">离线量化</h3>
-<p>接下来对导出的模型文件进行离线量化，离线量化的脚本为<a href="./quant_post.py">quant_post.py</a>，脚本中使用接口<code>paddleslim.quant.quant_post</code>对模型进行离线量化。运行命令为：</p>
-<div class="codehilite"><pre><span></span>python quant_post.py --model_path ./inference_model/MobileNet --save_path ./quant_model_train/MobileNet --model_filename model --params_filename weights
+</td></tr></table>
+转化之后的模型存储在<code>inference_model/MobileNet/</code>文件夹下，可看到该文件夹下有<code>'model'</code>, <code>'weights'</code>两个文件。</p>
+<h3 id="_7">离线量化<a class="headerlink" href="#_7" title="Permanent link">#</a></h3>
+<p>接下来对导出的模型文件进行离线量化，离线量化的脚本为<a href="./quant_post.py">quant_post.py</a>，脚本中使用接口<code>paddleslim.quant.quant_post</code>对模型进行离线量化。运行命令为：
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">python</span> <span class="n">quant_post</span><span class="p">.</span><span class="n">py</span> <span class="c1">--model_path ./inference_model/MobileNet --save_path ./quant_model_train/MobileNet --model_filename model --params_filename weights</span>
 </pre></div>
-
-
+</td></tr></table></p>
 <ul>
 <li><code>model_path</code>: 需要量化的模型坐在的文件夹</li>
 <li><code>save_path</code>: 量化后的模型保存的路径</li>
@@ -195,29 +201,26 @@
 <blockquote>
 <p>使用的量化算法为<code>'KL'</code>, 使用训练集中的160张图片进行量化参数的校正。</p>
 </blockquote>
-<h3 id="_8">测试精度</h3>
+<h3 id="_8">测试精度<a class="headerlink" href="#_8" title="Permanent link">#</a></h3>
 <p>使用<a href="./eval.py">eval.py</a>脚本对量化前后的模型进行测试，得到模型的分类精度进行对比。</p>
-<p>首先测试量化前的模型的精度，运行以下命令：</p>
-<div class="codehilite"><pre><span></span>python eval.py --model_path ./inference_model/MobileNet --model_name model --params_name weights
+<p>首先测试量化前的模型的精度，运行以下命令：
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">python</span> <span class="n">eval</span><span class="p">.</span><span class="n">py</span> <span class="c1">--model_path ./inference_model/MobileNet --model_name model --params_name weights</span>
 </pre></div>
-
-
-<p>精度输出为:</p>
-<div class="codehilite"><pre><span></span>top1_acc/top5_acc= [0.70913923 0.89548034]
+</td></tr></table>
+精度输出为:
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">top1_acc</span><span class="o">/</span><span class="n">top5_acc</span><span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">.</span><span class="mi">70913923</span> <span class="mi">0</span><span class="p">.</span><span class="mi">89548034</span><span class="p">]</span>
 </pre></div>
-
-
+</td></tr></table></p>
 <p>使用以下命令测试离线量化后的模型的精度：</p>
-<div class="codehilite"><pre><span></span>python eval.py --model_path ./quant_model_train/MobileNet
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">python</span> <span class="n">eval</span><span class="p">.</span><span class="n">py</span> <span class="c1">--model_path ./quant_model_train/MobileNet</span>
 </pre></div>
+</td></tr></table>
 
-
-<p>精度输出为</p>
-<div class="codehilite"><pre><span></span>top1_acc/top5_acc= [0.70141864 0.89086477]
+<p>精度输出为
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">top1_acc</span><span class="o">/</span><span class="n">top5_acc</span><span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">.</span><span class="mi">70141864</span> <span class="mi">0</span><span class="p">.</span><span class="mi">89086477</span><span class="p">]</span>
 </pre></div>
-
-
-<p>从以上精度对比可以看出，对<code>mobilenet</code>在<code>imagenet</code>上的分类模型进行离线量化后 <code>top1</code>精度损失为<code>0.77%</code>， <code>top5</code>精度损失为<code>0.46%</code>. </p>
+</td></tr></table>
+从以上精度对比可以看出，对<code>mobilenet</code>在<code>imagenet</code>上的分类模型进行离线量化后 <code>top1</code>精度损失为<code>0.77%</code>， <code>top5</code>精度损失为<code>0.46%</code>. </p>
               
             </div>
           </div>
@@ -253,6 +256,8 @@
   <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
+          <a href="https://github.com/PaddlePaddle/PaddleSlim/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
       
         <span><a href="../.." style="color: #fcfcfc;">&laquo; Previous</a></span>
       
@@ -264,7 +269,7 @@
     <script>var base_url = '../..';</script>
     <script src="../../js/theme.js" defer></script>
       <script src="../../mathjax-config.js" defer></script>
-      <script src="../../MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
       <script src="../../search/main.js" defer></script>
 
 </body>

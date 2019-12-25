@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>算法原理 - PaddleSlim Docs</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "\u7b97\u6cd5\u539f\u7406";
+    var mkdocs_page_input_path = "algo/algo.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> PaddleSlim Docs</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">教程</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../tutorials/quant_post_demo/">离线量化</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../tutorials/quant_aware_demo/">量化训练</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../tutorials/quant_embedding_demo/">Embedding量化</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../tutorials/nas_demo/">SA搜索</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">API</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../api/quantization_api/">量化</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../api/prune_api/">剪枝</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../api/analysis_api/">敏感度分析</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../api/single_distiller_api/">蒸馏</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../api/nas_api/">SA搜索</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../api/search_space/">搜索空间</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">算法原理</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#_1">目录</a></li>
+    
+
+    <li class="toctree-l2"><a href="#1-quantization-aware-training">1. Quantization Aware Training量化介绍</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#11">1.1 背景</a></li>
+        
+            <li><a class="toctree-l3" href="#12">1.2 量化原理</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l2"><a href="#2">2. 卷积核剪裁原理</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#21">2.1  剪裁卷积核</a></li>
+        
+            <li><a class="toctree-l3" href="#22-uniform">2.2 Uniform剪裁卷积网络</a></li>
+        
+            <li><a class="toctree-l3" href="#23">2.3 基于敏感度剪裁卷积网络</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l2"><a href="#3">3. 蒸馏</a></li>
+    
+
+    <li class="toctree-l2"><a href="#4">4. 轻量级模型结构搜索</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#41">4.1 搜索策略</a></li>
+        
+            <li><a class="toctree-l3" href="#42">4.2 搜索空间</a></li>
+        
+            <li><a class="toctree-l3" href="#43">4.3 模型延时评估</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l2"><a href="#5">5. 参考文献</a></li>
+    
+
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">PaddleSlim Docs</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>算法原理</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/PaddlePaddle/PaddleSlim/edit/master/docs/algo/algo.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h2 id="_1">目录<a class="headerlink" href="#_1" title="Permanent link">#</a></h2>
+<ul>
+<li><a href="#1-quantization-aware-training量化介绍">量化原理介绍</a></li>
+<li><a href="#2-卷积核剪裁原理">剪裁原理介绍</a></li>
+<li><a href="#3-蒸馏">蒸馏原理介绍</a></li>
+<li><a href="#4-轻量级模型结构搜索">轻量级模型结构搜索原理介绍</a></li>
+</ul>
+<h2 id="1-quantization-aware-training">1. Quantization Aware Training量化介绍<a class="headerlink" href="#1-quantization-aware-training" title="Permanent link">#</a></h2>
+<h3 id="11">1.1 背景<a class="headerlink" href="#11" title="Permanent link">#</a></h3>
+<p>近年来，定点量化使用更少的比特数（如8-bit、3-bit、2-bit等）表示神经网络的权重和激活已被验证是有效的。定点量化的优点包括低内存带宽、低功耗、低计算资源占用以及低模型存储需求等。</p>
+<p align="center">
+<img src="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/docs/docs/images/algo/quan_table_0.png" height=258 width=600 hspace='10'/> <br />
+<strong>表1: 不同类型操作的开销对比</strong>
+</p>
+
+<p>由表1可知，低精度定点数操作的硬件面积大小及能耗比高精度浮点数要少几个数量级。 使用定点量化可带来4倍的模型压缩、4倍的内存带宽提升，以及更高效的cache利用(很多硬件设备，内存访问是主要能耗)。除此之外，计算速度也会更快(通常具有2x-3x的性能提升)。由表2可知，在很多场景下，定点量化操作对精度并不会造成损失。另外，定点量化对神经网络于嵌入式设备上的推断来说是极其重要的。</p>
+<p align="center">
+<img src="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/docs/docs/images/algo/quan_table_1.png" height=155 width=500 hspace='10'/> <br />
+<strong>表2：模型量化前后精度对比</strong>
+</p>
+
+<p>目前，学术界主要将量化分为两大类：<code>Post Training Quantization</code>和<code>Quantization Aware Training</code>。<code>Post Training Quantization</code>是指使用KL散度、滑动平均等方法确定量化参数且不需要重新训练的定点量化方法。<code>Quantization Aware Training</code>是在训练过程中对量化进行建模以确定量化参数，它与<code>Post Training Quantization</code>模式相比可以提供更高的预测精度。</p>
+<h3 id="12">1.2 量化原理<a class="headerlink" href="#12" title="Permanent link">#</a></h3>
+<h4 id="121">1.2.1 量化方式<a class="headerlink" href="#121" title="Permanent link">#</a></h4>
+<p>目前，存在着许多方法可以将浮点数量化成定点数。例如：
+<script type="math/tex; mode=display"> r = min(max(x, a), b)</script>
+<script type="math/tex; mode=display"> s = \frac{b - a}{n - 1} </script>
+<script type="math/tex; mode=display"> q = \left \lfloor \frac{r - a}{s} \right \rceil </script>
+式中，<span><span class="MathJax_Preview">x</span><script type="math/tex">x</script></span>是待量化的浮点值，<span><span class="MathJax_Preview">[a, b]</span><script type="math/tex">[a, b]</script></span>是量化范围，<span><span class="MathJax_Preview">a</span><script type="math/tex">a</script></span>是待量化浮点数中的最小值， <span><span class="MathJax_Preview">b</span><script type="math/tex">b</script></span> 是待量化浮点数中的最大值。<span><span class="MathJax_Preview">\left \lfloor \right \rceil</span><script type="math/tex">\left \lfloor \right \rceil</script></span> 表示将结果四舍五入到最近的整数。如果量化级别为<span><span class="MathJax_Preview">k</span><script type="math/tex">k</script></span>，则<span><span class="MathJax_Preview">n</span><script type="math/tex">n</script></span>为<span><span class="MathJax_Preview">2^k</span><script type="math/tex">2^k</script></span>。例如，若<span><span class="MathJax_Preview">k</span><script type="math/tex">k</script></span>为8，则<span><span class="MathJax_Preview">n</span><script type="math/tex">n</script></span>为256。<span><span class="MathJax_Preview">q</span><script type="math/tex">q</script></span>是量化得到的整数。
+PaddleSlim框架中选择的量化方法为最大绝对值量化(<code>max-abs</code>)，具体描述如下：
+<script type="math/tex; mode=display"> M = max(abs(x)) </script>
+<script type="math/tex; mode=display"> q = \left \lfloor \frac{x}{M} * (n - 1) \right \rceil </script>
+式中，<span><span class="MathJax_Preview">x</span><script type="math/tex">x</script></span>是待被量化的浮点值，<span><span class="MathJax_Preview">M</span><script type="math/tex">M</script></span>是待量化浮点数中的绝对值最大值。<span><span class="MathJax_Preview">\left \lfloor \right \rceil</span><script type="math/tex">\left \lfloor \right \rceil</script></span>表示将结果四舍五入到最近的整数。对于8bit量化，PaddleSlim采用<code>int8_t</code>，即<span><span class="MathJax_Preview">n=2^7=128</span><script type="math/tex">n=2^7=128</script></span>。<span><span class="MathJax_Preview">q</span><script type="math/tex">q</script></span>是量化得到的整数。
+无论是<code>min-max量化</code>还是<code>max-abs量化</code>，他们都可以表示为如下形式：
+<span><span class="MathJax_Preview">q = scale * r + b</span><script type="math/tex">q = scale * r + b</script></span>
+其中<code>min-max</code>和<code>max-abs</code>被称为量化参数或者量化比例或者量化范围。</p>
+<h4 id="122">1.2.2 量化训练<a class="headerlink" href="#122" title="Permanent link">#</a></h4>
+<h5 id="1221">1.2.2.1 前向传播<a class="headerlink" href="#1221" title="Permanent link">#</a></h5>
+<p>前向传播过程采用模拟量化的方式，具体描述如下：</p>
+<p align="center">
+<img src="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/docs/docs/images/algo/quan_forward.png" height=433 width=335 hspace='10'/> <br />
+<strong>图1：基于模拟量化训练的前向过程</strong>
+</p>
+
+<p>由图1可知，基于模拟量化训练的前向过程可被描述为以下四个部分：
+1) 输入和权重均被量化成8-bit整数。
+2) 在8-bit整数上执行矩阵乘法或者卷积操作。
+3) 反量化矩阵乘法或者卷积操作的输出结果为32-bit浮点型数据。
+4) 在32-bit浮点型数据上执行偏置加法操作。此处，偏置并未被量化。
+对于通用矩阵乘法(<code>GEMM</code>)，输入<span><span class="MathJax_Preview">X</span><script type="math/tex">X</script></span>和权重<span><span class="MathJax_Preview">W</span><script type="math/tex">W</script></span>的量化操作可被表述为如下过程：
+<script type="math/tex; mode=display"> X_q = \left \lfloor \frac{X}{X_m} * (n - 1) \right \rceil </script>
+<script type="math/tex; mode=display"> W_q = \left \lfloor \frac{W}{W_m} * (n - 1) \right \rceil </script>
+执行通用矩阵乘法：
+<script type="math/tex; mode=display"> Y_q = X_q * W_q </script>
+对量化乘积结果<span><span class="MathJax_Preview">Yq</span><script type="math/tex">Yq</script></span>进行反量化:
+<script type="math/tex; mode=display">
+\begin{align}
+Y_{dq} = \frac{Y_q}{(n - 1) * (n - 1)} * X_m * W_m \
+=\frac{X_q * W_q}{(n - 1) * (n - 1)} * X_m * W_m \
+=(\frac{X_q}{n - 1} * X_m) * (\frac{W_q}{n - 1} * W_m) \
+\end{align}
+</script>
+上述公式表明反量化操作可以被移动到<code>GEMM</code>之前，即先对<span><span class="MathJax_Preview">Xq</span><script type="math/tex">Xq</script></span>和<span><span class="MathJax_Preview">Wq</span><script type="math/tex">Wq</script></span>执行反量化操作再做<code>GEMM</code>操作。因此，前向传播的工作流亦可表示为如下方式：</p>
+<p align="center">
+<img src="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/docs/docs/images/algo/quan_fwd_1.png" height=435 width=341 hspace='10'/> <br />
+<strong>图2：基于模拟量化训练前向过程的等价工作流</strong>
+</p>
+
+<p>训练过程中，PaddleSlim使用图2中所示的等价工作流。在设计中，量化Pass在IrGraph中插入量化op和反量化op。因为在连续的量化、反量化操作之后输入仍然为32-bit浮点型数据。因此，PaddleSlim量化训练框架所采用的量化方式被称为模拟量化。</p>
+<h5 id="1222">1.2.2.2 反向传播<a class="headerlink" href="#1222" title="Permanent link">#</a></h5>
+<p>由图3可知，权重更新所需的梯度值可以由量化后的权重和量化后的激活求得。反向传播过程中的所有输入和输出均为32-bit浮点型数据。注意，梯度更新操作需要在原始权重上进行，即计算出的梯度将被加到原始权重上而非量化后或反量化后的权重上。</p>
+<p align="center">
+<img src="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/docs/docs/images/algo/quan_bwd.png" height=300 width=650 hspace='10'/> <br />
+<strong>图3：基于模拟量化训练的反向传播和权重更新过程</strong>
+</p>
+
+<p>因此，量化Pass也会改变相应反向算子的某些输入。</p>
+<h5 id="1223">1.2.2.3 确定量化比例系数<a class="headerlink" href="#1223" title="Permanent link">#</a></h5>
+<p>存在着两种策略可以计算求取量化比例系数，即动态策略和静态策略。动态策略会在每次迭代过程中计算量化比例系数的值。静态策略则对不同的输入采用相同的量化比例系数。
+对于权重而言，在训练过程中采用动态策略。换句话说，在每次迭代过程中量化比例系数均会被重新计算得到直至训练过程结束。
+对于激活而言，可以选择动态策略也可以选择静态策略。若选择使用静态策略，则量化比例系数会在训练过程中被评估求得，且在推断过程中被使用(不同的输入均保持不变)。静态策略中的量化比例系数可于训练过程中通过如下三种方式进行评估：</p>
+<ol>
+<li>
+<p>在一个窗口中计算激活最大绝对值的平均值。</p>
+</li>
+<li>
+<p>在一个窗口中计算激活最大绝对值的最大值。</p>
+</li>
+<li>
+<p>在一个窗口中计算激活最大绝对值的滑动平均值，计算公式如下：</p>
+</li>
+</ol>
+<div>
+<div class="MathJax_Preview"> Vt = (1 - k) * V + k * V_{t-1} </div>
+<script type="math/tex; mode=display"> Vt = (1 - k) * V + k * V_{t-1} </script>
+</div>
+<p>式中，<span><span class="MathJax_Preview">V</span><script type="math/tex">V</script></span> 是当前batch的最大绝对值， <span><span class="MathJax_Preview">Vt</span><script type="math/tex">Vt</script></span>是滑动平均值。<span><span class="MathJax_Preview">k</span><script type="math/tex">k</script></span>是一个因子，例如其值可取为0.9。</p>
+<h4 id="124">1.2.4 训练后量化<a class="headerlink" href="#124" title="Permanent link">#</a></h4>
+<p>训练后量化是基于采样数据，采用KL散度等方法计算量化比例因子的方法。相比量化训练，训练后量化不需要重新训练，可以快速得到量化模型。</p>
+<p>训练后量化的目标是求取量化比例因子，主要有两种方法：非饱和量化方法 ( No Saturation) 和饱和量化方法 (Saturation)。非饱和量化方法计算FP32类型Tensor中绝对值的最大值<code>abs_max</code>，将其映射为127，则量化比例因子等于<code>abs_max/127</code>。饱和量化方法使用KL散度计算一个合适的阈值<code>T</code> (<code>0&lt;T&lt;mab_max</code>)，将其映射为127，则量化比例因子等于<code>T/127</code>。一般而言，对于待量化op的权重Tensor，采用非饱和量化方法，对于待量化op的激活Tensor（包括输入和输出），采用饱和量化方法 。</p>
+<p>训练后量化的实现步骤如下：
+* 加载预训练的FP32模型，配置<code>DataLoader</code>；
+* 读取样本数据，执行模型的前向推理，保存待量化op激活Tensor的数值；
+* 基于激活Tensor的采样数据，使用饱和量化方法计算它的量化比例因子；
+* 模型权重Tensor数据一直保持不变，使用非饱和方法计算它每个通道的绝对值最大值，作为每个通道的量化比例因子；
+* 将FP32模型转成INT8模型，进行保存。</p>
+<h2 id="2">2. 卷积核剪裁原理<a class="headerlink" href="#2" title="Permanent link">#</a></h2>
+<p>该策略参考paper: <a href="https://arxiv.org/pdf/1608.08710.pdf">Pruning Filters for Efficient ConvNets</a></p>
+<p>该策略通过减少卷积层中卷积核的数量，来减小模型大小和降低模型计算复杂度。</p>
+<h3 id="21">2.1  剪裁卷积核<a class="headerlink" href="#21" title="Permanent link">#</a></h3>
+<p><strong>剪裁注意事项1</strong>
+剪裁一个conv layer的filter，需要修改后续conv layer的filter. 如**图4**所示，剪掉Xi的一个filter，会导致<span><span class="MathJax_Preview">X_{i+1}</span><script type="math/tex">X_{i+1}</script></span>少一个channel, <span><span class="MathJax_Preview">X_{i+1}</span><script type="math/tex">X_{i+1}</script></span>对应的filter在input_channel纬度上也要减1.</p>
+<p align="center">
+<img src="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/docs/docs/images/algo/pruning_0.png" height=200 width=600 hspace='10'/> <br />
+<strong>图4</strong>
+</p>
+
+<p><strong>剪裁注意事项2</strong></p>
+<p>如**图5**所示，剪裁完<span><span class="MathJax_Preview">X_i</span><script type="math/tex">X_i</script></span>之后，根据注意事项1我们从<span><span class="MathJax_Preview">X_{i+1}</span><script type="math/tex">X_{i+1}</script></span>的filter中删除了一行（图中蓝色行），在计算<span><span class="MathJax_Preview">X_{i+1}</span><script type="math/tex">X_{i+1}</script></span>的filters的l1_norm(图中绿色一列)的时候，有两种选择：
+算上被删除的一行：independent pruning
+减去被删除的一行：greedy pruning</p>
+<p align="center">
+<img src="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/docs/docs/images/algo/pruning_1.png" height=200 width=450 hspace='10'/> <br />
+<strong>图5</strong>
+</p>
+
+<p><strong>剪裁注意事项3</strong>
+在对ResNet等复杂网络剪裁的时候，还要考虑到后当前卷积层的修改对上一层卷积层的影响。
+如**图6**所示，在对residual block剪裁时，<span><span class="MathJax_Preview">X_{i+1}</span><script type="math/tex">X_{i+1}</script></span>层如何剪裁取决于project shortcut的剪裁结果，因为我们要保证project shortcut的output和<span><span class="MathJax_Preview">X_{i+1}</span><script type="math/tex">X_{i+1}</script></span>的output能被正确的concat.</p>
+<p align="center">
+<img src="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/docs/docs/images/algo/pruning_2.png" height=240 width=600 hspace='10'/> <br />
+<strong>图6</strong>
+</p>
+
+<h3 id="22-uniform">2.2 Uniform剪裁卷积网络<a class="headerlink" href="#22-uniform" title="Permanent link">#</a></h3>
+<p>每层剪裁一样比例的卷积核。
+在剪裁一个卷积核之前，按l1_norm对filter从高到低排序，越靠后的filter越不重要，优先剪掉靠后的filter.</p>
+<h3 id="23">2.3 基于敏感度剪裁卷积网络<a class="headerlink" href="#23" title="Permanent link">#</a></h3>
+<p>根据每个卷积层敏感度的不同，剪掉不同比例的卷积核。</p>
+<h4 id="_2">两个假设<a class="headerlink" href="#_2" title="Permanent link">#</a></h4>
+<ul>
+<li>在一个conv layer的parameter内部，按l1_norm对filter从高到低排序，越靠后的filter越不重要。</li>
+<li>两个layer剪裁相同的比例的filters，我们称对模型精度影响更大的layer的敏感度相对高。</li>
+</ul>
+<h4 id="filter">剪裁filter的指导原则<a class="headerlink" href="#filter" title="Permanent link">#</a></h4>
+<ul>
+<li>layer的剪裁比例与其敏感度成反比</li>
+<li>优先剪裁layer内l1_norm相对低的filter</li>
+</ul>
+<h4 id="_3">敏感度的理解<a class="headerlink" href="#_3" title="Permanent link">#</a></h4>
+<p align="center">
+<img src="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/docs/docs/images/algo/pruning_3.png" height=200 width=400 hspace='10'/> <br />
+<strong>图7</strong>
+</p>
+
+<p>如**图7**所示，横坐标是将filter剪裁掉的比例，竖坐标是精度的损失，每条彩色虚线表示的是网络中的一个卷积层。
+以不同的剪裁比例**单独**剪裁一个卷积层，并观察其在验证数据集上的精度损失，并绘出**图7**中的虚线。虚线上升较慢的，对应的卷积层相对不敏感，我们优先剪不敏感的卷积层的filter.</p>
+<h4 id="_4">选择最优的剪裁率组合<a class="headerlink" href="#_4" title="Permanent link">#</a></h4>
+<p>我们将**图7**中的折线拟合为**图8**中的曲线，每在竖坐标轴上选取一个精度损失值，就在横坐标轴上对应着一组剪裁率，如**图8**中黑色实线所示。
+用户给定一个模型整体的剪裁率，我们通过移动**图5**中的黑色实线来找到一组满足条件的且合法的剪裁率。</p>
+<p align="center">
+<img src="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/docs/docs/images/algo/pruning_4.png" height=200 width=400 hspace='10'/> <br />
+<strong>图8</strong>
+</p>
+
+<h4 id="_5">迭代剪裁<a class="headerlink" href="#_5" title="Permanent link">#</a></h4>
+<p>考虑到多个卷积层间的相关性，一个卷积层的修改可能会影响其它卷积层的敏感度，我们采取了多次剪裁的策略，步骤如下：</p>
+<ul>
+<li>step1: 统计各卷积层的敏感度信息</li>
+<li>step2: 根据当前统计的敏感度信息，对每个卷积层剪掉少量filter, 并统计FLOPS，如果FLOPS已满足要求，进入step4，否则进行step3。</li>
+<li>step3: 对网络进行简单的fine-tune，进入step1</li>
+<li>step4: fine-tune训练至收敛</li>
+</ul>
+<h2 id="3">3. 蒸馏<a class="headerlink" href="#3" title="Permanent link">#</a></h2>
+<p>一般情况下，模型参数量越多，结构越复杂，其性能越好，但参数也越允余，运算量和资源消耗也越大；模型蒸馏是将复杂网络中的有用信息将复杂网络中的有用信息提取出来提取出来，迁移到一个更小的网络中去，在我们的工具包中，支持两种蒸馏的方法。
+    第一种是传统的蒸馏方法（参考论文：<a href="https://arxiv.org/pdf/1503.02531.pdf">Distilling the Knowledge in a Neural Network</a>）
+   使用复杂的网络作为teacher模型去监督训练一个参数量和运算量更少的student模型。teacher模型可以是一个或者多个提前训练好的高性能模型。student模型的训练有两个目标：一个是原始的目标函数，为student模型输出的类别概率和label的交叉熵，记为hard-target；另一个是student模型输出的类别概率和teacher模型输出的类别概率的交叉熵，记为soft target，这两个loss加权后得到最终的训练loss，共同监督studuent模型的训练。
+   第二种是基于FSP的蒸馏方法（参考论文：<a href="http://openaccess.thecvf.com/content_cvpr_2017/papers/Yim_A_Gift_From_CVPR_2017_paper.pdf">A Gift from Knowledge Distillation:
+Fast Optimization, Network Minimization and Transfer Learning</a>）
+   相比传统的蒸馏方法直接用小模型去拟合大模型的输出，该方法用小模型去拟合大模型不同层特征之间的转换关系，其用一个FSP矩阵（特征的内积）来表示不同层特征之间的关系，大模型和小模型不同层之间分别获得多个FSP矩阵，然后使用L2 loss让小模型的对应层FSP矩阵和大模型对应层的FSP矩阵尽量一致，具体如下图所示。这种方法的优势，通俗的解释是，比如将蒸馏类比成teacher（大模型）教student（小模型）解决一个问题，传统的蒸馏是直接告诉小模型问题的答案，让小模型学习，而学习FSP矩阵是让小模型学习解决问题的中间过程和方法，因此其学到的信息更多。</p>
+<p align="center">
+<img src="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/docs/docs/images/algo/distillation_0.png" height=300 width=600 hspace='10'/> <br />
+<strong>图9</strong>
+</p>
+
+<p>由于小模型和大模型之间通过L2 loss进行监督，必须保证两个FSP矩阵的维度必须相同，而FSP矩阵的维度为M*N，其中M、N分别为输入和输出特征的channel数，因此大模型和小模型的FSP矩阵需要一一对应。</p>
+<h2 id="4">4. 轻量级模型结构搜索<a class="headerlink" href="#4" title="Permanent link">#</a></h2>
+<p>深度学习模型在很多任务上都取得了不错的效果，网络结构的好坏对最终模型的效果有非常重要的影响。手工设计网络需要非常丰富的经验和众多尝试，并且众多的超参数和网络结构参数会产生爆炸性的组合，常规的random search几乎不可行，因此最近几年自动模型搜索技术（Neural Architecture Search）成为研究热点。区别于传统NAS，我们专注在搜索精度高并且速度快的模型结构，我们将该功能统称为Light-NAS.</p>
+<h3 id="41">4.1 搜索策略<a class="headerlink" href="#41" title="Permanent link">#</a></h3>
+<p>搜索策略定义了使用怎样的算法可以快速、准确找到最优的网络结构参数配置。常见的搜索方法包括：强化学习、贝叶斯优化、进化算法、基于梯度的算法。我们当前的实现以模拟退火算法为主。</p>
+<h4 id="411">4.1.1 模拟退火<a class="headerlink" href="#411" title="Permanent link">#</a></h4>
+<p>模拟退火算法来源于固体退火原理，将固体加温至充分高，再让其徐徐冷却，加温时，固体内部粒子随温升变为无序状，内能增大，而徐徐冷却时粒子渐趋有序，在每个温度都达到平衡态，最后在常温时达到基态，内能减为最小。</p>
+<p>鉴于物理中固体物质的退火过程与一般组合优化问题之间的相似性，我们将其用于网络结构的搜索。</p>
+<p>使用模拟退火算法搜索模型的过程如下:</p>
+<div>
+<div class="MathJax_Preview">
+T_k = T_0*\theta^k
+</div>
+<script type="math/tex; mode=display">
+T_k = T_0*\theta^k
+</script>
+</div>
+<div>
+<div class="MathJax_Preview">\begin{equation}
+P(r_k) =
+\begin{cases}
+e^{\frac{(r_k-r)}{T_k}} &amp; r_k &lt; r\\
+1 &amp; r_k&gt;=r
+\end{cases}
+\end{equation}</div>
+<script type="math/tex; mode=display">\begin{equation}
+P(r_k) =
+\begin{cases}
+e^{\frac{(r_k-r)}{T_k}} & r_k < r\\
+1 & r_k>=r
+\end{cases}
+\end{equation}</script>
+</div>
+<p>在第k次迭代，搜到的网络为<span><span class="MathJax_Preview">N_k</span><script type="math/tex">N_k</script></span>, 对<span><span class="MathJax_Preview">N_k</span><script type="math/tex">N_k</script></span>训练若干epoch后，在测试集上得到reward为<span><span class="MathJax_Preview">r_k</span><script type="math/tex">r_k</script></span>, 以概率<span><span class="MathJax_Preview">P(r_k)</span><script type="math/tex">P(r_k)</script></span>接受<span><span class="MathJax_Preview">r_k</span><script type="math/tex">r_k</script></span>，即执行<span><span class="MathJax_Preview">r=r_k</span><script type="math/tex">r=r_k</script></span>。<span><span class="MathJax_Preview">r</span><script type="math/tex">r</script></span>在搜索过程起始时被初始化为0. <span><span class="MathJax_Preview">T_0</span><script type="math/tex">T_0</script></span>为初始化温度，<span><span class="MathJax_Preview">\theta</span><script type="math/tex">\theta</script></span>为温度衰减系数，<span><span class="MathJax_Preview">T_k</span><script type="math/tex">T_k</script></span>为第k次迭代的温度。</p>
+<p>在我们的NAS任务中，区别于RL每次重新生成一个完整的网络，我们将网络结构映射成一段编码，第一次随机初始化，然后每次随机修改编码中的一部分（对应于网络结构的一部分）生成一个新的编码，然后将这个编码再映射回网络结构，通过在训练集上训练一定的epochs后的精度以及网络延时融合获得reward，来指导退火算法的收敛。</p>
+<h3 id="42">4.2 搜索空间<a class="headerlink" href="#42" title="Permanent link">#</a></h3>
+<p>搜索空间定义了优化问题的变量，变量规模决定了搜索算法的难度和搜索时间。因此为了加快搜索速度，定义一个合理的搜索空间至关重要。在Light-NAS中，为了加速搜索速度，我们将一个网络划分为多个block，先手动按链状层级结构堆叠c，再 使用搜索算法自动搜索每个block内部的结构。</p>
+<p>因为要搜索出在移动端运行速度快的模型，我们参考了MobileNetV2中的Linear Bottlenecks和Inverted residuals结构，搜索每一个Inverted residuals中的具体参数，包括kernelsize、channel扩张倍数、重复次数、channels number。如图10所示：</p>
+<p align="center">
+<img src="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/docs/docs/images/algo/light-nas-block.png" height=300 width=600 hspace='10'/> <br />
+<strong>图10</strong>
+</p>
+
+<h3 id="43">4.3 模型延时评估<a class="headerlink" href="#43" title="Permanent link">#</a></h3>
+<p>搜索过程支持 FLOPS 约束和模型延时约束。而基于 Android/iOS 移动端、开发板等硬件平台，迭代搜索过程中不断测试模型的延时不仅消耗时间而且非常不方便，因此我们开发了模型延时评估器来评估搜索得到模型的延时。通过延时评估器评估得到的延时与模型实际测试的延时波动偏差小于 10%。</p>
+<p>延时评估器分为配置硬件延时评估器和评估模型延时两个阶段，配置硬件延时评估器只需要执行一次，而评估模型延时则在搜索过程中不断评估搜索得到的模型延时。</p>
+<ul>
+<li>
+<p>配置硬件延时评估器</p>
+<ol>
+<li>获取搜索空间中所有不重复的 op 及其参数</li>
+<li>获取每组 op 及其参数的延时</li>
+</ol>
+</li>
+<li>
+<p>评估模型延时</p>
+<ol>
+<li>获取给定模型的所有 op 及其参数</li>
+<li>根据给定模型的所有 op 及参数，利用延时评估器去估计模型的延时</li>
+</ol>
+</li>
+</ul>
+<h2 id="5">5. 参考文献<a class="headerlink" href="#5" title="Permanent link">#</a></h2>
+<ol>
+<li>
+<p><a href="https://media.nips.cc/Conferences/2015/tutorialslides/Dally-NIPS-Tutorial-2015.pdf">High-Performance Hardware for Machine Learning</a></p>
+</li>
+<li>
+<p><a href="https://arxiv.org/pdf/1806.08342.pdf">Quantizing deep convolutional networks for efficient inference: A whitepaper</a></p>
+</li>
+<li>
+<p><a href="https://arxiv.org/pdf/1608.08710.pdf">Pruning Filters for Efficient ConvNets</a></p>
+</li>
+<li>
+<p><a href="https://arxiv.org/pdf/1503.02531.pdf">Distilling the Knowledge in a Neural Network</a></p>
+</li>
+<li>
+<p><a href="http://openaccess.thecvf.com/content_cvpr_2017/papers/Yim_A_Gift_From_CVPR_2017_paper.pdf">A Gift from Knowledge Distillation: Fast Optimization, Network Minimization and Transfer Learning</a></p>
+</li>
+</ol>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../../api/search_space/" class="btn btn-neutral" title="搜索空间"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/PaddlePaddle/PaddleSlim/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../../api/search_space/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../mathjax-config.js" defer></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
+      <script src="../../search/main.js" defer></script>
+
+</body>
+</html>

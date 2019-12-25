@@ -107,6 +107,11 @@
     </ul>
 	    </li>
           
+            <li class="toctree-l1">
+		
+    <a class="" href="../../algo/algo/">算法原理</a>
+	    </li>
+          
         </ul>
       </div>
       &nbsp;
@@ -132,6 +137,9 @@
     <li>Demo guide</li>
     <li class="wy-breadcrumbs-aside">
       
+        <a href="https://github.com/PaddlePaddle/PaddleSlim/edit/master/docs/tutorials/demo_guide.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
     </li>
   </ul>
   <hr/>
@@ -139,16 +147,16 @@
           <div role="main">
             <div class="section">
               
-                <h2 id="_1"><a href="../demo/distillation/distillation_demo.py">蒸馏</a></h2>
+                <h2 id="_1"><a href="../demo/distillation/distillation_demo.py">蒸馏</a><a class="headerlink" href="#_1" title="Permanent link">#</a></h2>
 <p>蒸馏demo默认使用ResNet50作为teacher网络，MobileNet作为student网络，此外还支持将teacher和student换成<a href="../demo/models">models目录</a>支持的任意模型。</p>
 <p>demo中对teahcer模型和student模型的一层特征图添加了l2_loss的蒸馏损失函数，使用时也可根据需要选择fsp_loss, soft_label_loss以及自定义的loss函数。</p>
 <p>训练默认使用的是cifar10数据集，piecewise_decay学习率衰减策略，momentum优化器进行120轮蒸馏训练。使用者也可以简单地用args参数切换为使用ImageNet数据集，cosine_decay学习率衰减策略等其他训练配置。</p>
-<h2 id="_2">量化</h2>
-<h3 id="demo"><a href="../quant_aware_demo/">量化训练demo文档</a></h3>
-<h3 id="demo_1"><a href="../quant_post_demo/">离线量化demo文档</a></h3>
-<h3 id="embeddingdemo"><a href="../quant_embedding_demo/">Embedding量化demo文档</a></h3>
-<h2 id="nas">NAS</h2>
-<h3 id="nas_1"><a href="../nas_demo/">NAS示例</a></h3>
+<h2 id="_2">量化<a class="headerlink" href="#_2" title="Permanent link">#</a></h2>
+<h3 id="demo"><a href="../quant_aware_demo/">量化训练demo文档</a><a class="headerlink" href="#demo" title="Permanent link">#</a></h3>
+<h3 id="demo_1"><a href="../quant_post_demo/">离线量化demo文档</a><a class="headerlink" href="#demo_1" title="Permanent link">#</a></h3>
+<h3 id="embeddingdemo"><a href="../quant_embedding_demo/">Embedding量化demo文档</a><a class="headerlink" href="#embeddingdemo" title="Permanent link">#</a></h3>
+<h2 id="nas">NAS<a class="headerlink" href="#nas" title="Permanent link">#</a></h2>
+<h3 id="nas_1"><a href="../nas_demo/">NAS示例</a><a class="headerlink" href="#nas_1" title="Permanent link">#</a></h3>
               
             </div>
           </div>
@@ -175,6 +183,8 @@
   <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
+          <a href="https://github.com/PaddlePaddle/PaddleSlim/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
       
       
     </span>
@@ -182,7 +192,7 @@
     <script>var base_url = '../..';</script>
     <script src="../../js/theme.js" defer></script>
       <script src="../../mathjax-config.js" defer></script>
-      <script src="../../MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
       <script src="../../search/main.js" defer></script>
 
 </body>

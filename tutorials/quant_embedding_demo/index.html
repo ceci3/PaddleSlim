@@ -121,6 +121,11 @@
     </ul>
 	    </li>
           
+            <li class="toctree-l1">
+		
+    <a class="" href="../../algo/algo/">算法原理</a>
+	    </li>
+          
         </ul>
       </div>
       &nbsp;
@@ -150,6 +155,9 @@
     <li>Embedding量化</li>
     <li class="wy-breadcrumbs-aside">
       
+        <a href="https://github.com/PaddlePaddle/PaddleSlim/edit/master/docs/tutorials/quant_embedding_demo.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
     </li>
   </ul>
   <hr/>
@@ -157,7 +165,7 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="embedding">Embedding量化示例</h1>
+                <h1 id="embedding">Embedding量化示例<a class="headerlink" href="#embedding" title="Permanent link">#</a></h1>
 <p>本示例介绍如何使用Embedding量化的接口 <a href="">paddleslim.quant.quant_embedding</a> 。<code>quant_embedding</code>接口将网络中的Embedding参数从<code>float32</code>类型量化到 <code>8-bit</code>整数类型，在几乎不损失模型精度的情况下减少模型的存储空间和显存占用。</p>
 <p>接口介绍请参考 <a href='../../../paddleslim/quant/quantization_api_doc.md'>量化API文档</a>。</p>
 <p>该接口对program的修改：</p>
@@ -174,9 +182,18 @@
 </p>
 
 <p>以下将以 <code>基于skip-gram的word2vector模型</code> 为例来说明如何使用<code>quant_embedding</code>接口。首先介绍 <code>基于skip-gram的word2vector模型</code> 的正常训练和测试流程。</p>
-<h2 id="skip-gramword2vector">基于skip-gram的word2vector模型</h2>
+<h2 id="skip-gramword2vector">基于skip-gram的word2vector模型<a class="headerlink" href="#skip-gramword2vector" title="Permanent link">#</a></h2>
 <p>以下是本例的简要目录结构及说明：</p>
-<div class="codehilite"><pre><span></span>.
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>.
 ├── cluster_train.py    # 分布式训练函数
 ├── cluster_train.sh    # 本地模拟多机脚本
 ├── train.py            # 训练函数
@@ -187,173 +204,243 @@
 ├── train.py            # 训练函数
 └── utils.py            # 通用函数
 </pre></div>
+</td></tr></table>
 
-
-<h3 id="_1">介绍</h3>
+<h3 id="_1">介绍<a class="headerlink" href="#_1" title="Permanent link">#</a></h3>
 <p>本例实现了skip-gram模式的word2vector模型。</p>
 <p>同时推荐用户参考<a href="https://aistudio.baidu.com/aistudio/projectDetail/124377"> IPython Notebook demo</a></p>
-<h3 id="_2">数据下载</h3>
-<p>全量数据集使用的是来自1 Billion Word Language Model Benchmark的(http://www.statmt.org/lm-benchmark) 的数据集.</p>
-<div class="codehilite"><pre><span></span>mkdir data
+<h3 id="_2">数据下载<a class="headerlink" href="#_2" title="Permanent link">#</a></h3>
+<p>全量数据集使用的是来自1 Billion Word Language Model Benchmark的(<a href="http://www.statmt.org/lm-benchmark">http://www.statmt.org/lm-benchmark</a>) 的数据集.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
+2
+3
+4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>mkdir data
 wget http://www.statmt.org/lm-benchmark/1-billion-word-language-modeling-benchmark-r13output.tar.gz
 tar xzvf <span class="m">1</span>-billion-word-language-modeling-benchmark-r13output.tar.gz
 mv <span class="m">1</span>-billion-word-language-modeling-benchmark-r13output/training-monolingual.tokenized.shuffled/ data/
 </pre></div>
-
+</td></tr></table>
 
 <p>备用数据地址下载命令如下</p>
-<div class="codehilite"><pre><span></span>mkdir data
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
+2
+3
+4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>mkdir data
 wget https://paddlerec.bj.bcebos.com/word2vec/1-billion-word-language-modeling-benchmark-r13output.tar
 tar xvf <span class="m">1</span>-billion-word-language-modeling-benchmark-r13output.tar
 mv <span class="m">1</span>-billion-word-language-modeling-benchmark-r13output/training-monolingual.tokenized.shuffled/ data/
 </pre></div>
-
+</td></tr></table>
 
 <p>为了方便快速验证，我们也提供了经典的text8样例数据集，包含1700w个词。 下载命令如下</p>
-<div class="codehilite"><pre><span></span>mkdir data
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
+2
+3
+4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>mkdir data
 wget https://paddlerec.bj.bcebos.com/word2vec/text.tar
 tar xvf text.tar
 mv text data/
 </pre></div>
+</td></tr></table>
 
-
-<h3 id="_3">数据预处理</h3>
+<h3 id="_3">数据预处理<a class="headerlink" href="#_3" title="Permanent link">#</a></h3>
 <p>以样例数据集为例进行预处理。全量数据集注意解压后以training-monolingual.tokenized.shuffled 目录为预处理目录，和样例数据集的text目录并列。</p>
 <p>词典格式: 词&lt;空格&gt;词频。注意低频词用'UNK'表示</p>
-<p>可以按格式自建词典，如果自建词典跳过第一步。</p>
-<div class="codehilite"><pre><span></span>the 1061396
-of 593677
-and 416629
-one 411764
-in 372201
-a 325873
-&lt;UNK&gt; 324608
-to 316376
-zero 264975
-nine 250430
+<p>可以按格式自建词典，如果自建词典跳过第一步。
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">the</span> <span class="mi">1061396</span>
+<span class="k">of</span> <span class="mi">593677</span>
+<span class="k">and</span> <span class="mi">416629</span>
+<span class="n">one</span> <span class="mi">411764</span>
+<span class="k">in</span> <span class="mi">372201</span>
+<span class="n">a</span> <span class="mi">325873</span>
+<span class="o">&lt;</span><span class="n">UNK</span><span class="o">&gt;</span> <span class="mi">324608</span>
+<span class="k">to</span> <span class="mi">316376</span>
+<span class="n">zero</span> <span class="mi">264975</span>
+<span class="n">nine</span> <span class="mi">250430</span>
 </pre></div>
-
-
+</td></tr></table></p>
 <p>第一步根据英文语料生成词典，中文语料可以通过修改text_strip方法自定义处理方法。</p>
-<div class="codehilite"><pre><span></span>python preprocess.py --build_dict --build_dict_corpus_dir data/text/ --dict_path data/test_build_dict
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>python preprocess.py --build_dict --build_dict_corpus_dir data/text/ --dict_path data/test_build_dict
 </pre></div>
-
+</td></tr></table>
 
 <p>第二步根据词典将文本转成id, 同时进行downsample，按照概率过滤常见词, 同时生成word和id映射的文件，文件名为词典+"<em>word_to_id</em>"。</p>
-<div class="codehilite"><pre><span></span>python preprocess.py --filter_corpus --dict_path data/test_build_dict --input_corpus_dir data/text --output_corpus_dir data/convert_text8 --min_count <span class="m">5</span> --downsample <span class="m">0</span>.001
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>python preprocess.py --filter_corpus --dict_path data/test_build_dict --input_corpus_dir data/text --output_corpus_dir data/convert_text8 --min_count <span class="m">5</span> --downsample <span class="m">0</span>.001
 </pre></div>
+</td></tr></table>
 
-
-<h3 id="_4">训练</h3>
+<h3 id="_4">训练<a class="headerlink" href="#_4" title="Permanent link">#</a></h3>
 <p>具体的参数配置可运行</p>
-<div class="codehilite"><pre><span></span>python train.py -h
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>python train.py -h
 </pre></div>
+</td></tr></table>
 
-
-<p>单机多线程训练</p>
-<div class="codehilite"><pre><span></span><span class="nv">OPENBLAS_NUM_THREADS</span><span class="o">=</span><span class="m">1</span> <span class="nv">CPU_NUM</span><span class="o">=</span><span class="m">5</span> python train.py --train_data_dir data/convert_text8 --dict_path data/test_build_dict --num_passes <span class="m">10</span> --batch_size <span class="m">100</span> --model_output_dir v1_cpu5_b100_lr1dir --base_lr <span class="m">1</span>.0 --print_batch <span class="m">1000</span> --with_speed --is_sparse
+<p>单机多线程训练
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="nv">OPENBLAS_NUM_THREADS</span><span class="o">=</span><span class="m">1</span> <span class="nv">CPU_NUM</span><span class="o">=</span><span class="m">5</span> python train.py --train_data_dir data/convert_text8 --dict_path data/test_build_dict --num_passes <span class="m">10</span> --batch_size <span class="m">100</span> --model_output_dir v1_cpu5_b100_lr1dir --base_lr <span class="m">1</span>.0 --print_batch <span class="m">1000</span> --with_speed --is_sparse
 </pre></div>
-
-
+</td></tr></table></p>
 <p>本地单机模拟多机训练</p>
-<div class="codehilite"><pre><span></span>sh cluster_train.sh
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>sh cluster_train.sh
 </pre></div>
+</td></tr></table>
 
-
-<p>本示例中按照单机多线程训练的命令进行训练，训练完毕后，可看到在当前文件夹下保存模型的路径为:     <code>v1_cpu5_b100_lr1dir</code>, 运行 <code>ls v1_cpu5_b100_lr1dir</code>可看到该文件夹下保存了训练的10个epoch的模型文件。</p>
-<div class="codehilite"><pre><span></span>pass-0  pass-1  pass-2  pass-3  pass-4  pass-5  pass-6  pass-7  pass-8  pass-9
+<p>本示例中按照单机多线程训练的命令进行训练，训练完毕后，可看到在当前文件夹下保存模型的路径为:     <code>v1_cpu5_b100_lr1dir</code>, 运行 <code>ls v1_cpu5_b100_lr1dir</code>可看到该文件夹下保存了训练的10个epoch的模型文件。
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">pass</span><span class="o">-</span><span class="mi">0</span>  <span class="n">pass</span><span class="o">-</span><span class="mi">1</span>  <span class="n">pass</span><span class="o">-</span><span class="mi">2</span>  <span class="n">pass</span><span class="o">-</span><span class="mi">3</span>  <span class="n">pass</span><span class="o">-</span><span class="mi">4</span>  <span class="n">pass</span><span class="o">-</span><span class="mi">5</span>  <span class="n">pass</span><span class="o">-</span><span class="mi">6</span>  <span class="n">pass</span><span class="o">-</span><span class="mi">7</span>  <span class="n">pass</span><span class="o">-</span><span class="mi">8</span>  <span class="n">pass</span><span class="o">-</span><span class="mi">9</span>
 </pre></div>
-
-
-<h3 id="_5">预测</h3>
+</td></tr></table></p>
+<h3 id="_5">预测<a class="headerlink" href="#_5" title="Permanent link">#</a></h3>
 <p>测试集下载命令如下</p>
-<div class="codehilite"><pre><span></span><span class="c1">#全量数据集测试集</span>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
+2
+3
+4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">#全量数据集测试集</span>
 wget https://paddlerec.bj.bcebos.com/word2vec/test_dir.tar
 <span class="c1">#样本数据集测试集</span>
 wget https://paddlerec.bj.bcebos.com/word2vec/test_mid_dir.tar
 </pre></div>
+</td></tr></table>
 
-
-<p>预测命令，注意词典名称需要加后缀"<em>word_to_id</em>", 此文件是预处理阶段生成的。</p>
-<div class="codehilite"><pre><span></span>python infer.py --infer_epoch --test_dir data/test_mid_dir --dict_path data/test_build_dict_word_to_id_ --batch_size <span class="m">20000</span> --model_dir v1_cpu5_b100_lr1dir/  --start_index <span class="m">0</span> --last_index <span class="m">9</span>
+<p>预测命令，注意词典名称需要加后缀"<em>word_to_id</em>", 此文件是预处理阶段生成的。
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>python infer.py --infer_epoch --test_dir data/test_mid_dir --dict_path data/test_build_dict_word_to_id_ --batch_size <span class="m">20000</span> --model_dir v1_cpu5_b100_lr1dir/  --start_index <span class="m">0</span> --last_index <span class="m">9</span>
 </pre></div>
-
-
-<p>运行该预测命令, 可看到如下输出</p>
-<div class="codehilite"><pre><span></span>(&#39;start index: &#39;, 0, &#39; last_index:&#39;, 9)
-(&#39;vocab_size:&#39;, 63642)
-step:1 249
-epoch:0          acc:0.014
-step:1 590
-epoch:1          acc:0.033
-step:1 982
-epoch:2          acc:0.055
-step:1 1338
-epoch:3          acc:0.075
-step:1 1653
-epoch:4          acc:0.093
-step:1 1914
-epoch:5          acc:0.107
-step:1 2204
-epoch:6          acc:0.124
-step:1 2416
-epoch:7          acc:0.136
-step:1 2606
-epoch:8          acc:0.146
-step:1 2722
-epoch:9          acc:0.153
+</td></tr></table>
+运行该预测命令, 可看到如下输出
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="p">(</span><span class="s1">&#39;start index: &#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39; last_index:&#39;</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+<span class="p">(</span><span class="s1">&#39;vocab_size:&#39;</span><span class="p">,</span> <span class="mi">63642</span><span class="p">)</span>
+<span class="n">step</span><span class="p">:</span><span class="mi">1</span> <span class="mi">249</span>
+<span class="n">epoch</span><span class="p">:</span><span class="mi">0</span>          <span class="n">acc</span><span class="p">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">014</span>
+<span class="n">step</span><span class="p">:</span><span class="mi">1</span> <span class="mi">590</span>
+<span class="n">epoch</span><span class="p">:</span><span class="mi">1</span>          <span class="n">acc</span><span class="p">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">033</span>
+<span class="n">step</span><span class="p">:</span><span class="mi">1</span> <span class="mi">982</span>
+<span class="n">epoch</span><span class="p">:</span><span class="mi">2</span>          <span class="n">acc</span><span class="p">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">055</span>
+<span class="n">step</span><span class="p">:</span><span class="mi">1</span> <span class="mi">1338</span>
+<span class="n">epoch</span><span class="p">:</span><span class="mi">3</span>          <span class="n">acc</span><span class="p">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">075</span>
+<span class="n">step</span><span class="p">:</span><span class="mi">1</span> <span class="mi">1653</span>
+<span class="n">epoch</span><span class="p">:</span><span class="mi">4</span>          <span class="n">acc</span><span class="p">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">093</span>
+<span class="n">step</span><span class="p">:</span><span class="mi">1</span> <span class="mi">1914</span>
+<span class="n">epoch</span><span class="p">:</span><span class="mi">5</span>          <span class="n">acc</span><span class="p">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">107</span>
+<span class="n">step</span><span class="p">:</span><span class="mi">1</span> <span class="mi">2204</span>
+<span class="n">epoch</span><span class="p">:</span><span class="mi">6</span>          <span class="n">acc</span><span class="p">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">124</span>
+<span class="n">step</span><span class="p">:</span><span class="mi">1</span> <span class="mi">2416</span>
+<span class="n">epoch</span><span class="p">:</span><span class="mi">7</span>          <span class="n">acc</span><span class="p">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">136</span>
+<span class="n">step</span><span class="p">:</span><span class="mi">1</span> <span class="mi">2606</span>
+<span class="n">epoch</span><span class="p">:</span><span class="mi">8</span>          <span class="n">acc</span><span class="p">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">146</span>
+<span class="n">step</span><span class="p">:</span><span class="mi">1</span> <span class="mi">2722</span>
+<span class="n">epoch</span><span class="p">:</span><span class="mi">9</span>          <span class="n">acc</span><span class="p">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">153</span>
 </pre></div>
-
-
-<h2 id="skip-gramword2vector_1">量化<code>基于skip-gram的word2vector模型</code></h2>
-<p>量化配置为:</p>
-<div class="codehilite"><pre><span></span>config = {
-        &#39;params_name&#39;: &#39;emb&#39;,
-        &#39;quantize_type&#39;: &#39;abs_max&#39;
-        }
+</td></tr></table></p>
+<h2 id="skip-gramword2vector_1">量化<code>基于skip-gram的word2vector模型</code><a class="headerlink" href="#skip-gramword2vector_1" title="Permanent link">#</a></h2>
+<p>量化配置为:
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
+2
+3
+4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">config</span> <span class="o">=</span> <span class="err">{</span>
+        <span class="s1">&#39;params_name&#39;</span><span class="p">:</span> <span class="s1">&#39;emb&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;quantize_type&#39;</span><span class="p">:</span> <span class="s1">&#39;abs_max&#39;</span>
+        <span class="err">}</span>
 </pre></div>
-
-
+</td></tr></table></p>
 <p>运行命令为：</p>
-<div class="codehilite"><pre><span></span>python infer.py --infer_epoch --test_dir data/test_mid_dir --dict_path data/test_build_dict_word_to_id_ --batch_size <span class="m">20000</span> --model_dir v1_cpu5_b100_lr1dir/  --start_index <span class="m">0</span> --last_index <span class="m">9</span> --emb_quant True
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>python infer.py --infer_epoch --test_dir data/test_mid_dir --dict_path data/test_build_dict_word_to_id_ --batch_size <span class="m">20000</span> --model_dir v1_cpu5_b100_lr1dir/  --start_index <span class="m">0</span> --last_index <span class="m">9</span> --emb_quant True
 </pre></div>
-
+</td></tr></table>
 
 <p>运行输出为:</p>
-<div class="codehilite"><pre><span></span>(&#39;start index: &#39;, 0, &#39; last_index:&#39;, 9)
-(&#39;vocab_size:&#39;, 63642)
-quant_embedding config {&#39;quantize_type&#39;: &#39;abs_max&#39;, &#39;params_name&#39;: &#39;emb&#39;, &#39;quantize_bits&#39;: 8, &#39;dtype&#39;: &#39;int8&#39;}
-step:1 253
-epoch:0          acc:0.014
-quant_embedding config {&#39;quantize_type&#39;: &#39;abs_max&#39;, &#39;params_name&#39;: &#39;emb&#39;, &#39;quantize_bits&#39;: 8, &#39;dtype&#39;: &#39;int8&#39;}
-step:1 586
-epoch:1          acc:0.033
-quant_embedding config {&#39;quantize_type&#39;: &#39;abs_max&#39;, &#39;params_name&#39;: &#39;emb&#39;, &#39;quantize_bits&#39;: 8, &#39;dtype&#39;: &#39;int8&#39;}
-step:1 970
-epoch:2          acc:0.054
-quant_embedding config {&#39;quantize_type&#39;: &#39;abs_max&#39;, &#39;params_name&#39;: &#39;emb&#39;, &#39;quantize_bits&#39;: 8, &#39;dtype&#39;: &#39;int8&#39;}
-step:1 1364
-epoch:3          acc:0.077
-quant_embedding config {&#39;quantize_type&#39;: &#39;abs_max&#39;, &#39;params_name&#39;: &#39;emb&#39;, &#39;quantize_bits&#39;: 8, &#39;dtype&#39;: &#39;int8&#39;}
-step:1 1642
-epoch:4          acc:0.092
-quant_embedding config {&#39;quantize_type&#39;: &#39;abs_max&#39;, &#39;params_name&#39;: &#39;emb&#39;, &#39;quantize_bits&#39;: 8, &#39;dtype&#39;: &#39;int8&#39;}
-step:1 1936
-epoch:5          acc:0.109
-quant_embedding config {&#39;quantize_type&#39;: &#39;abs_max&#39;, &#39;params_name&#39;: &#39;emb&#39;, &#39;quantize_bits&#39;: 8, &#39;dtype&#39;: &#39;int8&#39;}
-step:1 2216
-epoch:6          acc:0.124
-quant_embedding config {&#39;quantize_type&#39;: &#39;abs_max&#39;, &#39;params_name&#39;: &#39;emb&#39;, &#39;quantize_bits&#39;: 8, &#39;dtype&#39;: &#39;int8&#39;}
-step:1 2419
-epoch:7          acc:0.136
-quant_embedding config {&#39;quantize_type&#39;: &#39;abs_max&#39;, &#39;params_name&#39;: &#39;emb&#39;, &#39;quantize_bits&#39;: 8, &#39;dtype&#39;: &#39;int8&#39;}
-step:1 2603
-epoch:8          acc:0.146
-quant_embedding config {&#39;quantize_type&#39;: &#39;abs_max&#39;, &#39;params_name&#39;: &#39;emb&#39;, &#39;quantize_bits&#39;: 8, &#39;dtype&#39;: &#39;int8&#39;}
-step:1 2719
-epoch:9          acc:0.153
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="p">(</span><span class="s1">&#39;start index: &#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39; last_index:&#39;</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+<span class="p">(</span><span class="s1">&#39;vocab_size:&#39;</span><span class="p">,</span> <span class="mi">63642</span><span class="p">)</span>
+<span class="n">quant_embedding</span> <span class="n">config</span> <span class="err">{</span><span class="s1">&#39;quantize_type&#39;</span><span class="p">:</span> <span class="s1">&#39;abs_max&#39;</span><span class="p">,</span> <span class="s1">&#39;params_name&#39;</span><span class="p">:</span> <span class="s1">&#39;emb&#39;</span><span class="p">,</span> <span class="s1">&#39;quantize_bits&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;dtype&#39;</span><span class="p">:</span> <span class="s1">&#39;int8&#39;</span><span class="err">}</span>
+<span class="n">step</span><span class="p">:</span><span class="mi">1</span> <span class="mi">253</span>
+<span class="n">epoch</span><span class="p">:</span><span class="mi">0</span>          <span class="n">acc</span><span class="p">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">014</span>
+<span class="n">quant_embedding</span> <span class="n">config</span> <span class="err">{</span><span class="s1">&#39;quantize_type&#39;</span><span class="p">:</span> <span class="s1">&#39;abs_max&#39;</span><span class="p">,</span> <span class="s1">&#39;params_name&#39;</span><span class="p">:</span> <span class="s1">&#39;emb&#39;</span><span class="p">,</span> <span class="s1">&#39;quantize_bits&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;dtype&#39;</span><span class="p">:</span> <span class="s1">&#39;int8&#39;</span><span class="err">}</span>
+<span class="n">step</span><span class="p">:</span><span class="mi">1</span> <span class="mi">586</span>
+<span class="n">epoch</span><span class="p">:</span><span class="mi">1</span>          <span class="n">acc</span><span class="p">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">033</span>
+<span class="n">quant_embedding</span> <span class="n">config</span> <span class="err">{</span><span class="s1">&#39;quantize_type&#39;</span><span class="p">:</span> <span class="s1">&#39;abs_max&#39;</span><span class="p">,</span> <span class="s1">&#39;params_name&#39;</span><span class="p">:</span> <span class="s1">&#39;emb&#39;</span><span class="p">,</span> <span class="s1">&#39;quantize_bits&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;dtype&#39;</span><span class="p">:</span> <span class="s1">&#39;int8&#39;</span><span class="err">}</span>
+<span class="n">step</span><span class="p">:</span><span class="mi">1</span> <span class="mi">970</span>
+<span class="n">epoch</span><span class="p">:</span><span class="mi">2</span>          <span class="n">acc</span><span class="p">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">054</span>
+<span class="n">quant_embedding</span> <span class="n">config</span> <span class="err">{</span><span class="s1">&#39;quantize_type&#39;</span><span class="p">:</span> <span class="s1">&#39;abs_max&#39;</span><span class="p">,</span> <span class="s1">&#39;params_name&#39;</span><span class="p">:</span> <span class="s1">&#39;emb&#39;</span><span class="p">,</span> <span class="s1">&#39;quantize_bits&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;dtype&#39;</span><span class="p">:</span> <span class="s1">&#39;int8&#39;</span><span class="err">}</span>
+<span class="n">step</span><span class="p">:</span><span class="mi">1</span> <span class="mi">1364</span>
+<span class="n">epoch</span><span class="p">:</span><span class="mi">3</span>          <span class="n">acc</span><span class="p">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">077</span>
+<span class="n">quant_embedding</span> <span class="n">config</span> <span class="err">{</span><span class="s1">&#39;quantize_type&#39;</span><span class="p">:</span> <span class="s1">&#39;abs_max&#39;</span><span class="p">,</span> <span class="s1">&#39;params_name&#39;</span><span class="p">:</span> <span class="s1">&#39;emb&#39;</span><span class="p">,</span> <span class="s1">&#39;quantize_bits&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;dtype&#39;</span><span class="p">:</span> <span class="s1">&#39;int8&#39;</span><span class="err">}</span>
+<span class="n">step</span><span class="p">:</span><span class="mi">1</span> <span class="mi">1642</span>
+<span class="n">epoch</span><span class="p">:</span><span class="mi">4</span>          <span class="n">acc</span><span class="p">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">092</span>
+<span class="n">quant_embedding</span> <span class="n">config</span> <span class="err">{</span><span class="s1">&#39;quantize_type&#39;</span><span class="p">:</span> <span class="s1">&#39;abs_max&#39;</span><span class="p">,</span> <span class="s1">&#39;params_name&#39;</span><span class="p">:</span> <span class="s1">&#39;emb&#39;</span><span class="p">,</span> <span class="s1">&#39;quantize_bits&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;dtype&#39;</span><span class="p">:</span> <span class="s1">&#39;int8&#39;</span><span class="err">}</span>
+<span class="n">step</span><span class="p">:</span><span class="mi">1</span> <span class="mi">1936</span>
+<span class="n">epoch</span><span class="p">:</span><span class="mi">5</span>          <span class="n">acc</span><span class="p">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">109</span>
+<span class="n">quant_embedding</span> <span class="n">config</span> <span class="err">{</span><span class="s1">&#39;quantize_type&#39;</span><span class="p">:</span> <span class="s1">&#39;abs_max&#39;</span><span class="p">,</span> <span class="s1">&#39;params_name&#39;</span><span class="p">:</span> <span class="s1">&#39;emb&#39;</span><span class="p">,</span> <span class="s1">&#39;quantize_bits&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;dtype&#39;</span><span class="p">:</span> <span class="s1">&#39;int8&#39;</span><span class="err">}</span>
+<span class="n">step</span><span class="p">:</span><span class="mi">1</span> <span class="mi">2216</span>
+<span class="n">epoch</span><span class="p">:</span><span class="mi">6</span>          <span class="n">acc</span><span class="p">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">124</span>
+<span class="n">quant_embedding</span> <span class="n">config</span> <span class="err">{</span><span class="s1">&#39;quantize_type&#39;</span><span class="p">:</span> <span class="s1">&#39;abs_max&#39;</span><span class="p">,</span> <span class="s1">&#39;params_name&#39;</span><span class="p">:</span> <span class="s1">&#39;emb&#39;</span><span class="p">,</span> <span class="s1">&#39;quantize_bits&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;dtype&#39;</span><span class="p">:</span> <span class="s1">&#39;int8&#39;</span><span class="err">}</span>
+<span class="n">step</span><span class="p">:</span><span class="mi">1</span> <span class="mi">2419</span>
+<span class="n">epoch</span><span class="p">:</span><span class="mi">7</span>          <span class="n">acc</span><span class="p">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">136</span>
+<span class="n">quant_embedding</span> <span class="n">config</span> <span class="err">{</span><span class="s1">&#39;quantize_type&#39;</span><span class="p">:</span> <span class="s1">&#39;abs_max&#39;</span><span class="p">,</span> <span class="s1">&#39;params_name&#39;</span><span class="p">:</span> <span class="s1">&#39;emb&#39;</span><span class="p">,</span> <span class="s1">&#39;quantize_bits&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;dtype&#39;</span><span class="p">:</span> <span class="s1">&#39;int8&#39;</span><span class="err">}</span>
+<span class="n">step</span><span class="p">:</span><span class="mi">1</span> <span class="mi">2603</span>
+<span class="n">epoch</span><span class="p">:</span><span class="mi">8</span>          <span class="n">acc</span><span class="p">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">146</span>
+<span class="n">quant_embedding</span> <span class="n">config</span> <span class="err">{</span><span class="s1">&#39;quantize_type&#39;</span><span class="p">:</span> <span class="s1">&#39;abs_max&#39;</span><span class="p">,</span> <span class="s1">&#39;params_name&#39;</span><span class="p">:</span> <span class="s1">&#39;emb&#39;</span><span class="p">,</span> <span class="s1">&#39;quantize_bits&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;dtype&#39;</span><span class="p">:</span> <span class="s1">&#39;int8&#39;</span><span class="err">}</span>
+<span class="n">step</span><span class="p">:</span><span class="mi">1</span> <span class="mi">2719</span>
+<span class="n">epoch</span><span class="p">:</span><span class="mi">9</span>          <span class="n">acc</span><span class="p">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">153</span>
 </pre></div>
-
+</td></tr></table>
 
 <p>量化后的模型保存在<code>./output_quant</code>中，可看到量化后的参数<code>'emb.int8'</code>的大小为3.9M, 在<code>./v1_cpu5_b100_lr1dir</code>中可看到量化前的参数<code>'emb'</code>的大小为16M。</p>
               
@@ -391,6 +478,8 @@ epoch:9          acc:0.153
   <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
+          <a href="https://github.com/PaddlePaddle/PaddleSlim/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
       
         <span><a href="../quant_aware_demo/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
@@ -402,7 +491,7 @@ epoch:9          acc:0.153
     <script>var base_url = '../..';</script>
     <script src="../../js/theme.js" defer></script>
       <script src="../../mathjax-config.js" defer></script>
-      <script src="../../MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
       <script src="../../search/main.js" defer></script>
 
 </body>

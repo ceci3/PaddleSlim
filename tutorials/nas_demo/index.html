@@ -119,6 +119,11 @@
     </ul>
 	    </li>
           
+            <li class="toctree-l1">
+		
+    <a class="" href="../../algo/algo/">算法原理</a>
+	    </li>
+          
         </ul>
       </div>
       &nbsp;
@@ -148,6 +153,9 @@
     <li>SA搜索</li>
     <li class="wy-breadcrumbs-aside">
       
+        <a href="https://github.com/PaddlePaddle/PaddleSlim/edit/master/docs/tutorials/nas_demo.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
     </li>
   </ul>
   <hr/>
@@ -155,18 +163,25 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="_1">网络结构搜索示例</h1>
+                <h1 id="_1">网络结构搜索示例<a class="headerlink" href="#_1" title="Permanent link">#</a></h1>
 <p>本示例介绍如何使用网络结构搜索接口，搜索到一个更小或者精度更高的模型，该文档仅介绍paddleslim中SANAS的使用及如何利用SANAS得到模型结构，完整示例代码请参考sa_nas_mobilenetv2.py或者block_sa_nas_mobilenetv2.py。</p>
-<h2 id="_2">接口介绍</h2>
+<h2 id="_2">接口介绍<a class="headerlink" href="#_2" title="Permanent link">#</a></h2>
 <p>请参考。</p>
-<h3 id="1">1. 配置搜索空间</h3>
-<p>详细的搜索空间配置可以参考<a href='../../../paddleslim/nas/nas_api.md'>神经网络搜索API文档</a>。</p>
-<div class="codehilite"><pre><span></span>config = [(&#39;MobileNetV2Space&#39;)]
+<h3 id="1">1. 配置搜索空间<a class="headerlink" href="#1" title="Permanent link">#</a></h3>
+<p>详细的搜索空间配置可以参考<a href='../../../paddleslim/nas/nas_api.md'>神经网络搜索API文档</a>。
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">config</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;MobileNetV2Space&#39;</span><span class="p">)]</span>
 </pre></div>
-
-
-<h3 id="2-sanas">2. 利用搜索空间初始化SANAS实例</h3>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">paddleslim.nas</span> <span class="kn">import</span> <span class="n">SANAS</span>
+</td></tr></table></p>
+<h3 id="2-sanas">2. 利用搜索空间初始化SANAS实例<a class="headerlink" href="#2-sanas" title="Permanent link">#</a></h3>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">paddleslim.nas</span> <span class="kn">import</span> <span class="n">SANAS</span>
 
 <span class="n">sa_nas</span> <span class="o">=</span> <span class="n">SANAS</span><span class="p">(</span>
     <span class="n">config</span><span class="p">,</span>
@@ -176,15 +191,34 @@
     <span class="n">search_steps</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
     <span class="n">is_server</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
+</td></tr></table>
 
-
-<h3 id="3-nas">3. 根据实例化的NAS得到当前的网络结构</h3>
-<div class="codehilite"><pre><span></span>archs = sa_nas.next_archs()
+<h3 id="3-nas">3. 根据实例化的NAS得到当前的网络结构<a class="headerlink" href="#3-nas" title="Permanent link">#</a></h3>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">archs</span> <span class="o">=</span> <span class="n">sa_nas</span><span class="p">.</span><span class="n">next_archs</span><span class="p">()</span>
 </pre></div>
+</td></tr></table>
 
-
-<h3 id="4-program">4. 根据得到的网络结构和输入构造训练和测试program</h3>
-<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">paddle.fluid</span> <span class="kn">as</span> <span class="nn">fluid</span>
+<h3 id="4-program">4. 根据得到的网络结构和输入构造训练和测试program<a class="headerlink" href="#4-program" title="Permanent link">#</a></h3>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">paddle.fluid</span> <span class="kn">as</span> <span class="nn">fluid</span>
 
 <span class="n">train_program</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">Program</span><span class="p">()</span>
 <span class="n">test_program</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">Program</span><span class="p">()</span>
@@ -205,19 +239,23 @@
     <span class="n">sgd</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
     <span class="n">sgd</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">avg_cost</span><span class="p">)</span>
 </pre></div>
+</td></tr></table>
 
-
-<h3 id="5-program">5. 根据构造的训练program添加限制条件</h3>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">paddleslim.analysis</span> <span class="kn">import</span> <span class="n">flops</span>
+<h3 id="5-program">5. 根据构造的训练program添加限制条件<a class="headerlink" href="#5-program" title="Permanent link">#</a></h3>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
+2
+3
+4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">paddleslim.analysis</span> <span class="kn">import</span> <span class="n">flops</span>
 
 <span class="k">if</span> <span class="n">flops</span><span class="p">(</span><span class="n">train_program</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">321208544</span><span class="p">:</span>
     <span class="k">continue</span>
 </pre></div>
+</td></tr></table>
 
-
-<h3 id="6-score">6. 回传score</h3>
-<div class="codehilite"><pre><span></span>sa_nas.reward(score)
+<h3 id="6-score">6. 回传score<a class="headerlink" href="#6-score" title="Permanent link">#</a></h3>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">sa_nas</span><span class="p">.</span><span class="n">reward</span><span class="p">(</span><span class="n">score</span><span class="p">)</span>
 </pre></div>
+</td></tr></table>
               
             </div>
           </div>
@@ -253,6 +291,8 @@
   <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
+          <a href="https://github.com/PaddlePaddle/PaddleSlim/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
       
         <span><a href="../quant_embedding_demo/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
@@ -264,7 +304,7 @@
     <script>var base_url = '../..';</script>
     <script src="../../js/theme.js" defer></script>
       <script src="../../mathjax-config.js" defer></script>
-      <script src="../../MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
       <script src="../../search/main.js" defer></script>
 
 </body>

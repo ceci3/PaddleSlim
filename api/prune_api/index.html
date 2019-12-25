@@ -127,6 +127,11 @@
     </ul>
 	    </li>
           
+            <li class="toctree-l1">
+		
+    <a class="" href="../../algo/algo/">算法原理</a>
+	    </li>
+          
         </ul>
       </div>
       &nbsp;
@@ -156,6 +161,9 @@
     <li>剪枝</li>
     <li class="wy-breadcrumbs-aside">
       
+        <a href="https://github.com/PaddlePaddle/PaddleSlim/edit/master/docs/api/prune_api.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
     </li>
   </ul>
   <hr/>
@@ -163,8 +171,8 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="api">卷积通道剪裁API文档</h1>
-<h2 id="class-pruner">class Pruner</h2>
+                <h1 id="api">卷积通道剪裁API文档<a class="headerlink" href="#api" title="Permanent link">#</a></h1>
+<h2 id="class-pruner">class Pruner<a class="headerlink" href="#class-pruner" title="Permanent link">#</a></h2>
 <hr />
 <blockquote>
 <p>paddleslim.prune.Pruner(criterion="l1_norm")<a href="">源代码</a></p>
@@ -176,10 +184,11 @@
 </ul>
 <p><strong>返回：</strong> 一个Pruner类的实例</p>
 <p><strong>示例代码：</strong></p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">paddleslim.prune</span> <span class="kn">import</span> <span class="n">Pruner</span>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
+2</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">paddleslim.prune</span> <span class="kn">import</span> <span class="n">Pruner</span>
 <span class="n">pruner</span> <span class="o">=</span> <span class="n">Pruner</span><span class="p">()</span>
 </pre></div>
-
+</td></tr></table>
 
 <hr />
 <blockquote>
@@ -195,16 +204,15 @@
 <p><strong>scope(paddle.fluid.Scope):</strong> 要裁剪的权重所在的<code>scope</code>，Paddle中用<code>scope</code>实例存放模型参数和运行时变量的值。Scope中的参数值会被<code>inplace</code>的裁剪。更多介绍请参考<a href="">Scope概念介绍</a></p>
 </li>
 <li>
-<p><strong>params(list<str>):</strong> 需要被裁剪的卷积层的参数的名称列表。可以通过以下方式查看模型中所有参数的名称:</p>
-</li>
-</ul>
-<div class="codehilite"><pre><span></span><span class="nt">for</span> <span class="nt">block</span> <span class="nt">in</span> <span class="nt">program</span><span class="p">.</span><span class="nc">blocks</span><span class="o">:</span>
-    <span class="nt">for</span> <span class="nt">param</span> <span class="nt">in</span> <span class="nt">block</span><span class="p">.</span><span class="nc">all_parameters</span><span class="o">():</span>
-        <span class="nt">print</span><span class="o">(</span><span class="s2">&quot;param: {}; shape: {}&quot;</span><span class="p">.</span><span class="nc">format</span><span class="o">(</span><span class="nt">param</span><span class="p">.</span><span class="nc">name</span><span class="o">,</span> <span class="nt">param</span><span class="p">.</span><span class="nc">shape</span><span class="o">))</span>
+<p><strong>params(list<str>):</strong> 需要被裁剪的卷积层的参数的名称列表。可以通过以下方式查看模型中所有参数的名称:
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
+2
+3</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">for</span> <span class="nv">block</span> <span class="nv">in</span> <span class="nv">program</span>.<span class="nv">blocks</span>:
+    <span class="k">for</span> <span class="nv">param</span> <span class="nv">in</span> <span class="nv">block</span>.<span class="nv">all_parameters</span><span class="ss">()</span>:
+        <span class="nv">print</span><span class="ss">(</span><span class="s2">&quot;</span><span class="s">param: {}; shape: {}</span><span class="s2">&quot;</span>.<span class="nv">format</span><span class="ss">(</span><span class="nv">param</span>.<span class="nv">name</span>, <span class="nv">param</span>.<span class="nv">shape</span><span class="ss">))</span>
 </pre></div>
-
-
-<ul>
+</td></tr></table></p>
+</li>
 <li>
 <p><strong>ratios(list<float>):</strong> 用于裁剪<code>params</code>的剪切率，类型为列表。该列表长度必须与<code>params</code>的长度一致。</p>
 </li>
@@ -237,8 +245,78 @@
 </li>
 </ul>
 <p><strong>示例：</strong></p>
-<p>点击<a href="https://aistudio.baidu.com/aistudio/projectDetail/200786">AIStudio</a>执行以下示例代码。</p>
-<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">paddle.fluid</span> <span class="kn">as</span> <span class="nn">fluid</span>
+<p>点击<a href="https://aistudio.baidu.com/aistudio/projectDetail/200786">AIStudio</a>执行以下示例代码。
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">paddle.fluid</span> <span class="kn">as</span> <span class="nn">fluid</span>
 <span class="kn">from</span> <span class="nn">paddle.fluid.param_attr</span> <span class="kn">import</span> <span class="n">ParamAttr</span>
 <span class="kn">from</span> <span class="nn">paddleslim.prune</span> <span class="kn">import</span> <span class="n">Pruner</span>
 
@@ -310,10 +388,9 @@
     <span class="k">if</span> <span class="s2">&quot;weights&quot;</span> <span class="ow">in</span> <span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="s2">&quot;param name: {}; param shape: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
 </pre></div>
-
-
+</td></tr></table></p>
 <hr />
-<h2 id="sensitivity">sensitivity</h2>
+<h2 id="sensitivity">sensitivity<a class="headerlink" href="#sensitivity" title="Permanent link">#</a></h2>
 <blockquote>
 <p>paddleslim.prune.sensitivity(program, place, param_names, eval_func, sensitivities_file=None, pruned_ratios=None) <a href="">源代码</a></p>
 </blockquote>
@@ -330,11 +407,13 @@
 <p><strong>param_names(list<str>):</strong> 待分析的卷积层的参数的名称列表。可以通过以下方式查看模型中所有参数的名称:</p>
 </li>
 </ul>
-<div class="codehilite"><pre><span></span><span class="nt">for</span> <span class="nt">block</span> <span class="nt">in</span> <span class="nt">program</span><span class="p">.</span><span class="nc">blocks</span><span class="o">:</span>
-    <span class="nt">for</span> <span class="nt">param</span> <span class="nt">in</span> <span class="nt">block</span><span class="p">.</span><span class="nc">all_parameters</span><span class="o">():</span>
-        <span class="nt">print</span><span class="o">(</span><span class="s2">&quot;param: {}; shape: {}&quot;</span><span class="p">.</span><span class="nc">format</span><span class="o">(</span><span class="nt">param</span><span class="p">.</span><span class="nc">name</span><span class="o">,</span> <span class="nt">param</span><span class="p">.</span><span class="nc">shape</span><span class="o">))</span>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
+2
+3</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">for</span> <span class="nv">block</span> <span class="nv">in</span> <span class="nv">program</span>.<span class="nv">blocks</span>:
+    <span class="k">for</span> <span class="nv">param</span> <span class="nv">in</span> <span class="nv">block</span>.<span class="nv">all_parameters</span><span class="ss">()</span>:
+        <span class="nv">print</span><span class="ss">(</span><span class="s2">&quot;</span><span class="s">param: {}; shape: {}</span><span class="s2">&quot;</span>.<span class="nv">format</span><span class="ss">(</span><span class="nv">param</span>.<span class="nv">name</span>, <span class="nv">param</span>.<span class="nv">shape</span><span class="ss">))</span>
 </pre></div>
-
+</td></tr></table>
 
 <ul>
 <li>
@@ -351,22 +430,120 @@
 <ul>
 <li><strong>sensitivities(dict):</strong> 存放敏感度信息的dict，其格式为：</li>
 </ul>
-<div class="codehilite"><pre><span></span>{&quot;weight_0&quot;: 
-   {0.1: 0.22,
-    0.2: 0.33
-   },
- &quot;weight_1&quot;:
-   {0.1: 0.21,
-    0.2: 0.4
-   }
-}
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="err">{</span><span class="ss">&quot;weight_0&quot;</span><span class="p">:</span> 
+   <span class="err">{</span><span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">22</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">.</span><span class="mi">2</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">33</span>
+   <span class="err">}</span><span class="p">,</span>
+ <span class="ss">&quot;weight_1&quot;</span><span class="p">:</span>
+   <span class="err">{</span><span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">21</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">.</span><span class="mi">2</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">4</span>
+   <span class="err">}</span>
+<span class="err">}</span>
 </pre></div>
-
+</td></tr></table>
 
 <p>其中，<code>weight_0</code>是卷积层参数的名称，sensitivities['weight_0']的<code>value</code>为剪裁比例，<code>value</code>为精度损失的比例。</p>
 <p><strong>示例：</strong></p>
 <p>点击<a href="https://aistudio.baidu.com/aistudio/projectdetail/201401">AIStudio</a>运行以下示例代码。</p>
-<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">paddle</span>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">paddle</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">paddle.fluid</span> <span class="kn">as</span> <span class="nn">fluid</span>
 <span class="kn">from</span> <span class="nn">paddle.fluid.param_attr</span> <span class="kn">import</span> <span class="n">ParamAttr</span>
@@ -458,9 +635,9 @@
                             <span class="n">pruned_ratios</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">])</span>
 <span class="k">print</span><span class="p">(</span><span class="n">sensitivities</span><span class="p">)</span>
 </pre></div>
+</td></tr></table>
 
-
-<h2 id="merge_sensitive">merge_sensitive</h2>
+<h2 id="merge_sensitive">merge_sensitive<a class="headerlink" href="#merge_sensitive" title="Permanent link">#</a></h2>
 <blockquote>
 <p>merge_sensitive(sensitivities)</p>
 </blockquote>
@@ -473,21 +650,29 @@
 <ul>
 <li><strong>sensitivities(dict)：</strong> 合并后的敏感度信息。其格式为：</li>
 </ul>
-<div class="codehilite"><pre><span></span>{&quot;weight_0&quot;: 
-   {0.1: 0.22,
-    0.2: 0.33
-   },
- &quot;weight_1&quot;:
-   {0.1: 0.21,
-    0.2: 0.4
-   }
-}
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="err">{</span><span class="ss">&quot;weight_0&quot;</span><span class="p">:</span> 
+   <span class="err">{</span><span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">22</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">.</span><span class="mi">2</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">33</span>
+   <span class="err">}</span><span class="p">,</span>
+ <span class="ss">&quot;weight_1&quot;</span><span class="p">:</span>
+   <span class="err">{</span><span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">21</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">.</span><span class="mi">2</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">4</span>
+   <span class="err">}</span>
+<span class="err">}</span>
 </pre></div>
-
+</td></tr></table>
 
 <p>其中，<code>weight_0</code>是卷积层参数的名称，sensitivities['weight_0']的<code>value</code>为剪裁比例，<code>value</code>为精度损失的比例。</p>
 <p>示例：</p>
-<h2 id="load_sensitivities">load_sensitivities</h2>
+<h2 id="load_sensitivities">load_sensitivities<a class="headerlink" href="#load_sensitivities" title="Permanent link">#</a></h2>
 <blockquote>
 <p>load_sensitivities(sensitivities_file)</p>
 </blockquote>
@@ -498,10 +683,10 @@
 </ul>
 <p>返回：</p>
 <ul>
-<li><strong>sensitivities(dict)</strong>敏感度信息。</li>
+<li>**sensitivities(dict)**敏感度信息。</li>
 </ul>
 <p>示例：</p>
-<h2 id="get_ratios_by_losssensitivities-loss">get_ratios_by_loss(sensitivities, loss)</h2>
+<h2 id="get_ratios_by_losssensitivities-loss">get_ratios_by_loss(sensitivities, loss)<a class="headerlink" href="#get_ratios_by_losssensitivities-loss" title="Permanent link">#</a></h2>
 <p>根据敏感度和精度损失阈值计算出一组剪切率。对于参数<code>w</code>, 其剪裁率为使精度损失低于<code>loss</code>的最大剪裁率。</p>
 <p>参数：</p>
 <ul>
@@ -517,8 +702,9 @@
 <li>ratios(dict): 一组剪切率。<code>key</code>是待剪裁参数的名称。<code>value</code>是对应参数的剪裁率。</li>
 </ul>
 <p>示例：</p>
-<div class="codehilite"><pre><span></span>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>
 </pre></div>
+</td></tr></table>
               
             </div>
           </div>
@@ -554,6 +740,8 @@
   <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
+          <a href="https://github.com/PaddlePaddle/PaddleSlim/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
       
         <span><a href="../quantization_api/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
@@ -565,7 +753,7 @@
     <script>var base_url = '../..';</script>
     <script src="../../js/theme.js" defer></script>
       <script src="../../mathjax-config.js" defer></script>
-      <script src="../../MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
       <script src="../../search/main.js" defer></script>
 
 </body>

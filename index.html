@@ -125,6 +125,11 @@
     </ul>
 	    </li>
           
+            <li class="toctree-l1">
+		
+    <a class="" href="algo/algo/">算法原理</a>
+	    </li>
+          
         </ul>
       </div>
       &nbsp;
@@ -150,6 +155,9 @@
     <li>Home</li>
     <li class="wy-breadcrumbs-aside">
       
+        <a href="https://github.com/PaddlePaddle/PaddleSlim/edit/master/docs/index.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
     </li>
   </ul>
   <hr/>
@@ -157,9 +165,9 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="paddleslim">PaddleSlim</h1>
+                <h1 id="paddleslim">PaddleSlim<a class="headerlink" href="#paddleslim" title="Permanent link">#</a></h1>
 <p>PaddleSlim是PaddlePaddle框架的一个子模块，主要用于压缩图像领域模型。在PaddleSlim中，不仅实现了目前主流的网络剪枝、量化、蒸馏三种压缩策略，还实现了超参数搜索和小模型网络结构搜索功能。在后续版本中，会添加更多的压缩策略，以及完善对NLP领域模型的支持。</p>
-<h2 id="_1">功能</h2>
+<h2 id="_1">功能<a class="headerlink" href="#_1" title="Permanent link">#</a></h2>
 <ul>
 <li>模型剪裁</li>
 <li>支持通道均匀模型剪裁（uniform pruning)</li>
@@ -185,29 +193,31 @@
 <li>支持 FLOPS / 硬件延时约束</li>
 <li>支持多平台模型延时评估</li>
 </ul>
-<h2 id="_2">安装</h2>
+<h2 id="_2">安装<a class="headerlink" href="#_2" title="Permanent link">#</a></h2>
 <p>安装PaddleSlim前，请确认已正确安装Paddle1.6版本或更新版本。Paddle安装请参考：<a href="https://www.paddlepaddle.org.cn/install/quick">Paddle安装教程</a>。</p>
 <ul>
 <li>安装develop版本</li>
 </ul>
-<div class="codehilite"><pre><span></span>git clone https://github.com/PaddlePaddle/PaddleSlim.git
-cd PaddleSlim
-python setup.py install
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
+2
+3</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">PaddlePaddle</span><span class="o">/</span><span class="n">PaddleSlim</span><span class="p">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">PaddleSlim</span>
+<span class="n">python</span> <span class="n">setup</span><span class="p">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
-
+</td></tr></table>
 
 <ul>
 <li>安装官方发布的最新版本</li>
 </ul>
-<div class="codehilite"><pre><span></span>pip install paddleslim -i https://pypi.org/simple
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">paddleslim</span> <span class="o">-</span><span class="n">i</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">pypi</span><span class="p">.</span><span class="n">org</span><span class="o">/</span><span class="k">simple</span>
 </pre></div>
-
+</td></tr></table>
 
 <ul>
 <li>安装历史版本</li>
 </ul>
 <p>请点击<a href="https://pypi.org/project/paddleslim/#history">pypi.org</a>查看可安装历史版本。</p>
-<h2 id="_3">使用</h2>
+<h2 id="_3">使用<a class="headerlink" href="#_3" title="Permanent link">#</a></h2>
 <ul>
 <li><a href="doc/api_guide.md">API文档</a>：API使用介绍，包括<a href="">蒸馏</a>、<a href="">剪裁</a>、<a href="">量化</a>和<a href="">模型结构搜索</a>。</li>
 <li><a href="doc/demo_guide.md">示例</a>：基于mnist和cifar10等简单分类任务的模型压缩示例，您可以通过该部分快速体验和了解PaddleSlim的功能。</li>
@@ -217,7 +227,7 @@ python setup.py install
 <li><a href="">Paddle分割库</a>：介绍如何在分割库中使用PaddleSlim。</li>
 <li><a href="">PaddleLite</a>：介绍如何使用预测库PaddleLite部署PaddleSlim产出的模型。</li>
 </ul>
-<h2 id="_4">贡献与反馈</h2>
+<h2 id="_4">贡献与反馈<a class="headerlink" href="#_4" title="Permanent link">#</a></h2>
               
             </div>
           </div>
@@ -251,6 +261,8 @@ python setup.py install
   <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
+          <a href="https://github.com/PaddlePaddle/PaddleSlim/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
       
       
         <span style="margin-left: 15px"><a href="tutorials/quant_post_demo/" style="color: #fcfcfc">Next &raquo;</a></span>
@@ -260,7 +272,7 @@ python setup.py install
     <script>var base_url = '.';</script>
     <script src="js/theme.js" defer></script>
       <script src="mathjax-config.js" defer></script>
-      <script src="MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
       <script src="search/main.js" defer></script>
 
 </body>
@@ -268,5 +280,5 @@ python setup.py install
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2019-12-16 13:47:19
+Build Date UTC : 2019-12-25 12:46:33
 -->
