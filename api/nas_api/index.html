@@ -162,15 +162,17 @@
 <dt>paddleslim.nas.SANAS(configs, server_addr, init_temperature, reduce_rate, search_steps, save_checkpoint, load_checkpoint, is_server)<a href="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/paddleslim/nas/sa_nas.py#L36">源代码</a></dt>
 <dd>SANAS（Simulated Annealing Neural Architecture Search）是基于模拟退火算法进行模型结构搜索的算法，一般用于离散搜索任务。</dd>
 </dl>
-<p><strong>参数：</strong>
-- <strong>configs(list<tuple>)</strong> 搜索空间配置列表，格式是<code>[(key, {input_size, output_size, block_num, block_mask})]</code>或者<code>[(key)]</code>（MobileNetV2、MobilenetV1和ResNet的搜索空间使用和原本网络结构相同的搜索空间，所以仅需指定<code>key</code>即可）, <code>input_size</code> 和<code>output_size</code>表示输入和输出的特征图的大小，<code>block_num</code>是指搜索网络中的block数量，<code>block_mask</code>是一组由0和1组成的列表，0代表不进行下采样的block，1代表下采样的block。 更多paddleslim提供的搜索空间配置可以参考。
-- <strong>server_addr(tuple)</strong> SANAS的地址，包括server的ip地址和端口号，如果ip地址为None或者为""的话则默认使用本机ip。默认：（"", 8881）。
-- <strong>init_temperature(float)</strong> 基于模拟退火进行搜索的初始温度。默认：100。
-- <strong>reduce_rate(float)</strong> 基于模拟退火进行搜索的衰减率。默认：0.85。
-- <strong>search_steps(int)</strong> 搜索过程迭代的次数。默认：300。
-- <strong>save_checkpoint(str|None)</strong> 保存checkpoint的文件目录，如果设置为None的话则不保存checkpoint。默认：<code>./nas_checkpoint</code>。
-- <strong>load_checkpoint(str|None)</strong> 加载checkpoint的文件目录，如果设置为None的话则不加载checkpoint。默认：None。
-- <strong>is_server(bool)</strong> 当前实例是否要启动一个server。默认：True。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><strong>configs(list<tuple>)</strong> 搜索空间配置列表，格式是<code>[(key, {input_size, output_size, block_num, block_mask})]</code>或者<code>[(key)]</code>（MobileNetV2、MobilenetV1和ResNet的搜索空间使用和原本网络结构相同的搜索空间，所以仅需指定<code>key</code>即可）, <code>input_size</code> 和<code>output_size</code>表示输入和输出的特征图的大小，<code>block_num</code>是指搜索网络中的block数量，<code>block_mask</code>是一组由0和1组成的列表，0代表不进行下采样的block，1代表下采样的block。 更多paddleslim提供的搜索空间配置可以参考。</li>
+<li><strong>server_addr(tuple)</strong> SANAS的地址，包括server的ip地址和端口号，如果ip地址为None或者为""的话则默认使用本机ip。默认：（"", 8881）。</li>
+<li><strong>init_temperature(float)</strong> 基于模拟退火进行搜索的初始温度。默认：100。</li>
+<li><strong>reduce_rate(float)</strong> 基于模拟退火进行搜索的衰减率。默认：0.85。</li>
+<li><strong>search_steps(int)</strong> 搜索过程迭代的次数。默认：300。</li>
+<li><strong>save_checkpoint(str|None)</strong> 保存checkpoint的文件目录，如果设置为None的话则不保存checkpoint。默认：<code>./nas_checkpoint</code>。</li>
+<li><strong>load_checkpoint(str|None)</strong> 加载checkpoint的文件目录，如果设置为None的话则不加载checkpoint。默认：None。</li>
+<li><strong>is_server(bool)</strong> 当前实例是否要启动一个server。默认：True。</li>
+</ul>
 <p><strong>返回：</strong>
 一个SANAS类的实例</p>
 <p><strong>示例代码：</strong>
@@ -185,8 +187,10 @@
 <dt>paddlesim.nas.SANAS.tokens2arch(tokens)</dt>
 <dd>通过一组token得到实际的模型结构，一般用来把搜索到最优的token转换为模型结构用来做最后的训练。</dd>
 </dl>
-<p><strong>参数：</strong>
-- <strong>tokens(list):</strong> 一组token。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><strong>tokens(list):</strong> 一组token。</li>
+</ul>
 <p><strong>返回：</strong>
 根据传入的token得到一个模型结构实例。</p>
 <p><strong>示例代码：</strong>
@@ -227,8 +231,10 @@
 <dt>paddleslim.nas.SANAS.reward(score)</dt>
 <dd>把当前模型结构的得分情况回传。</dd>
 </dl>
-<p><strong>参数：</strong>
-<strong>score<float>:</strong> 当前模型的得分，分数越大越好。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><strong>score<float>:</strong> 当前模型的得分，分数越大越好。</li>
+</ul>
 <p><strong>返回：</strong>
 模型结构更新成功或者失败，成功则返回<code>True</code>，失败则返回<code>False</code>。</p>
               
