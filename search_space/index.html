@@ -212,9 +212,11 @@
 <p>InceptionABlockSpace<br>
 &emsp; InceptionABlock的结构可以参考：<a href="https://github.com/PaddlePaddle/models/blob/develop/PaddleCV/image_classification/models/inception_v4.py#L140">代码</a></p>
 </li>
-</ol>
-<p>5 InceptionCBlockSpace<br>
+<li>
+<p>InceptionCBlockSpace<br>
 &emsp; InceptionCBlock结构可以参考：<a href="https://github.com/PaddlePaddle/models/blob/develop/PaddleCV/image_classification/models/inception_v4.py#L291">代码</a></p>
+</li>
+</ol>
 <h2 id="_3">搜索空间示例<a class="headerlink" href="#_3" title="Permanent link">#</a></h2>
 <ol>
 <li>使用paddleslim中提供用初始的模型结构来构造搜索空间的话，仅需要指定搜索空间名字即可。例如：如果使用原本的MobileNetV2的搜索空间进行搜索的话，传入SANAS中的config直接指定为[('MobileNetV2Space')]。</li>
