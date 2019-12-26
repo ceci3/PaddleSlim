@@ -172,20 +172,19 @@
 </dl>
 <h2 id="paddleslimnas">paddleslim.nas 提供的搜索空间<a class="headerlink" href="#paddleslimnas" title="Permanent link">#</a></h2>
 <ol>
-<li>根据初始模型结构构造搜索空间<br>
- 1.1 MobileNetV2Space<br>
+<li>根据初始模型结构构造搜索空间
+&emsp; 1.1 MobileNetV2Space<br>
 &emsp;&emsp; MobileNetV2的网络结构可以参考：<a href="https://github.com/PaddlePaddle/models/blob/develop/PaddleCV/image_classification/models/mobilenet_v2.py#L29">代码</a>，<a href="https://arxiv.org/abs/1801.04381">论文</a></li>
 </ol>
 <p>&emsp; 1.2 MobileNetV1Space<br>
 &emsp;&emsp; MobilNetV1的网络结构可以参考：<a href="https://github.com/PaddlePaddle/models/blob/develop/PaddleCV/image_classification/models/mobilenet_v1.py#L29">代码</a>，<a href="https://arxiv.org/abs/1704.04861">论文</a></p>
 <p>&emsp; 1.3 ResNetSpace<br>
 &emsp;&emsp; ResNetSpace的网络结构可以参考：<a href="https://github.com/PaddlePaddle/models/blob/develop/PaddleCV/image_classification/models/resnet.py#L30">代码</a>，<a href="https://arxiv.org/pdf/1512.03385.pdf">论文</a></p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="mi">2</span><span class="p">.</span> <span class="err">根据相应模型的</span><span class="n">block</span><span class="err">构造搜索空间</span><span class="o">&lt;</span><span class="n">br</span><span class="o">&gt;</span>
-</pre></div>
-</td></tr></table>
-
-<p>2.1 MobileNetV1BlockSpace<br>
-&emsp;&emsp; MobileNetV1Block的结构可以参考：<a href="https://github.com/PaddlePaddle/models/blob/develop/PaddleCV/image_classification/models/mobilenet_v1.py#L173">代码</a></p>
+<ol>
+<li>根据相应模型的block构造搜索空间
+&emsp; 2.1 MobileNetV1BlockSpace<br>
+&emsp;&emsp; MobileNetV1Block的结构可以参考：<a href="https://github.com/PaddlePaddle/models/blob/develop/PaddleCV/image_classification/models/mobilenet_v1.py#L173">代码</a></li>
+</ol>
 <p>&emsp; 2.2 MobileNetV2BlockSpace<br>
 &emsp;&emsp; MobileNetV2Block的结构可以参考：<a href="https://github.com/PaddlePaddle/models/blob/develop/PaddleCV/image_classification/models/mobilenet_v2.py#L174">代码</a></p>
 <p>&emsp; 2.3 ResNetBlockSpace<br>
