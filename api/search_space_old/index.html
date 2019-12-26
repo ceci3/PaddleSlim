@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../../img/favicon.ico">
-  <title>搜索空间 - PaddleSlim Docs</title>
+  <title>Search space old - PaddleSlim Docs</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "\u641c\u7d22\u7a7a\u95f4";
-    var mkdocs_page_input_path = "api/search_space.md";
+    var mkdocs_page_name = "Search space old";
+    var mkdocs_page_input_path = "api/search_space_old.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -100,24 +100,9 @@
                     
     <a class="" href="../nas_api/">SA搜索</a>
                 </li>
-                <li class=" current">
+                <li class="">
                     
-    <a class="current" href="./">搜索空间</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l3"><a href="#paddleslimnas">paddleslim.nas 提供的搜索空间</a></li>
-    
-
-    <li class="toctree-l3"><a href="#_1">搜索空间的配置介绍</a></li>
-    
-
-    <li class="toctree-l3"><a href="#_2">搜索空间示例</a></li>
-    
-
-    <li class="toctree-l3"><a href="#search-space">自定义搜索空间(search space)</a></li>
-    
-
-    </ul>
+    <a class="" href="../search_space.md">搜索空间</a>
                 </li>
     </ul>
 	    </li>
@@ -148,15 +133,11 @@
     <li><a href="../..">Docs</a> &raquo;</li>
     
       
-        
-          <li>API &raquo;</li>
-        
-      
     
-    <li>搜索空间</li>
+    <li>Search space old</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/PaddlePaddle/PaddleSlim/edit/master/docs/api/search_space.md"
+        <a href="https://github.com/PaddlePaddle/PaddleSlim/edit/master/docs/api/search_space_old.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -166,13 +147,20 @@
           <div role="main">
             <div class="section">
               
-                <h2 id="paddleslimnas">paddleslim.nas 提供的搜索空间<a class="headerlink" href="#paddleslimnas" title="Permanent link">#</a></h2>
+                <h2 id="_1">搜索空间<a class="headerlink" href="#_1" title="Permanent link">#</a></h2>
+<dl>
+<dd>搜索空间是神经网络搜索中的一个概念。搜索空间是一系列模型结构的汇集, SANAS主要是利用模拟退火的思想在搜索空间中搜索到一个比较小的模型结构或者一个精度比较高的模型结构。</dd>
+</dl>
+<h2 id="paddleslimnas">paddleslim.nas 提供的搜索空间<a class="headerlink" href="#paddleslimnas" title="Permanent link">#</a></h2>
 <ol>
-<li>根据原本模型结构构造搜索空间：</li>
+<li>根据初始模型结构构造搜索空间：</li>
 </ol>
-<p>1.1 MobileNetV2Space</p>
-<p>1.2 MobileNetV1Space</p>
-<p>1.3 ResNetSpace</p>
+<p>1.1 MobileNetV2Space
+    MobileNetV2的网络结构可以参考：，论文：</p>
+<p>1.2 MobileNetV1Space
+    MobilNetV1的网络结构可以参考：，论文：</p>
+<p>1.3 ResNetSpace
+    ResNetSpace的网络结构可以参考：，论文：</p>
 <ol>
 <li>根据相应模型的block构造搜索空间</li>
 </ol>
@@ -181,15 +169,17 @@
 <p>2.3 ResNetBlockSpace</p>
 <p>2.4 InceptionABlockSpace</p>
 <p>2.5 InceptionCBlockSpace</p>
-<h2 id="_1">搜索空间的配置介绍<a class="headerlink" href="#_1" title="Permanent link">#</a></h2>
-<p><strong>input_size(int|None)</strong>：<code>input_size</code>表示输入feature map的大小。
-<strong>output_size(int|None)</strong>：<code>output_size</code>表示输出feature map的大小。
-<strong>block_num(int|None)</strong>：<code>block_num</code>表示搜索空间中block的数量。
-<strong>block_mask(list|None)</strong>：<code>block_mask</code>表示当前的block是一个reduction block还是一个normal block，是一组由0、1组成的列表，0表示当前block是normal block，1表示当前block是reduction block。如果设置了<code>block_mask</code>，则主要以<code>block_mask</code>为主要配置，<code>input_size</code>，<code>output_size</code>和<code>block_num</code>三种配置是无效的。</p>
-<p><strong>Note:</strong>
+<h2 id="_2">搜索空间的配置介绍<a class="headerlink" href="#_2" title="Permanent link">#</a></h2>
+<p>通过参数配置搜索空间。</p>
+<p><strong>参数：</strong></p>
+<p><strong>input_size(int|None)</strong>：- <code>input_size</code>表示输入feature map的大小。
+<strong>output_size(int|None)</strong>：- <code>output_size</code>表示输出feature map的大小。
+<strong>block_num(int|None)</strong>：- <code>block_num</code>表示搜索空间中block的数量。
+<strong>block_mask(list|None)</strong>：- <code>block_mask</code>表示当前的block是一个reduction block还是一个normal block，是一组由0、1组成的列表，0表示当前block是normal block，1表示当前block是reduction block。如果设置了<code>block_mask</code>，则主要以<code>block_mask</code>为主要配置，<code>input_size</code>，<code>output_size</code>和<code>block_num</code>三种配置是无效的。</p>
+<p>**Note: **
 1. reduction block表示经过这个block之后的feature map大小下降为之前的一半，normal block表示经过这个block之后feature map大小不变。
 2. <code>input_size</code>和<code>output_size</code>用来计算整个模型结构中reduction block数量。</p>
-<h2 id="_2">搜索空间示例<a class="headerlink" href="#_2" title="Permanent link">#</a></h2>
+<h2 id="_3">搜索空间示例<a class="headerlink" href="#_3" title="Permanent link">#</a></h2>
 <ol>
 <li>使用paddleslim中提供用原本的模型结构来构造搜索空间的话，仅需要指定搜索空间名字即可。例如：如果使用原本的MobileNetV2的搜索空间进行搜索的话，传入SANAS中的config直接指定为[('MobileNetV2Space')]。</li>
 <li>使用paddleslim中提供的block搜索空间构造搜索空间：
@@ -330,15 +320,6 @@
           </div>
           <footer>
   
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../../algo/algo/" class="btn btn-neutral float-right" title="算法原理">Next <span class="icon icon-circle-arrow-right"></span></a>
-      
-      
-        <a href="../nas_api/" class="btn btn-neutral" title="SA搜索"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-      
-    </div>
-  
 
   <hr/>
 
@@ -363,10 +344,6 @@
           <a href="https://github.com/PaddlePaddle/PaddleSlim/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../nas_api/" style="color: #fcfcfc;">&laquo; Previous</a></span>
-      
-      
-        <span style="margin-left: 15px"><a href="../../algo/algo/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
