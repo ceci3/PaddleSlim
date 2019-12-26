@@ -169,7 +169,7 @@
 <li><strong>block_num(int|None)</strong>：- <code>block_num</code>表示搜索空间中block的数量。</li>
 <li><strong>block_mask(list|None)</strong>：- <code>block_mask</code>是一组由0、1组成的列表，0表示当前block是normal block，1表示当前block是reduction block。如果设置了<code>block_mask</code>，则主要以<code>block_mask</code>为主要配置，<code>input_size</code>，<code>output_size</code>和<code>block_num</code>三种配置是无效的。</li>
 </ul>
-<p>Note:
+<p>Note: <br />
 1. reduction block表示经过这个block之后的feature map大小下降为之前的一半，normal block表示经过这个block之后feature map大小不变。
 2. <code>input_size</code>和<code>output_size</code>用来计算整个模型结构中reduction block数量。</p>
 <h2 id="sanas">SANAS<a class="headerlink" href="#sanas" title="Permanent link">#</a></h2>
