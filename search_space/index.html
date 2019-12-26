@@ -181,22 +181,22 @@
 <h2 id="paddleslimnas">paddleslim.nas 提供的搜索空间<a class="headerlink" href="#paddleslimnas" title="Permanent link">#</a></h2>
 <h4 id="_2">根据初始模型结构构造搜索空间：<a class="headerlink" href="#_2" title="Permanent link">#</a></h4>
 <p>&nbsp; 1.1 MobileNetV2Space<br />
-&nbsp;&nbsp;MobileNetV2的网络结构可以参考：<a href="https://github.com/PaddlePaddle/models/blob/develop/PaddleCV/image_classification/models/mobilenet_v2.py#L29">代码</a>，<a href="https://arxiv.org/abs/1801.04381">论文</a></p>
+&nbsp;&nbsp;&nbsp; MobileNetV2的网络结构可以参考：<a href="https://github.com/PaddlePaddle/models/blob/develop/PaddleCV/image_classification/models/mobilenet_v2.py#L29">代码</a>，<a href="https://arxiv.org/abs/1801.04381">论文</a></p>
 <p>&nbsp; 1.2 MobileNetV1Space<br />
-&nbsp;&nbsp; MobilNetV1的网络结构可以参考：<a href="https://github.com/PaddlePaddle/models/blob/develop/PaddleCV/image_classification/models/mobilenet_v1.py#L29">代码</a>，<a href="https://arxiv.org/abs/1704.04861">论文</a></p>
+&nbsp;&nbsp;&nbsp; MobilNetV1的网络结构可以参考：<a href="https://github.com/PaddlePaddle/models/blob/develop/PaddleCV/image_classification/models/mobilenet_v1.py#L29">代码</a>，<a href="https://arxiv.org/abs/1704.04861">论文</a></p>
 <p>&nbsp; 1.3 ResNetSpace<br />
-&nbsp;&nbsp;ResNetSpace的网络结构可以参考：<a href="https://github.com/PaddlePaddle/models/blob/develop/PaddleCV/image_classification/models/resnet.py#L30">代码</a>，<a href="https://arxiv.org/pdf/1512.03385.pdf">论文</a></p>
+&nbsp;&nbsp;&nbsp; ResNetSpace的网络结构可以参考：<a href="https://github.com/PaddlePaddle/models/blob/develop/PaddleCV/image_classification/models/resnet.py#L30">代码</a>，<a href="https://arxiv.org/pdf/1512.03385.pdf">论文</a></p>
 <h4 id="block">根据相应模型的block构造搜索空间<a class="headerlink" href="#block" title="Permanent link">#</a></h4>
 <p>&nbsp; 2.1 MobileNetV1BlockSpace<br />
-&nbsp;&nbsp; MobileNetV1Block的结构可以参考：<a href="https://github.com/PaddlePaddle/models/blob/develop/PaddleCV/image_classification/models/mobilenet_v1.py#L173">代码</a></p>
+&nbsp;&nbsp;&nbsp; MobileNetV1Block的结构可以参考：<a href="https://github.com/PaddlePaddle/models/blob/develop/PaddleCV/image_classification/models/mobilenet_v1.py#L173">代码</a></p>
 <p>&nbsp; 2.2 MobileNetV2BlockSpace<br />
-&nbsp;&nbsp; MobileNetV2Block的结构可以参考：<a href="https://github.com/PaddlePaddle/models/blob/develop/PaddleCV/image_classification/models/mobilenet_v2.py#L174">代码</a></p>
+&nbsp;&nbsp;&nbsp; MobileNetV2Block的结构可以参考：<a href="https://github.com/PaddlePaddle/models/blob/develop/PaddleCV/image_classification/models/mobilenet_v2.py#L174">代码</a></p>
 <p>&nbsp; 2.3 ResNetBlockSpace<br />
-&nbsp;&nbsp; ResNetBlock的结构可以参考：<a href="https://github.com/PaddlePaddle/models/blob/develop/PaddleCV/image_classification/models/resnet.py#L148">代码</a></p>
+&nbsp;&nbsp;&nbsp; ResNetBlock的结构可以参考：<a href="https://github.com/PaddlePaddle/models/blob/develop/PaddleCV/image_classification/models/resnet.py#L148">代码</a></p>
 <p>&nbsp; 2.4 InceptionABlockSpace<br />
-&nbsp;&nbsp; InceptionABlock的结构可以参考：<a href="https://github.com/PaddlePaddle/models/blob/develop/PaddleCV/image_classification/models/inception_v4.py#L140">代码</a></p>
+&nbsp;&nbsp;&nbsp; InceptionABlock的结构可以参考：<a href="https://github.com/PaddlePaddle/models/blob/develop/PaddleCV/image_classification/models/inception_v4.py#L140">代码</a></p>
 <p>&nbsp; 2.5 InceptionCBlockSpace<br />
-&nbsp;&nbsp; InceptionCBlock结构可以参考：<a href="https://github.com/PaddlePaddle/models/blob/develop/PaddleCV/image_classification/models/inception_v4.py#L291">代码</a></p>
+&nbsp;&nbsp;&nbsp; InceptionCBlock结构可以参考：<a href="https://github.com/PaddlePaddle/models/blob/develop/PaddleCV/image_classification/models/inception_v4.py#L291">代码</a></p>
 <h2 id="_3">搜索空间示例<a class="headerlink" href="#_3" title="Permanent link">#</a></h2>
 <ol>
 <li>使用paddleslim中提供用初始的模型结构来构造搜索空间的话，仅需要指定搜索空间名字即可。例如：如果使用原本的MobileNetV2的搜索空间进行搜索的话，传入SANAS中的config直接指定为[('MobileNetV2Space')]。</li>
