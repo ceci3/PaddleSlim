@@ -101,7 +101,7 @@
     <a class="current" href="./">SA搜索</a>
     <ul class="subnav">
             
-    <li class="toctree-l3"><a href="#_1">搜索空间的配置介绍</a></li>
+    <li class="toctree-l3"><a href="#_1">搜索空间的配置</a></li>
     
 
     <li class="toctree-l3"><a href="#sanas">SANAS</a></li>
@@ -160,7 +160,7 @@
           <div role="main">
             <div class="section">
               
-                <h2 id="_1">搜索空间的配置介绍<a class="headerlink" href="#_1" title="Permanent link">#</a></h2>
+                <h2 id="_1">搜索空间的配置<a class="headerlink" href="#_1" title="Permanent link">#</a></h2>
 <p>通过参数配置搜索空间。更多搜索空间的使用可以参考<a href="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/docs/docs/search_space.md">search_space</a></p>
 <p><strong>参数：</strong></p>
 <ul>
@@ -169,9 +169,11 @@
 <li><strong>block_num(int|None)</strong>：- <code>block_num</code>表示搜索空间中block的数量。</li>
 <li><strong>block_mask(list|None)</strong>：- <code>block_mask</code>是一组由0、1组成的列表，0表示当前block是normal block，1表示当前block是reduction block。如果设置了<code>block_mask</code>，则主要以<code>block_mask</code>为主要配置，<code>input_size</code>，<code>output_size</code>和<code>block_num</code>三种配置是无效的。</li>
 </ul>
-<p>**Note: **
-1. reduction block表示经过这个block之后的feature map大小下降为之前的一半，normal block表示经过这个block之后feature map大小不变。
-2. <code>input_size</code>和<code>output_size</code>用来计算整个模型结构中reduction block数量。</p>
+<p>**Note: **</p>
+<ol>
+<li>reduction block表示经过这个block之后的feature map大小下降为之前的一半，normal block表示经过这个block之后feature map大小不变。</li>
+<li><code>input_size</code>和<code>output_size</code>用来计算整个模型结构中reduction block数量。</li>
+</ol>
 <h2 id="sanas">SANAS<a class="headerlink" href="#sanas" title="Permanent link">#</a></h2>
 <dl>
 <dt>paddleslim.nas.SANAS(configs, server_addr=("", 8881), init_temperature=100, reduce_rate=0.85, search_steps=300, save_checkpoint='./nas_checkpoint', load_checkpoint=None, is_server=True)<a href="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/paddleslim/nas/sa_nas.py#L36">源代码</a></dt>
