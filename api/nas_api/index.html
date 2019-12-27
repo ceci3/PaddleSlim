@@ -258,6 +258,12 @@ tokens是一个列表，token映射到搜索空间转换成相应的网络结构
 </ul>
 <p><strong>返回：</strong>
 模型结构更新成功或者失败，成功则返回<code>True</code>，失败则返回<code>False</code>。</p>
+<dl>
+<dt>paddleslim.nas.SANAS.current_info()</dt>
+<dd>返回当前token和搜索过程中最好的token和reward。</dd>
+</dl>
+<p><strong>返回：</strong>
+搜索过程中最好的token，reward和当前训练的token，形式为字典。</p>
               
             </div>
           </div>
