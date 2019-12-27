@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../../img/favicon.ico">
-  <title>剪枝 - PaddleSlim Docs</title>
+  <title>剪枝与敏感度 - PaddleSlim Docs</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
@@ -17,7 +17,7 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "\u526a\u679d";
+    var mkdocs_page_name = "\u526a\u679d\u4e0e\u654f\u611f\u5ea6";
     var mkdocs_page_input_path = "api/prune_api.md";
     var mkdocs_page_url = null;
   </script>
@@ -86,31 +86,29 @@
                 </li>
                 <li class=" current">
                     
-    <a class="current" href="./">剪枝</a>
+    <a class="current" href="./">剪枝与敏感度</a>
     <ul class="subnav">
             
-    <li class="toctree-l3"><a href="#api">卷积通道剪裁API文档</a></li>
+    <li class="toctree-l3"><a href="#pruner">Pruner</a></li>
     
-        <ul>
-        
-            <li><a class="toctree-l4" href="#class-pruner">class Pruner</a></li>
-        
-            <li><a class="toctree-l4" href="#sensitivity">sensitivity</a></li>
-        
-            <li><a class="toctree-l4" href="#merge_sensitive">merge_sensitive</a></li>
-        
-            <li><a class="toctree-l4" href="#load_sensitivities">load_sensitivities</a></li>
-        
-            <li><a class="toctree-l4" href="#get_ratios_by_losssensitivities-loss">get_ratios_by_loss(sensitivities, loss)</a></li>
-        
-        </ul>
+
+    <li class="toctree-l3"><a href="#sensitivity">sensitivity</a></li>
+    
+
+    <li class="toctree-l3"><a href="#merge_sensitive">merge_sensitive</a></li>
+    
+
+    <li class="toctree-l3"><a href="#load_sensitivities">load_sensitivities</a></li>
+    
+
+    <li class="toctree-l3"><a href="#get_ratios_by_loss">get_ratios_by_loss</a></li>
     
 
     </ul>
                 </li>
                 <li class="">
                     
-    <a class="" href="../analysis_api/">敏感度分析</a>
+    <a class="" href="../analysis_api/">模型分析</a>
                 </li>
                 <li class="">
                     
@@ -123,6 +121,10 @@
                 <li class="">
                     
     <a class="" href="../../search_space/">搜索空间</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../table_latency/">硬件延时评估表</a>
                 </li>
     </ul>
 	    </li>
@@ -158,7 +160,7 @@
         
       
     
-    <li>剪枝</li>
+    <li>剪枝与敏感度</li>
     <li class="wy-breadcrumbs-aside">
       
         <a href="https://github.com/PaddlePaddle/PaddleSlim/edit/master/docs/api/prune_api.md"
@@ -171,16 +173,16 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="api">卷积通道剪裁API文档<a class="headerlink" href="#api" title="Permanent link">#</a></h1>
-<h2 id="class-pruner">class Pruner<a class="headerlink" href="#class-pruner" title="Permanent link">#</a></h2>
-<hr />
-<blockquote>
-<p>paddleslim.prune.Pruner(criterion="l1_norm")<a href="">源代码</a></p>
-</blockquote>
+                <h2 id="pruner">Pruner<a class="headerlink" href="#pruner" title="Permanent link">#</a></h2>
+<dl>
+<dt>paddleslim.prune.Pruner(criterion="l1_norm")<a href="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/paddleslim/prune/pruner.py#L28">源代码</a></dt>
+<dd>
 <p>对卷积网络的通道进行一次剪裁。剪裁一个卷积层的通道，是指剪裁该卷积层输出的通道。卷积层的权重形状为<code>[output_channel, input_channel, kernel_size, kernel_size]</code>，通过剪裁该权重的第一纬度达到剪裁输出通道数的目的。</p>
+</dd>
+</dl>
 <p><strong>参数：</strong></p>
 <ul>
-<li><strong>criterion:</strong> 评估一个卷积层内通道重要性所参考的指标。目前仅支持<code>l1_norm</code>。默认为<code>l1_norm</code>。</li>
+<li><strong>criterion</strong> - 评估一个卷积层内通道重要性所参考的指标。目前仅支持<code>l1_norm</code>。默认为<code>l1_norm</code>。</li>
 </ul>
 <p><strong>返回：</strong> 一个Pruner类的实例</p>
 <p><strong>示例代码：</strong></p>
@@ -190,21 +192,22 @@
 </pre></div>
 </td></tr></table>
 
-<hr />
-<blockquote>
-<p>prune(program, scope, params, ratios, place=None, lazy=False, only_graph=False, param_backup=False, param_shape_backup=False)</p>
-</blockquote>
+<dl>
+<dt>paddleslim.prune.Pruner.prune(program, scope, params, ratios, place=None, lazy=False, only_graph=False, param_backup=False, param_shape_backup=False)<a href="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/paddleslim/prune/pruner.py#L36">源代码</a></dt>
+<dd>
 <p>对目标网络的一组卷积层的权重进行裁剪。</p>
+</dd>
+</dl>
 <p><strong>参数：</strong></p>
 <ul>
 <li>
-<p><strong>program(paddle.fluid.Program):</strong> 要裁剪的目标网络。更多关于Program的介绍请参考：<a href="https://www.paddlepaddle.org.cn/documentation/docs/zh/api_cn/fluid_cn/Program_cn.html#program">Program概念介绍</a>。</p>
+<p><strong>program(paddle.fluid.Program)</strong> - 要裁剪的目标网络。更多关于Program的介绍请参考：<a href="https://www.paddlepaddle.org.cn/documentation/docs/zh/api_cn/fluid_cn/Program_cn.html#program">Program概念介绍</a>。</p>
 </li>
 <li>
-<p><strong>scope(paddle.fluid.Scope):</strong> 要裁剪的权重所在的<code>scope</code>，Paddle中用<code>scope</code>实例存放模型参数和运行时变量的值。Scope中的参数值会被<code>inplace</code>的裁剪。更多介绍请参考<a href="">Scope概念介绍</a></p>
+<p><strong>scope(paddle.fluid.Scope)</strong> - 要裁剪的权重所在的<code>scope</code>，Paddle中用<code>scope</code>实例存放模型参数和运行时变量的值。Scope中的参数值会被<code>inplace</code>的裁剪。更多介绍请参考<a href="">Scope概念介绍</a></p>
 </li>
 <li>
-<p><strong>params(list<str>):</strong> 需要被裁剪的卷积层的参数的名称列表。可以通过以下方式查看模型中所有参数的名称:
+<p><strong>params(list<str>)</strong> - 需要被裁剪的卷积层的参数的名称列表。可以通过以下方式查看模型中所有参数的名称:
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
 2
 3</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">for</span> <span class="nv">block</span> <span class="nv">in</span> <span class="nv">program</span>.<span class="nv">blocks</span>:
@@ -214,34 +217,34 @@
 </td></tr></table></p>
 </li>
 <li>
-<p><strong>ratios(list<float>):</strong> 用于裁剪<code>params</code>的剪切率，类型为列表。该列表长度必须与<code>params</code>的长度一致。</p>
+<p><strong>ratios(list<float>)</strong> - 用于裁剪<code>params</code>的剪切率，类型为列表。该列表长度必须与<code>params</code>的长度一致。</p>
 </li>
 <li>
-<p><strong>place(paddle.fluid.Place):</strong> 待裁剪参数所在的设备位置，可以是<code>CUDAPlace</code>或<code>CPUPlace</code>。<a href="">Place概念介绍</a></p>
+<p><strong>place(paddle.fluid.Place)</strong> - 待裁剪参数所在的设备位置，可以是<code>CUDAPlace</code>或<code>CPUPlace</code>。<a href="">Place概念介绍</a></p>
 </li>
 <li>
-<p><strong>lazy(bool):</strong> <code>lazy</code>为True时，通过将指定通道的参数置零达到裁剪的目的，参数的<code>shape保持不变</code>；<code>lazy</code>为False时，直接将要裁的通道的参数删除，参数的<code>shape</code>会发生变化。</p>
+<p><strong>lazy(bool)</strong> - <code>lazy</code>为True时，通过将指定通道的参数置零达到裁剪的目的，参数的<code>shape保持不变</code>；<code>lazy</code>为False时，直接将要裁的通道的参数删除，参数的<code>shape</code>会发生变化。</p>
 </li>
 <li>
-<p><strong>only_graph(bool):</strong> 是否只裁剪网络结构。在Paddle中，Program定义了网络结构，Scope存储参数的数值。一个Scope实例可以被多个Program使用，比如定义了训练网络的Program和定义了测试网络的Program是使用同一个Scope实例的。<code>only_graph</code>为True时，只对Program中定义的卷积的通道进行剪裁；<code>only_graph</code>为false时，Scope中卷积参数的数值也会被剪裁。默认为False。</p>
+<p><strong>only_graph(bool)</strong> - 是否只裁剪网络结构。在Paddle中，Program定义了网络结构，Scope存储参数的数值。一个Scope实例可以被多个Program使用，比如定义了训练网络的Program和定义了测试网络的Program是使用同一个Scope实例的。<code>only_graph</code>为True时，只对Program中定义的卷积的通道进行剪裁；<code>only_graph</code>为false时，Scope中卷积参数的数值也会被剪裁。默认为False。</p>
 </li>
 <li>
-<p><strong>param_backup(bool):</strong> 是否返回对参数值的备份。默认为False。</p>
+<p><strong>param_backup(bool)</strong> - 是否返回对参数值的备份。默认为False。</p>
 </li>
 <li>
-<p><strong>param_shape_backup(bool):</strong> 是否返回对参数<code>shape</code>的备份。默认为False。</p>
+<p><strong>param_shape_backup(bool)</strong> - 是否返回对参数<code>shape</code>的备份。默认为False。</p>
 </li>
 </ul>
 <p><strong>返回：</strong></p>
 <ul>
 <li>
-<p><strong>pruned_program(paddle.fluid.Program):</strong> 被裁剪后的Program。</p>
+<p><strong>pruned_program(paddle.fluid.Program)</strong> - 被裁剪后的Program。</p>
 </li>
 <li>
-<p><strong>param_backup(dict):</strong> 对参数数值的备份，用于恢复Scope中的参数数值。</p>
+<p><strong>param_backup(dict)</strong> - 对参数数值的备份，用于恢复Scope中的参数数值。</p>
 </li>
 <li>
-<p><strong>param_shape_backup(dict):</strong> 对参数形状的备份。</p>
+<p><strong>param_shape_backup(dict)</strong> - 对参数形状的备份。</p>
 </li>
 </ul>
 <p><strong>示例：</strong></p>
@@ -391,20 +394,22 @@
 </td></tr></table></p>
 <hr />
 <h2 id="sensitivity">sensitivity<a class="headerlink" href="#sensitivity" title="Permanent link">#</a></h2>
-<blockquote>
-<p>paddleslim.prune.sensitivity(program, place, param_names, eval_func, sensitivities_file=None, pruned_ratios=None) <a href="">源代码</a></p>
-</blockquote>
+<dl>
+<dt>paddleslim.prune.sensitivity(program, place, param_names, eval_func, sensitivities_file=None, pruned_ratios=None) <a href="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/paddleslim/prune/sensitive.py#L34">源代码</a></dt>
+<dd>
 <p>计算网络中每个卷积层的敏感度。每个卷积层的敏感度信息统计方法为：依次剪掉当前卷积层不同比例的输出通道数，在测试集上计算剪裁后的精度损失。得到敏感度信息后，可以通过观察或其它方式确定每层卷积的剪裁率。</p>
+</dd>
+</dl>
 <p><strong>参数：</strong></p>
 <ul>
 <li>
-<p><strong>program(paddle.fluid.Program):</strong> 待评估的目标网络。更多关于Program的介绍请参考：<a href="https://www.paddlepaddle.org.cn/documentation/docs/zh/api_cn/fluid_cn/Program_cn.html#program">Program概念介绍</a>。</p>
+<p><strong>program(paddle.fluid.Program)</strong> - 待评估的目标网络。更多关于Program的介绍请参考：<a href="https://www.paddlepaddle.org.cn/documentation/docs/zh/api_cn/fluid_cn/Program_cn.html#program">Program概念介绍</a>。</p>
 </li>
 <li>
-<p><strong>place(paddle.fluid.Place):</strong> 待分析的参数所在的设备位置，可以是<code>CUDAPlace</code>或<code>CPUPlace</code>。<a href="">Place概念介绍</a></p>
+<p><strong>place(paddle.fluid.Place)</strong> - 待分析的参数所在的设备位置，可以是<code>CUDAPlace</code>或<code>CPUPlace</code>。<a href="">Place概念介绍</a></p>
 </li>
 <li>
-<p><strong>param_names(list<str>):</strong> 待分析的卷积层的参数的名称列表。可以通过以下方式查看模型中所有参数的名称:</p>
+<p><strong>param_names(list<str>)</strong> - 待分析的卷积层的参数的名称列表。可以通过以下方式查看模型中所有参数的名称:</p>
 </li>
 </ul>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
@@ -417,18 +422,18 @@
 
 <ul>
 <li>
-<p><strong>eval_func(function):</strong> 用于评估裁剪后模型效果的回调函数。该回调函数接受被裁剪后的<code>program</code>为参数，返回一个表示当前program的精度，用以计算当前裁剪带来的精度损失。</p>
+<p><strong>eval_func(function)</strong> - 用于评估裁剪后模型效果的回调函数。该回调函数接受被裁剪后的<code>program</code>为参数，返回一个表示当前program的精度，用以计算当前裁剪带来的精度损失。</p>
 </li>
 <li>
-<p><strong>sensitivities_file(str):</strong> 保存敏感度信息的本地文件系统的文件。在敏感度计算过程中，会持续将新计算出的敏感度信息追加到该文件中。重启任务后，文件中已有敏感度信息不会被重复计算。该文件可以用<code>pickle</code>加载。</p>
+<p><strong>sensitivities_file(str)</strong> - 保存敏感度信息的本地文件系统的文件。在敏感度计算过程中，会持续将新计算出的敏感度信息追加到该文件中。重启任务后，文件中已有敏感度信息不会被重复计算。该文件可以用<code>pickle</code>加载。</p>
 </li>
 <li>
-<p><strong>pruned_ratios(list<float>):</strong> 计算卷积层敏感度信息时，依次剪掉的通道数比例。默认为[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]。</p>
+<p><strong>pruned_ratios(list<float>)</strong> - 计算卷积层敏感度信息时，依次剪掉的通道数比例。默认为[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]。</p>
 </li>
 </ul>
 <p><strong>返回：</strong></p>
 <ul>
-<li><strong>sensitivities(dict):</strong> 存放敏感度信息的dict，其格式为：</li>
+<li><strong>sensitivities(dict)</strong> - 存放敏感度信息的dict，其格式为：</li>
 </ul>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
 2
@@ -438,7 +443,7 @@
 6
 7
 8
-9</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="err">{</span><span class="ss">&quot;weight_0&quot;</span><span class="p">:</span> 
+9</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="err">{</span><span class="ss">&quot;weight_0&quot;</span><span class="p">:</span>
    <span class="err">{</span><span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">22</span><span class="p">,</span>
     <span class="mi">0</span><span class="p">.</span><span class="mi">2</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">33</span>
    <span class="err">}</span><span class="p">,</span>
@@ -590,7 +595,7 @@
 <span class="n">image_shape</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">28</span><span class="p">,</span><span class="mi">28</span><span class="p">]</span>
 <span class="k">with</span> <span class="n">fluid</span><span class="o">.</span><span class="n">program_guard</span><span class="p">(</span><span class="n">main_program</span><span class="p">,</span> <span class="n">startup_program</span><span class="p">):</span>
     <span class="n">image</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;image&#39;</span><span class="p">,</span> <span class="kp">shape</span><span class="o">=</span><span class="p">[</span><span class="bp">None</span><span class="p">]</span><span class="o">+</span><span class="n">image_shape</span><span class="p">,</span> <span class="kp">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
-    <span class="n">label</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="kp">shape</span><span class="o">=</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="kp">dtype</span><span class="o">=</span><span class="s1">&#39;int64&#39;</span><span class="p">)</span>   
+    <span class="n">label</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="kp">shape</span><span class="o">=</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="kp">dtype</span><span class="o">=</span><span class="s1">&#39;int64&#39;</span><span class="p">)</span>  
     <span class="n">conv1</span> <span class="o">=</span> <span class="n">conv_bn_layer</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;conv1&quot;</span><span class="p">)</span>
     <span class="n">conv2</span> <span class="o">=</span> <span class="n">conv_bn_layer</span><span class="p">(</span><span class="n">conv1</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;conv2&quot;</span><span class="p">)</span>
     <span class="n">sum1</span> <span class="o">=</span> <span class="n">conv1</span> <span class="o">+</span> <span class="n">conv2</span>
@@ -638,17 +643,19 @@
 </td></tr></table>
 
 <h2 id="merge_sensitive">merge_sensitive<a class="headerlink" href="#merge_sensitive" title="Permanent link">#</a></h2>
-<blockquote>
-<p>merge_sensitive(sensitivities)</p>
-</blockquote>
+<dl>
+<dt>paddleslim.prune.merge_sensitive(sensitivities)<a href="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/paddleslim/prune/sensitive.py#L161">源代码</a></dt>
+<dd>
 <p>合并多个敏感度信息。</p>
+</dd>
+</dl>
 <p>参数：</p>
 <ul>
-<li><strong>sensitivities(list<dict> | list<str>):</strong> 待合并的敏感度信息，可以是字典的列表，或者是存放敏感度信息的文件的路径列表。</li>
+<li><strong>sensitivities(list<dict> | list<str>)</strong> - 待合并的敏感度信息，可以是字典的列表，或者是存放敏感度信息的文件的路径列表。</li>
 </ul>
 <p>返回：</p>
 <ul>
-<li><strong>sensitivities(dict)：</strong> 合并后的敏感度信息。其格式为：</li>
+<li><strong>sensitivities(dict)</strong> - 合并后的敏感度信息。其格式为：</li>
 </ul>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
 2
@@ -658,7 +665,7 @@
 6
 7
 8
-9</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="err">{</span><span class="ss">&quot;weight_0&quot;</span><span class="p">:</span> 
+9</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="err">{</span><span class="ss">&quot;weight_0&quot;</span><span class="p">:</span>
    <span class="err">{</span><span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">22</span><span class="p">,</span>
     <span class="mi">0</span><span class="p">.</span><span class="mi">2</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">33</span>
    <span class="err">}</span><span class="p">,</span>
@@ -673,38 +680,41 @@
 <p>其中，<code>weight_0</code>是卷积层参数的名称，sensitivities['weight_0']的<code>value</code>为剪裁比例，<code>value</code>为精度损失的比例。</p>
 <p>示例：</p>
 <h2 id="load_sensitivities">load_sensitivities<a class="headerlink" href="#load_sensitivities" title="Permanent link">#</a></h2>
-<blockquote>
-<p>load_sensitivities(sensitivities_file)</p>
-</blockquote>
+<dl>
+<dt>paddleslim.prune.load_sensitivities(sensitivities_file)<a href="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/paddleslim/prune/sensitive.py#L184">源代码</a></dt>
+<dd>
 <p>从文件中加载敏感度信息。</p>
+</dd>
+</dl>
 <p>参数：</p>
 <ul>
-<li><strong>sensitivities_file(str):</strong> 存放敏感度信息的本地文件.</li>
+<li><strong>sensitivities_file(str)</strong> - 存放敏感度信息的本地文件.</li>
 </ul>
 <p>返回：</p>
 <ul>
-<li>**sensitivities(dict)**敏感度信息。</li>
+<li><strong>sensitivities(dict)</strong> - 敏感度信息。</li>
 </ul>
 <p>示例：</p>
-<h2 id="get_ratios_by_losssensitivities-loss">get_ratios_by_loss(sensitivities, loss)<a class="headerlink" href="#get_ratios_by_losssensitivities-loss" title="Permanent link">#</a></h2>
+<h2 id="get_ratios_by_loss">get_ratios_by_loss<a class="headerlink" href="#get_ratios_by_loss" title="Permanent link">#</a></h2>
+<dl>
+<dt>paddleslim.prune.get_ratios_by_loss(sensitivities, loss)<a href="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/paddleslim/prune/sensitive.py#L206">源代码</a></dt>
+<dd>
 <p>根据敏感度和精度损失阈值计算出一组剪切率。对于参数<code>w</code>, 其剪裁率为使精度损失低于<code>loss</code>的最大剪裁率。</p>
+</dd>
+</dl>
 <p>参数：</p>
 <ul>
 <li>
-<p><strong>sensitivities(dict):</strong> 敏感度信息。</p>
+<p><strong>sensitivities(dict)</strong> - 敏感度信息。</p>
 </li>
 <li>
-<p><strong>loss:</strong> 精度损失阈值。</p>
+<p><strong>loss</strong> - 精度损失阈值。</p>
 </li>
 </ul>
 <p>返回：</p>
 <ul>
-<li>ratios(dict): 一组剪切率。<code>key</code>是待剪裁参数的名称。<code>value</code>是对应参数的剪裁率。</li>
+<li><strong>ratios(dict)</strong> - 一组剪切率。<code>key</code>是待剪裁参数的名称。<code>value</code>是对应参数的剪裁率。</li>
 </ul>
-<p>示例：</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>
-</pre></div>
-</td></tr></table>
               
             </div>
           </div>
@@ -712,7 +722,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../analysis_api/" class="btn btn-neutral float-right" title="敏感度分析">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../analysis_api/" class="btn btn-neutral float-right" title="模型分析">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
         <a href="../quantization_api/" class="btn btn-neutral" title="量化"><span class="icon icon-circle-arrow-left"></span> Previous</a>

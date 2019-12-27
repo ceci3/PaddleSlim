@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../../img/favicon.ico">
-  <title>敏感度分析 - PaddleSlim Docs</title>
+  <title>模型分析 - PaddleSlim Docs</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
@@ -17,7 +17,7 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "\u654f\u611f\u5ea6\u5206\u6790";
+    var mkdocs_page_name = "\u6a21\u578b\u5206\u6790";
     var mkdocs_page_input_path = "api/analysis_api.md";
     var mkdocs_page_url = null;
   </script>
@@ -86,24 +86,20 @@
                 </li>
                 <li class="">
                     
-    <a class="" href="../prune_api/">剪枝</a>
+    <a class="" href="../prune_api/">剪枝与敏感度</a>
                 </li>
                 <li class=" current">
                     
-    <a class="current" href="./">敏感度分析</a>
+    <a class="current" href="./">模型分析</a>
     <ul class="subnav">
             
-    <li class="toctree-l3"><a href="#api">模型分析API文档</a></li>
+    <li class="toctree-l3"><a href="#flops">FLOPs</a></li>
     
-        <ul>
-        
-            <li><a class="toctree-l4" href="#flops">flops</a></li>
-        
-            <li><a class="toctree-l4" href="#model_size">model_size</a></li>
-        
-            <li><a class="toctree-l4" href="#tablelatencyevaluator">TableLatencyEvaluator</a></li>
-        
-        </ul>
+
+    <li class="toctree-l3"><a href="#model_size">model_size</a></li>
+    
+
+    <li class="toctree-l3"><a href="#tablelatencyevaluator">TableLatencyEvaluator</a></li>
     
 
     </ul>
@@ -119,6 +115,10 @@
                 <li class="">
                     
     <a class="" href="../../search_space/">搜索空间</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../table_latency/">硬件延时评估表</a>
                 </li>
     </ul>
 	    </li>
@@ -154,7 +154,7 @@
         
       
     
-    <li>敏感度分析</li>
+    <li>模型分析</li>
     <li class="wy-breadcrumbs-aside">
       
         <a href="https://github.com/PaddlePaddle/PaddleSlim/edit/master/docs/api/analysis_api.md"
@@ -167,28 +167,32 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="api">模型分析API文档<a class="headerlink" href="#api" title="Permanent link">#</a></h1>
-<h2 id="flops">flops<a class="headerlink" href="#flops" title="Permanent link">#</a></h2>
-<blockquote>
-<p>paddleslim.analysis.flops(program, detail=False) <a href="">源代码</a></p>
-</blockquote>
-<p>获得指定网络的每秒浮点运算次数(FLOPS)。</p>
+                <h2 id="flops">FLOPs<a class="headerlink" href="#flops" title="Permanent link">#</a></h2>
+<dl>
+<dt>paddleslim.analysis.flops(program, detail=False) <a href="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/paddleslim/analysis/flops.py">源代码</a></dt>
+<dd>
+<p>获得指定网络的浮点运算次数(FLOPs)。</p>
+</dd>
+</dl>
 <p><strong>参数：</strong></p>
 <ul>
 <li>
-<p><strong>program(paddle.fluid.Program):</strong>  待分析的目标网络。更多关于Program的介绍请参考：<a href="https://www.paddlepaddle.org.cn/documentation/docs/zh/api_cn/fluid_cn/Program_cn.html#program">Program概念介绍</a>。</p>
+<p><strong>program(paddle.fluid.Program)</strong> - 待分析的目标网络。更多关于Program的介绍请参考：<a href="https://www.paddlepaddle.org.cn/documentation/docs/zh/api_cn/fluid_cn/Program_cn.html#program">Program概念介绍</a>。</p>
 </li>
 <li>
-<p><strong>detail(bool):</strong> 是否返回每个卷积层的FLOPS。默认为False。</p>
+<p><strong>detail(bool)</strong> - 是否返回每个卷积层的FLOPs。默认为False。</p>
+</li>
+<li>
+<p><strong>only_conv(bool)</strong> - 如果设置为True，则仅计算卷积层和全连接层的FLOPs，即浮点数的乘加（multiplication-adds）操作次数。如果设置为False，则也会计算卷积和全连接层之外的操作的FLOPs。</p>
 </li>
 </ul>
 <p><strong>返回值：</strong></p>
 <ul>
 <li>
-<p><strong>flops(float):</strong> 整个网络的FLOPS。</p>
+<p><strong>flops(float)</strong> - 整个网络的FLOPs。</p>
 </li>
 <li>
-<p><strong>params2flops(dict):</strong> 每层卷积对应的FLOPS，其中key为卷积层参数名称，value为FLOPS值。</p>
+<p><strong>params2flops(dict)</strong> - 每层卷积对应的FLOPs，其中key为卷积层参数名称，value为FLOPs值。</p>
 </li>
 </ul>
 <p><strong>示例：</strong></p>
@@ -296,22 +300,20 @@
     <span class="n">conv5</span> <span class="o">=</span> <span class="n">conv_bn_layer</span><span class="p">(</span><span class="n">sum2</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;conv5&quot;</span><span class="p">)</span>
     <span class="n">conv6</span> <span class="o">=</span> <span class="n">conv_bn_layer</span><span class="p">(</span><span class="n">conv5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;conv6&quot;</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;FLOPS: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">flops</span><span class="p">(</span><span class="n">main_program</span><span class="p">)))</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;FLOPs: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">flops</span><span class="p">(</span><span class="n">main_program</span><span class="p">)))</span>
 </pre></div>
 </td></tr></table>
 
 <h2 id="model_size">model_size<a class="headerlink" href="#model_size" title="Permanent link">#</a></h2>
-<blockquote>
-<p>paddleslim.analysis.model_size(program) <a href="">源代码</a></p>
-</blockquote>
+<p>paddleslim.analysis.model_size(program) <a href="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/paddleslim/analysis/model_size.py">源代码</a></p>
 <p>获得指定网络的参数数量。</p>
 <p><strong>参数：</strong></p>
 <ul>
-<li><strong>program(paddle.fluid.Program):</strong>  待分析的目标网络。更多关于Program的介绍请参考：<a href="https://www.paddlepaddle.org.cn/documentation/docs/zh/api_cn/fluid_cn/Program_cn.html#program">Program概念介绍</a>。</li>
+<li><strong>program(paddle.fluid.Program)</strong> - 待分析的目标网络。更多关于Program的介绍请参考：<a href="https://www.paddlepaddle.org.cn/documentation/docs/zh/api_cn/fluid_cn/Program_cn.html#program">Program概念介绍</a>。</li>
 </ul>
 <p><strong>返回值：</strong></p>
 <ul>
-<li><strong>model_size(int):</strong> 整个网络的参数数量。</li>
+<li><strong>model_size(int)</strong> - 整个网络的参数数量。</li>
 </ul>
 <p><strong>示例：</strong></p>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
@@ -402,39 +404,43 @@
     <span class="n">conv5</span> <span class="o">=</span> <span class="n">conv_layer</span><span class="p">(</span><span class="n">sum2</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;conv5&quot;</span><span class="p">)</span>
     <span class="n">conv6</span> <span class="o">=</span> <span class="n">conv_layer</span><span class="p">(</span><span class="n">conv5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;conv6&quot;</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;FLOPS: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model_size</span><span class="p">(</span><span class="n">main_program</span><span class="p">)))</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;FLOPs: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model_size</span><span class="p">(</span><span class="n">main_program</span><span class="p">)))</span>
 </pre></div>
 </td></tr></table>
 
 <h2 id="tablelatencyevaluator">TableLatencyEvaluator<a class="headerlink" href="#tablelatencyevaluator" title="Permanent link">#</a></h2>
-<blockquote>
-<p>paddleslim.analysis.TableLatencyEvaluator(table_file, delimiter=",") <a href="">源代码</a></p>
-</blockquote>
+<dl>
+<dt>paddleslim.analysis.TableLatencyEvaluator(table_file, delimiter=",") <a href="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/paddleslim/analysis/latency.py">源代码</a></dt>
+<dd>
 <p>基于硬件延时表的模型延时评估器。</p>
+</dd>
+</dl>
 <p><strong>参数：</strong></p>
 <ul>
 <li>
-<p><strong>table_file(str):</strong> 所使用的延时评估表的绝对路径。关于演示评估表格式请参考：<a href="../paddleslim/analysis/table_latency.md">PaddleSlim硬件延时评估表格式</a></p>
+<p><strong>table_file(str)</strong> - 所使用的延时评估表的绝对路径。关于演示评估表格式请参考：<a href="../paddleslim/analysis/table_latency.md">PaddleSlim硬件延时评估表格式</a></p>
 </li>
 <li>
-<p><strong>delimiter(str):</strong> 硬件延时评估表中，操作信息之前所使用的分割符，默认为英文字符逗号。</p>
+<p><strong>delimiter(str)</strong> - 硬件延时评估表中，操作信息之前所使用的分割符，默认为英文字符逗号。</p>
 </li>
 </ul>
 <p><strong>返回值：</strong></p>
 <ul>
-<li><strong>Evaluator:</strong> 硬件延时评估器的实例。</li>
+<li><strong>Evaluator</strong> - 硬件延时评估器的实例。</li>
 </ul>
-<blockquote>
-<p>paddleslim.analysis.TableLatencyEvaluator.latency(graph) <a href="">源代码</a></p>
-</blockquote>
+<dl>
+<dt>paddleslim.analysis.TableLatencyEvaluator.latency(graph) <a href="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/paddleslim/analysis/latency.py">源代码</a></dt>
+<dd>
 <p>获得指定网络的预估延时。</p>
+</dd>
+</dl>
 <p><strong>参数：</strong></p>
 <ul>
-<li><strong>graph(Program):</strong> 待预估的目标网络。</li>
+<li><strong>graph(Program)</strong> - 待预估的目标网络。</li>
 </ul>
 <p><strong>返回值：</strong></p>
 <ul>
-<li><strong>latency:</strong> 目标网络的预估延时。</li>
+<li><strong>latency</strong> - 目标网络的预估延时。</li>
 </ul>
               
             </div>
@@ -446,7 +452,7 @@
         <a href="../single_distiller_api/" class="btn btn-neutral float-right" title="蒸馏">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../prune_api/" class="btn btn-neutral" title="剪枝"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../prune_api/" class="btn btn-neutral" title="剪枝与敏感度"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
