@@ -73,6 +73,10 @@
                     
     <a class="" href="../tutorials/nas_demo/">SA搜索</a>
                 </li>
+                <li class="">
+                    
+    <a class="" href="../tutorials/distillation_demo/">知识蒸馏</a>
+                </li>
     </ul>
 	    </li>
           
@@ -94,7 +98,7 @@
                 </li>
                 <li class="">
                     
-    <a class="" href="../api/single_distiller_api/">蒸馏</a>
+    <a class="" href="../api/single_distiller_api/">知识蒸馏</a>
                 </li>
                 <li class="">
                     
@@ -294,7 +298,8 @@
 58
 59
 60
-61</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">### 引入搜索空间基类函数和search space的注册类函数</span>
+61
+62</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">### 引入搜索空间基类函数和search space的注册类函数</span>
 <span class="kn">from</span> <span class="nn">.search_space_base</span> <span class="kn">import</span> <span class="n">SearchSpaceBase</span>
 <span class="kn">from</span> <span class="nn">.search_space_registry</span> <span class="kn">import</span> <span class="n">SEARCHSPACE</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -312,10 +317,11 @@
     <span class="k">def</span> <span class="nf">init_tokens</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_mask</span><span class="p">)</span>
 
-    <span class="c1">### 定义</span>
+    <span class="c1">### 定义token的index的取值范围</span>
     <span class="k">def</span> <span class="nf">range_table</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filter_num</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_mask</span><span class="p">)</span>
 
+    <span class="c1">### 把token转换成模型结构</span>
     <span class="k">def</span> <span class="nf">token2arch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokens</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">tokens</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">tokens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_tokens</span><span class="p">()</span>
