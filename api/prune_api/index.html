@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <link href="../../extra.css" rel="stylesheet">
   
   <script>
     // Current page data
@@ -51,6 +52,11 @@
             <li class="toctree-l1">
 		
     <a class="" href="../..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../model_zoo/">模型库</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -190,11 +196,9 @@
 </ul>
 <p><strong>返回：</strong> 一个Pruner类的实例</p>
 <p><strong>示例代码：</strong></p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">paddleslim.prune</span> <span class="kn">import</span> <span class="n">Pruner</span>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">paddleslim.prune</span> <span class="kn">import</span> <span class="n">Pruner</span>
 <span class="n">pruner</span> <span class="o">=</span> <span class="n">Pruner</span><span class="p">()</span>
 </pre></div>
-</td></tr></table>
 
 <dl>
 <dt>paddleslim.prune.Pruner.prune(program, scope, params, ratios, place=None, lazy=False, only_graph=False, param_backup=False, param_shape_backup=False)<a href="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/paddleslim/prune/pruner.py#L36">源代码</a></dt>
@@ -212,13 +216,10 @@
 </li>
 <li>
 <p><strong>params(list<str>)</strong> - 需要被裁剪的卷积层的参数的名称列表。可以通过以下方式查看模型中所有参数的名称:
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">for</span> <span class="nv">block</span> <span class="nv">in</span> <span class="nv">program</span>.<span class="nv">blocks</span>:
-    <span class="k">for</span> <span class="nv">param</span> <span class="nv">in</span> <span class="nv">block</span>.<span class="nv">all_parameters</span><span class="ss">()</span>:
-        <span class="nv">print</span><span class="ss">(</span><span class="s2">&quot;</span><span class="s">param: {}; shape: {}</span><span class="s2">&quot;</span>.<span class="nv">format</span><span class="ss">(</span><span class="nv">param</span>.<span class="nv">name</span>, <span class="nv">param</span>.<span class="nv">shape</span><span class="ss">))</span>
-</pre></div>
-</td></tr></table></p>
+<div class="codehilite"><pre><span></span><span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">program</span><span class="o">.</span><span class="n">blocks</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">block</span><span class="o">.</span><span class="n">all_parameters</span><span class="p">():</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;param: {}; shape: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+</pre></div></p>
 </li>
 <li>
 <p><strong>ratios(list<float>)</strong> - 用于裁剪<code>params</code>的剪切率，类型为列表。该列表长度必须与<code>params</code>的长度一致。</p>
@@ -253,77 +254,7 @@
 </ul>
 <p><strong>示例：</strong></p>
 <p>点击<a href="https://aistudio.baidu.com/aistudio/projectDetail/200786">AIStudio</a>执行以下示例代码。
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">paddle.fluid</span> <span class="kn">as</span> <span class="nn">fluid</span>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">paddle.fluid</span> <span class="kn">as</span> <span class="nn">fluid</span>
 <span class="kn">from</span> <span class="nn">paddle.fluid.param_attr</span> <span class="kn">import</span> <span class="n">ParamAttr</span>
 <span class="kn">from</span> <span class="nn">paddleslim.prune</span> <span class="kn">import</span> <span class="n">Pruner</span>
 
@@ -394,8 +325,7 @@
 <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">main_program</span><span class="o">.</span><span class="n">global_block</span><span class="p">()</span><span class="o">.</span><span class="n">all_parameters</span><span class="p">():</span>
     <span class="k">if</span> <span class="s2">&quot;weights&quot;</span> <span class="ow">in</span> <span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="s2">&quot;param name: {}; param shape: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
-</pre></div>
-</td></tr></table></p>
+</pre></div></p>
 <hr />
 <h2 id="sensitivity">sensitivity<a class="headerlink" href="#sensitivity" title="Permanent link">#</a></h2>
 <dl>
@@ -416,13 +346,10 @@
 <p><strong>param_names(list<str>)</strong> - 待分析的卷积层的参数的名称列表。可以通过以下方式查看模型中所有参数的名称:</p>
 </li>
 </ul>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">for</span> <span class="nv">block</span> <span class="nv">in</span> <span class="nv">program</span>.<span class="nv">blocks</span>:
-    <span class="k">for</span> <span class="nv">param</span> <span class="nv">in</span> <span class="nv">block</span>.<span class="nv">all_parameters</span><span class="ss">()</span>:
-        <span class="nv">print</span><span class="ss">(</span><span class="s2">&quot;</span><span class="s">param: {}; shape: {}</span><span class="s2">&quot;</span>.<span class="nv">format</span><span class="ss">(</span><span class="nv">param</span>.<span class="nv">name</span>, <span class="nv">param</span>.<span class="nv">shape</span><span class="ss">))</span>
+<div class="codehilite"><pre><span></span><span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">program</span><span class="o">.</span><span class="n">blocks</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">block</span><span class="o">.</span><span class="n">all_parameters</span><span class="p">():</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;param: {}; shape: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
 </pre></div>
-</td></tr></table>
 
 <ul>
 <li>
@@ -439,120 +366,21 @@
 <ul>
 <li><strong>sensitivities(dict)</strong> - 存放敏感度信息的dict，其格式为：</li>
 </ul>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3
-4
-5
-6
-7
-8
-9</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="err">{</span><span class="ss">&quot;weight_0&quot;</span><span class="p">:</span>
-   <span class="err">{</span><span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">22</span><span class="p">,</span>
-    <span class="mi">0</span><span class="p">.</span><span class="mi">2</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">33</span>
-   <span class="err">}</span><span class="p">,</span>
- <span class="ss">&quot;weight_1&quot;</span><span class="p">:</span>
-   <span class="err">{</span><span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">21</span><span class="p">,</span>
-    <span class="mi">0</span><span class="p">.</span><span class="mi">2</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">4</span>
-   <span class="err">}</span>
-<span class="err">}</span>
+<div class="codehilite"><pre><span></span><span class="p">{</span><span class="s2">&quot;weight_0&quot;</span><span class="p">:</span>
+   <span class="p">{</span><span class="mf">0.1</span><span class="p">:</span> <span class="mf">0.22</span><span class="p">,</span>
+    <span class="mf">0.2</span><span class="p">:</span> <span class="mf">0.33</span>
+   <span class="p">},</span>
+ <span class="s2">&quot;weight_1&quot;</span><span class="p">:</span>
+   <span class="p">{</span><span class="mf">0.1</span><span class="p">:</span> <span class="mf">0.21</span><span class="p">,</span>
+    <span class="mf">0.2</span><span class="p">:</span> <span class="mf">0.4</span>
+   <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
-</td></tr></table>
 
 <p>其中，<code>weight_0</code>是卷积层参数的名称，sensitivities['weight_0']的<code>value</code>为剪裁比例，<code>value</code>为精度损失的比例。</p>
 <p><strong>示例：</strong></p>
 <p>点击<a href="https://aistudio.baidu.com/aistudio/projectdetail/201401">AIStudio</a>运行以下示例代码。</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83
-84
-85
-86
-87
-88
-89
-90
-91</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">paddle</span>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">paddle</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">paddle.fluid</span> <span class="kn">as</span> <span class="nn">fluid</span>
 <span class="kn">from</span> <span class="nn">paddle.fluid.param_attr</span> <span class="kn">import</span> <span class="n">ParamAttr</span>
@@ -598,8 +426,8 @@
 <span class="c1"># O: prune input channels</span>
 <span class="n">image_shape</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">28</span><span class="p">,</span><span class="mi">28</span><span class="p">]</span>
 <span class="k">with</span> <span class="n">fluid</span><span class="o">.</span><span class="n">program_guard</span><span class="p">(</span><span class="n">main_program</span><span class="p">,</span> <span class="n">startup_program</span><span class="p">):</span>
-    <span class="n">image</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;image&#39;</span><span class="p">,</span> <span class="kp">shape</span><span class="o">=</span><span class="p">[</span><span class="bp">None</span><span class="p">]</span><span class="o">+</span><span class="n">image_shape</span><span class="p">,</span> <span class="kp">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
-    <span class="n">label</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="kp">shape</span><span class="o">=</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="kp">dtype</span><span class="o">=</span><span class="s1">&#39;int64&#39;</span><span class="p">)</span>  
+    <span class="n">image</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;image&#39;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="bp">None</span><span class="p">]</span><span class="o">+</span><span class="n">image_shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int64&#39;</span><span class="p">)</span>  
     <span class="n">conv1</span> <span class="o">=</span> <span class="n">conv_bn_layer</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;conv1&quot;</span><span class="p">)</span>
     <span class="n">conv2</span> <span class="o">=</span> <span class="n">conv_bn_layer</span><span class="p">(</span><span class="n">conv1</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;conv2&quot;</span><span class="p">)</span>
     <span class="n">sum1</span> <span class="o">=</span> <span class="n">conv1</span> <span class="o">+</span> <span class="n">conv2</span>
@@ -608,20 +436,20 @@
     <span class="n">sum2</span> <span class="o">=</span> <span class="n">conv4</span> <span class="o">+</span> <span class="n">sum1</span>
     <span class="n">conv5</span> <span class="o">=</span> <span class="n">conv_bn_layer</span><span class="p">(</span><span class="n">sum2</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;conv5&quot;</span><span class="p">)</span>
     <span class="n">conv6</span> <span class="o">=</span> <span class="n">conv_bn_layer</span><span class="p">(</span><span class="n">conv5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;conv6&quot;</span><span class="p">)</span>
-    <span class="n">out</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">fc</span><span class="p">(</span><span class="n">conv6</span><span class="p">,</span> <span class="kp">size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">act</span><span class="o">=</span><span class="s2">&quot;softmax&quot;</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">fc</span><span class="p">(</span><span class="n">conv6</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">act</span><span class="o">=</span><span class="s2">&quot;softmax&quot;</span><span class="p">)</span>
 <span class="c1">#    cost = fluid.layers.cross_entropy(input=out, label=label)</span>
 <span class="c1">#    avg_cost = fluid.layers.mean(x=cost)</span>
     <span class="n">acc_top1</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">accuracy</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="n">out</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="c1">#    acc_top5 = fluid.layers.accuracy(input=out, label=label, k=5)</span>
 
 
-<span class="kp">place</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">CPUPlace</span><span class="p">()</span>
-<span class="n">exe</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">Executor</span><span class="p">(</span><span class="kp">place</span><span class="p">)</span>
+<span class="n">place</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">CPUPlace</span><span class="p">()</span>
+<span class="n">exe</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">Executor</span><span class="p">(</span><span class="n">place</span><span class="p">)</span>
 <span class="n">exe</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">startup_program</span><span class="p">)</span>
 
-<span class="n">val_reader</span> <span class="o">=</span> <span class="n">paddle</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="kp">test</span><span class="p">(),</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+<span class="n">val_reader</span> <span class="o">=</span> <span class="n">paddle</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="n">test</span><span class="p">(),</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
 <span class="n">val_feeder</span> <span class="o">=</span> <span class="n">feeder</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">DataFeeder</span><span class="p">(</span>
-        <span class="p">[</span><span class="n">image</span><span class="p">,</span> <span class="n">label</span><span class="p">],</span> <span class="kp">place</span><span class="p">,</span> <span class="n">program</span><span class="o">=</span><span class="n">main_program</span><span class="p">)</span>
+        <span class="p">[</span><span class="n">image</span><span class="p">,</span> <span class="n">label</span><span class="p">],</span> <span class="n">place</span><span class="p">,</span> <span class="n">program</span><span class="o">=</span><span class="n">main_program</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">eval_func</span><span class="p">(</span><span class="n">program</span><span class="p">):</span>
 
@@ -630,21 +458,20 @@
         <span class="n">acc_top1_n</span> <span class="o">=</span> <span class="n">exe</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">program</span><span class="p">,</span>
                              <span class="n">feed</span><span class="o">=</span><span class="n">val_feeder</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
                              <span class="n">fetch_list</span><span class="o">=</span><span class="p">[</span><span class="n">acc_top1</span><span class="o">.</span><span class="n">name</span><span class="p">])</span>
-        <span class="n">acc_top1_ns</span><span class="o">.</span><span class="kp">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="kp">mean</span><span class="p">(</span><span class="n">acc_top1_n</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="kp">mean</span><span class="p">(</span><span class="n">acc_top1_ns</span><span class="p">)</span>
+        <span class="n">acc_top1_ns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">acc_top1_n</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">acc_top1_ns</span><span class="p">)</span>
 <span class="n">param_names</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">main_program</span><span class="o">.</span><span class="n">global_block</span><span class="p">()</span><span class="o">.</span><span class="n">all_parameters</span><span class="p">():</span>
     <span class="k">if</span> <span class="s2">&quot;weights&quot;</span> <span class="ow">in</span> <span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
-        <span class="n">param_names</span><span class="o">.</span><span class="kp">append</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">param_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 <span class="n">sensitivities</span> <span class="o">=</span> <span class="n">sensitivity</span><span class="p">(</span><span class="n">main_program</span><span class="p">,</span>
-                            <span class="kp">place</span><span class="p">,</span>
+                            <span class="n">place</span><span class="p">,</span>
                             <span class="n">param_names</span><span class="p">,</span>
                             <span class="n">eval_func</span><span class="p">,</span>
                             <span class="n">sensitivities_file</span><span class="o">=</span><span class="s2">&quot;./sensitive.data&quot;</span><span class="p">,</span>
                             <span class="n">pruned_ratios</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">])</span>
 <span class="k">print</span><span class="p">(</span><span class="n">sensitivities</span><span class="p">)</span>
 </pre></div>
-</td></tr></table>
 
 <h2 id="merge_sensitive">merge_sensitive<a class="headerlink" href="#merge_sensitive" title="Permanent link">#</a></h2>
 <dl>
@@ -661,25 +488,16 @@
 <ul>
 <li><strong>sensitivities(dict)</strong> - 合并后的敏感度信息。其格式为：</li>
 </ul>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3
-4
-5
-6
-7
-8
-9</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="err">{</span><span class="ss">&quot;weight_0&quot;</span><span class="p">:</span>
-   <span class="err">{</span><span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">22</span><span class="p">,</span>
-    <span class="mi">0</span><span class="p">.</span><span class="mi">2</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">33</span>
-   <span class="err">}</span><span class="p">,</span>
- <span class="ss">&quot;weight_1&quot;</span><span class="p">:</span>
-   <span class="err">{</span><span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">21</span><span class="p">,</span>
-    <span class="mi">0</span><span class="p">.</span><span class="mi">2</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">4</span>
-   <span class="err">}</span>
-<span class="err">}</span>
+<div class="codehilite"><pre><span></span><span class="o">{</span><span class="s2">&quot;weight_0&quot;</span>:
+   <span class="o">{</span><span class="m">0</span>.1: <span class="m">0</span>.22,
+    <span class="m">0</span>.2: <span class="m">0</span>.33
+   <span class="o">}</span>,
+ <span class="s2">&quot;weight_1&quot;</span>:
+   <span class="o">{</span><span class="m">0</span>.1: <span class="m">0</span>.21,
+    <span class="m">0</span>.2: <span class="m">0</span>.4
+   <span class="o">}</span>
+<span class="o">}</span>
 </pre></div>
-</td></tr></table>
 
 <p>其中，<code>weight_0</code>是卷积层参数的名称，sensitivities['weight_0']的<code>value</code>为剪裁比例，<code>value</code>为精度损失的比例。</p>
 <p>示例：</p>

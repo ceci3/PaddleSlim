@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <link href="../extra.css" rel="stylesheet">
   
   <script>
     // Current page data
@@ -51,6 +52,11 @@
             <li class="toctree-l1">
 		
     <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../model_zoo/">模型库</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -203,9 +209,8 @@
 <p>操作信息字段之间以逗号分割。操作信息与延迟信息之间以制表符分割。</p>
 <h3 id="conv2d">conv2d<a class="headerlink" href="#conv2d" title="Permanent link">#</a></h3>
 <p><strong>格式</strong></p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">op_type</span><span class="p">,</span><span class="n">flag_bias</span><span class="p">,</span><span class="n">flag_relu</span><span class="p">,</span><span class="n">n_in</span><span class="p">,</span><span class="n">c_in</span><span class="p">,</span><span class="n">h_in</span><span class="p">,</span><span class="n">w_in</span><span class="p">,</span><span class="n">c_out</span><span class="p">,</span><span class="n">groups</span><span class="p">,</span><span class="n">kernel</span><span class="p">,</span><span class="n">padding</span><span class="p">,</span><span class="n">stride</span><span class="p">,</span><span class="n">dilation</span><span class="err">\</span><span class="n">tlatency</span>
+<div class="codehilite"><pre><span></span>op_type,flag_bias,flag_relu,n_in,c_in,h_in,w_in,c_out,groups,kernel,padding,stride,dilation\tlatency
 </pre></div>
-</td></tr></table>
 
 <p><strong>字段解释</strong></p>
 <ul>
@@ -226,9 +231,8 @@
 </ul>
 <h3 id="activation">activation<a class="headerlink" href="#activation" title="Permanent link">#</a></h3>
 <p><strong>格式</strong></p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">op_type</span><span class="p">,</span><span class="n">n_in</span><span class="p">,</span><span class="n">c_in</span><span class="p">,</span><span class="n">h_in</span><span class="p">,</span><span class="n">w_in</span><span class="err">\</span><span class="n">tlatency</span>
+<div class="codehilite"><pre><span></span>op_type,n_in,c_in,h_in,w_in\tlatency
 </pre></div>
-</td></tr></table>
 
 <p><strong>字段解释</strong></p>
 <ul>
@@ -241,9 +245,8 @@
 </ul>
 <h3 id="batch_norm">batch_norm<a class="headerlink" href="#batch_norm" title="Permanent link">#</a></h3>
 <p><strong>格式</strong></p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">op_type</span><span class="p">,</span><span class="n">active_type</span><span class="p">,</span><span class="n">n_in</span><span class="p">,</span><span class="n">c_in</span><span class="p">,</span><span class="n">h_in</span><span class="p">,</span><span class="n">w_in</span><span class="err">\</span><span class="n">tlatency</span>
+<div class="codehilite"><pre><span></span>op_type,active_type,n_in,c_in,h_in,w_in\tlatency
 </pre></div>
-</td></tr></table>
 
 <p><strong>字段解释</strong></p>
 <ul>
@@ -257,9 +260,8 @@
 </ul>
 <h3 id="eltwise">eltwise<a class="headerlink" href="#eltwise" title="Permanent link">#</a></h3>
 <p><strong>格式</strong></p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">op_type</span><span class="p">,</span><span class="n">n_in</span><span class="p">,</span><span class="n">c_in</span><span class="p">,</span><span class="n">h_in</span><span class="p">,</span><span class="n">w_in</span><span class="err">\</span><span class="n">tlatency</span>
+<div class="codehilite"><pre><span></span>op_type,n_in,c_in,h_in,w_in\tlatency
 </pre></div>
-</td></tr></table>
 
 <p><strong>字段解释</strong></p>
 <ul>
@@ -272,9 +274,8 @@
 </ul>
 <h3 id="pooling">pooling<a class="headerlink" href="#pooling" title="Permanent link">#</a></h3>
 <p><strong>格式</strong></p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">op_type</span><span class="p">,</span><span class="n">flag_global_pooling</span><span class="p">,</span><span class="n">n_in</span><span class="p">,</span><span class="n">c_in</span><span class="p">,</span><span class="n">h_in</span><span class="p">,</span><span class="n">w_in</span><span class="p">,</span><span class="n">kernel</span><span class="p">,</span><span class="n">padding</span><span class="p">,</span><span class="n">stride</span><span class="p">,</span><span class="n">ceil_mode</span><span class="p">,</span><span class="n">pool_type</span><span class="err">\</span><span class="n">tlatency</span>
+<div class="codehilite"><pre><span></span>op_type,flag_global_pooling,n_in,c_in,h_in,w_in,kernel,padding,stride,ceil_mode,pool_type\tlatency
 </pre></div>
-</td></tr></table>
 
 <p><strong>字段解释</strong></p>
 <ul>
@@ -293,9 +294,8 @@
 </ul>
 <h3 id="softmax">softmax<a class="headerlink" href="#softmax" title="Permanent link">#</a></h3>
 <p><strong>格式</strong></p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">op_type</span><span class="p">,</span><span class="n">axis</span><span class="p">,</span><span class="n">n_in</span><span class="p">,</span><span class="n">c_in</span><span class="p">,</span><span class="n">h_in</span><span class="p">,</span><span class="n">w_in</span><span class="err">\</span><span class="n">tlatency</span>
+<div class="codehilite"><pre><span></span>op_type,axis,n_in,c_in,h_in,w_in\tlatency
 </pre></div>
-</td></tr></table>
 
 <p><strong>字段解释</strong></p>
 <ul>

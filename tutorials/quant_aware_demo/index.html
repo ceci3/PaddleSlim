@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <link href="../../extra.css" rel="stylesheet">
   
   <script>
     // Current page data
@@ -51,6 +52,11 @@
             <li class="toctree-l1">
 		
     <a class="" href="../..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../model_zoo/">模型库</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -179,18 +185,7 @@
 <p>请参考 <a href='../../../paddleslim/quant/quantization_api_doc.md'>量化API文档</a>。</p>
 <h2 id="_3">分类模型的离线量化流程<a class="headerlink" href="#_3" title="Permanent link">#</a></h2>
 <h3 id="1">1. 配置量化参数<a class="headerlink" href="#1" title="Permanent link">#</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">quant_config</span> <span class="o">=</span> <span class="err">{</span>
+<div class="codehilite"><pre><span></span><span class="n">quant_config</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;weight_quantize_type&#39;</span><span class="p">:</span> <span class="s1">&#39;abs_max&#39;</span><span class="p">,</span>
     <span class="s1">&#39;activation_quantize_type&#39;</span><span class="p">:</span> <span class="s1">&#39;moving_average_abs_max&#39;</span><span class="p">,</span>
     <span class="s1">&#39;weight_bits&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
@@ -199,85 +194,53 @@
     <span class="s1">&#39;quantize_op_types&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;conv2d&#39;</span><span class="p">,</span> <span class="s1">&#39;depthwise_conv2d&#39;</span><span class="p">,</span> <span class="s1">&#39;mul&#39;</span><span class="p">],</span>
     <span class="s1">&#39;dtype&#39;</span><span class="p">:</span> <span class="s1">&#39;int8&#39;</span><span class="p">,</span>
     <span class="s1">&#39;window_size&#39;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">,</span>
-    <span class="s1">&#39;moving_rate&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">9</span><span class="p">,</span>
-    <span class="s1">&#39;quant_weight_only&#39;</span><span class="p">:</span> <span class="k">False</span>
-<span class="err">}</span>
+    <span class="s1">&#39;moving_rate&#39;</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">,</span>
+    <span class="s1">&#39;quant_weight_only&#39;</span><span class="p">:</span> <span class="bp">False</span>
+<span class="p">}</span>
 </pre></div>
-</td></tr></table>
 
 <h3 id="2-programop">2. 对训练和测试program插入可训练量化op<a class="headerlink" href="#2-programop" title="Permanent link">#</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">val_program</span> <span class="o">=</span> <span class="n">quant_aware</span><span class="p">(</span><span class="n">val_program</span><span class="p">,</span> <span class="n">place</span><span class="p">,</span> <span class="n">quant_config</span><span class="p">,</span> <span class="k">scope</span><span class="o">=</span><span class="k">None</span><span class="p">,</span> <span class="n">for_test</span><span class="o">=</span><span class="k">True</span><span class="p">)</span>
+<div class="codehilite"><pre><span></span><span class="n">val_program</span> <span class="o">=</span> <span class="n">quant_aware</span><span class="p">(</span><span class="n">val_program</span><span class="p">,</span> <span class="n">place</span><span class="p">,</span> <span class="n">quant_config</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">for_test</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
-<span class="n">compiled_train_prog</span> <span class="o">=</span> <span class="n">quant_aware</span><span class="p">(</span><span class="n">train_prog</span><span class="p">,</span> <span class="n">place</span><span class="p">,</span> <span class="n">quant_config</span><span class="p">,</span> <span class="k">scope</span><span class="o">=</span><span class="k">None</span><span class="p">,</span> <span class="n">for_test</span><span class="o">=</span><span class="k">False</span><span class="p">)</span>
+<span class="n">compiled_train_prog</span> <span class="o">=</span> <span class="n">quant_aware</span><span class="p">(</span><span class="n">train_prog</span><span class="p">,</span> <span class="n">place</span><span class="p">,</span> <span class="n">quant_config</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">for_test</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
-</td></tr></table>
 
 <h3 id="3build">3.关掉指定build策略<a class="headerlink" href="#3build" title="Permanent link">#</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3
-4
-5
-6
-7
-8</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">build_strategy</span> <span class="o">=</span> <span class="n">fluid</span><span class="p">.</span><span class="n">BuildStrategy</span><span class="p">()</span>
-<span class="n">build_strategy</span><span class="p">.</span><span class="n">fuse_all_reduce_ops</span> <span class="o">=</span> <span class="k">False</span>
-<span class="n">build_strategy</span><span class="p">.</span><span class="n">sync_batch_norm</span> <span class="o">=</span> <span class="k">False</span>
-<span class="n">exec_strategy</span> <span class="o">=</span> <span class="n">fluid</span><span class="p">.</span><span class="n">ExecutionStrategy</span><span class="p">()</span>
-<span class="n">compiled_train_prog</span> <span class="o">=</span> <span class="n">compiled_train_prog</span><span class="p">.</span><span class="n">with_data_parallel</span><span class="p">(</span>
-        <span class="n">loss_name</span><span class="o">=</span><span class="n">avg_cost</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
+<div class="codehilite"><pre><span></span><span class="n">build_strategy</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">BuildStrategy</span><span class="p">()</span>
+<span class="n">build_strategy</span><span class="o">.</span><span class="n">fuse_all_reduce_ops</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">build_strategy</span><span class="o">.</span><span class="n">sync_batch_norm</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">exec_strategy</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">ExecutionStrategy</span><span class="p">()</span>
+<span class="n">compiled_train_prog</span> <span class="o">=</span> <span class="n">compiled_train_prog</span><span class="o">.</span><span class="n">with_data_parallel</span><span class="p">(</span>
+        <span class="n">loss_name</span><span class="o">=</span><span class="n">avg_cost</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
         <span class="n">build_strategy</span><span class="o">=</span><span class="n">build_strategy</span><span class="p">,</span>
         <span class="n">exec_strategy</span><span class="o">=</span><span class="n">exec_strategy</span><span class="p">)</span>
 </pre></div>
-</td></tr></table>
 
 <h3 id="4-freeze-program">4. freeze program<a class="headerlink" href="#4-freeze-program" title="Permanent link">#</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3
-4
-5</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">float_program</span><span class="p">,</span> <span class="n">int8_program</span> <span class="o">=</span> <span class="k">convert</span><span class="p">(</span><span class="n">val_program</span><span class="p">,</span> 
+<div class="codehilite"><pre><span></span><span class="n">float_program</span><span class="p">,</span> <span class="n">int8_program</span> <span class="o">=</span> <span class="n">convert</span><span class="p">(</span><span class="n">val_program</span><span class="p">,</span> 
                                       <span class="n">place</span><span class="p">,</span>
                                       <span class="n">quant_config</span><span class="p">,</span>
-                                      <span class="k">scope</span><span class="o">=</span><span class="k">None</span><span class="p">,</span>
-                                      <span class="n">save_int8</span><span class="o">=</span><span class="k">True</span><span class="p">)</span>
+                                      <span class="n">scope</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                                      <span class="n">save_int8</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
-</td></tr></table>
 
 <h3 id="5">5.保存预测模型<a class="headerlink" href="#5" title="Permanent link">#</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="nv">fluid</span>.<span class="nv">io</span>.<span class="nv">save_inference_model</span><span class="ss">(</span>
-    <span class="k">dirname</span><span class="o">=</span><span class="nv">float_path</span>,
-    <span class="nv">feeded_var_names</span><span class="o">=</span>[<span class="nv">image</span>.<span class="nv">name</span>],
-    <span class="nv">target_vars</span><span class="o">=</span>[<span class="nv">out</span>], <span class="nv">executor</span><span class="o">=</span><span class="nv">exe</span>,
-    <span class="nv">main_program</span><span class="o">=</span><span class="nv">float_program</span>,
-    <span class="nv">model_filename</span><span class="o">=</span><span class="nv">float_path</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="s">/model</span><span class="s1">&#39;</span>,
-    <span class="nv">params_filename</span><span class="o">=</span><span class="nv">float_path</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="s">/params</span><span class="s1">&#39;</span><span class="ss">)</span>
+<div class="codehilite"><pre><span></span><span class="n">fluid</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">save_inference_model</span><span class="p">(</span>
+    <span class="n">dirname</span><span class="o">=</span><span class="n">float_path</span><span class="p">,</span>
+    <span class="n">feeded_var_names</span><span class="o">=</span><span class="p">[</span><span class="n">image</span><span class="o">.</span><span class="n">name</span><span class="p">],</span>
+    <span class="n">target_vars</span><span class="o">=</span><span class="p">[</span><span class="n">out</span><span class="p">],</span> <span class="n">executor</span><span class="o">=</span><span class="n">exe</span><span class="p">,</span>
+    <span class="n">main_program</span><span class="o">=</span><span class="n">float_program</span><span class="p">,</span>
+    <span class="n">model_filename</span><span class="o">=</span><span class="n">float_path</span> <span class="o">+</span> <span class="s1">&#39;/model&#39;</span><span class="p">,</span>
+    <span class="n">params_filename</span><span class="o">=</span><span class="n">float_path</span> <span class="o">+</span> <span class="s1">&#39;/params&#39;</span><span class="p">)</span>
 
-<span class="nv">fluid</span>.<span class="nv">io</span>.<span class="nv">save_inference_model</span><span class="ss">(</span>
-    <span class="k">dirname</span><span class="o">=</span><span class="nv">int8_path</span>,
-    <span class="nv">feeded_var_names</span><span class="o">=</span>[<span class="nv">image</span>.<span class="nv">name</span>],
-    <span class="nv">target_vars</span><span class="o">=</span>[<span class="nv">out</span>], <span class="nv">executor</span><span class="o">=</span><span class="nv">exe</span>,
-    <span class="nv">main_program</span><span class="o">=</span><span class="nv">int8_program</span>,
-    <span class="nv">model_filename</span><span class="o">=</span><span class="nv">int8_path</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="s">/model</span><span class="s1">&#39;</span>,
-    <span class="nv">params_filename</span><span class="o">=</span><span class="nv">int8_path</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="s">/params</span><span class="s1">&#39;</span><span class="ss">)</span>
+<span class="n">fluid</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">save_inference_model</span><span class="p">(</span>
+    <span class="n">dirname</span><span class="o">=</span><span class="n">int8_path</span><span class="p">,</span>
+    <span class="n">feeded_var_names</span><span class="o">=</span><span class="p">[</span><span class="n">image</span><span class="o">.</span><span class="n">name</span><span class="p">],</span>
+    <span class="n">target_vars</span><span class="o">=</span><span class="p">[</span><span class="n">out</span><span class="p">],</span> <span class="n">executor</span><span class="o">=</span><span class="n">exe</span><span class="p">,</span>
+    <span class="n">main_program</span><span class="o">=</span><span class="n">int8_program</span><span class="p">,</span>
+    <span class="n">model_filename</span><span class="o">=</span><span class="n">int8_path</span> <span class="o">+</span> <span class="s1">&#39;/model&#39;</span><span class="p">,</span>
+    <span class="n">params_filename</span><span class="o">=</span><span class="n">int8_path</span> <span class="o">+</span> <span class="s1">&#39;/params&#39;</span><span class="p">)</span>
 </pre></div>
-</td></tr></table>
               
             </div>
           </div>

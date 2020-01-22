@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <link href="../../extra.css" rel="stylesheet">
   
   <script>
     // Current page data
@@ -51,6 +52,11 @@
             <li class="toctree-l1">
 		
     <a class="" href="../..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../model_zoo/">模型库</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -179,46 +185,50 @@
               
                 <h2 id="_1">量化配置<a class="headerlink" href="#_1" title="Permanent link">#</a></h2>
 <p>通过字典配置量化参数</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="nv">quant_config_default</span> <span class="o">=</span> {
-    <span class="s1">&#39;</span><span class="s">weight_quantize_type</span><span class="s1">&#39;</span>: <span class="s1">&#39;</span><span class="s">abs_max</span><span class="s1">&#39;</span>,
-    <span class="s1">&#39;</span><span class="s">activation_quantize_type</span><span class="s1">&#39;</span>: <span class="s1">&#39;</span><span class="s">abs_max</span><span class="s1">&#39;</span>,
-    <span class="s1">&#39;</span><span class="s">weight_bits</span><span class="s1">&#39;</span>: <span class="mi">8</span>,
-    <span class="s1">&#39;</span><span class="s">activation_bits</span><span class="s1">&#39;</span>: <span class="mi">8</span>,
-    # <span class="nv">ops</span> <span class="nv">of</span> <span class="nv">name_scope</span> <span class="nv">in</span> <span class="nv">not_quant_pattern</span> <span class="nv">list</span>, <span class="nv">will</span> <span class="nv">not</span> <span class="nv">be</span> <span class="nv">quantized</span>
-    <span class="s1">&#39;</span><span class="s">not_quant_pattern</span><span class="s1">&#39;</span>: [<span class="s1">&#39;</span><span class="s">skip_quant</span><span class="s1">&#39;</span>],
-    # <span class="nv">ops</span> <span class="nv">of</span> <span class="nv">type</span> <span class="nv">in</span> <span class="nv">quantize_op_types</span>, <span class="nv">will</span> <span class="nv">be</span> <span class="nv">quantized</span>
-    <span class="s1">&#39;</span><span class="s">quantize_op_types</span><span class="s1">&#39;</span>:
-    [<span class="s1">&#39;</span><span class="s">conv2d</span><span class="s1">&#39;</span>, <span class="s1">&#39;</span><span class="s">depthwise_conv2d</span><span class="s1">&#39;</span>, <span class="s1">&#39;</span><span class="s">mul</span><span class="s1">&#39;</span>, <span class="s1">&#39;</span><span class="s">elementwise_add</span><span class="s1">&#39;</span>, <span class="s1">&#39;</span><span class="s">pool2d</span><span class="s1">&#39;</span>],
-    # <span class="nv">data</span> <span class="nv">type</span> <span class="nv">after</span> <span class="nv">quantization</span>, <span class="nv">such</span> <span class="nv">as</span> <span class="s1">&#39;</span><span class="s">uint8</span><span class="s1">&#39;</span>, <span class="s1">&#39;</span><span class="s">int8</span><span class="s1">&#39;</span>, <span class="nv">etc</span>. <span class="nv">default</span> <span class="nv">is</span> <span class="s1">&#39;</span><span class="s">int8</span><span class="s1">&#39;</span>
-    <span class="s1">&#39;</span><span class="s">dtype</span><span class="s1">&#39;</span>: <span class="s1">&#39;</span><span class="s">int8</span><span class="s1">&#39;</span>,
-    # <span class="nv">window</span> <span class="nv">size</span> <span class="k">for</span> <span class="s1">&#39;</span><span class="s">range_abs_max</span><span class="s1">&#39;</span> <span class="nv">quantization</span>. <span class="nv">defaulf</span> <span class="nv">is</span> <span class="mi">10000</span>
-    <span class="s1">&#39;</span><span class="s">window_size</span><span class="s1">&#39;</span>: <span class="mi">10000</span>,
-    # <span class="nv">The</span> <span class="nv">decay</span> <span class="nv">coefficient</span> <span class="nv">of</span> <span class="nv">moving</span> <span class="nv">average</span>, <span class="nv">default</span> <span class="nv">is</span> <span class="mi">0</span>.<span class="mi">9</span>
-    <span class="s1">&#39;</span><span class="s">moving_rate</span><span class="s1">&#39;</span>: <span class="mi">0</span>.<span class="mi">9</span>,
-}
+<div class="codehilite"><pre><span></span><span class="n">TENSORRT_OP_TYPES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;mul&#39;</span><span class="p">,</span> <span class="s1">&#39;conv2d&#39;</span><span class="p">,</span> <span class="s1">&#39;pool2d&#39;</span><span class="p">,</span> <span class="s1">&#39;depthwise_conv2d&#39;</span><span class="p">,</span> <span class="s1">&#39;elementwise_add&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;leaky_relu&#39;</span>
+<span class="p">]</span>
+<span class="n">TRANSFORM_PASS_OP_TYPES</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;conv2d&#39;</span><span class="p">,</span> <span class="s1">&#39;depthwise_conv2d&#39;</span><span class="p">,</span> <span class="s1">&#39;mul&#39;</span><span class="p">]</span>
+
+<span class="n">QUANT_DEQUANT_PASS_OP_TYPES</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;pool2d&quot;</span><span class="p">,</span> <span class="s2">&quot;elementwise_add&quot;</span><span class="p">,</span> <span class="s2">&quot;concat&quot;</span><span class="p">,</span> <span class="s2">&quot;softmax&quot;</span><span class="p">,</span> <span class="s2">&quot;argmax&quot;</span><span class="p">,</span> <span class="s2">&quot;transpose&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;equal&quot;</span><span class="p">,</span> <span class="s2">&quot;gather&quot;</span><span class="p">,</span> <span class="s2">&quot;greater_equal&quot;</span><span class="p">,</span> <span class="s2">&quot;greater_than&quot;</span><span class="p">,</span> <span class="s2">&quot;less_equal&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;less_than&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;not_equal&quot;</span><span class="p">,</span> <span class="s2">&quot;reshape&quot;</span><span class="p">,</span> <span class="s2">&quot;reshape2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;bilinear_interp&quot;</span><span class="p">,</span> <span class="s2">&quot;nearest_interp&quot;</span><span class="p">,</span> <span class="s2">&quot;trilinear_interp&quot;</span><span class="p">,</span> <span class="s2">&quot;slice&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;squeeze&quot;</span><span class="p">,</span> <span class="s2">&quot;elementwise_sub&quot;</span><span class="p">,</span> <span class="s2">&quot;relu&quot;</span><span class="p">,</span> <span class="s2">&quot;relu6&quot;</span><span class="p">,</span> <span class="s2">&quot;leaky_relu&quot;</span><span class="p">,</span> <span class="s2">&quot;tanh&quot;</span><span class="p">,</span> <span class="s2">&quot;swish&quot;</span>
+    <span class="p">]</span>
+
+<span class="n">_quant_config_default</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># weight quantize type, default is &#39;channel_wise_abs_max&#39;</span>
+    <span class="s1">&#39;weight_quantize_type&#39;</span><span class="p">:</span> <span class="s1">&#39;channel_wise_abs_max&#39;</span><span class="p">,</span>
+    <span class="c1"># activation quantize type, default is &#39;moving_average_abs_max&#39;</span>
+    <span class="s1">&#39;activation_quantize_type&#39;</span><span class="p">:</span> <span class="s1">&#39;moving_average_abs_max&#39;</span><span class="p">,</span>
+    <span class="c1"># weight quantize bit num, default is 8</span>
+    <span class="s1">&#39;weight_bits&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+    <span class="c1"># activation quantize bit num, default is 8</span>
+    <span class="s1">&#39;activation_bits&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+    <span class="c1"># ops of name_scope in not_quant_pattern list, will not be quantized</span>
+    <span class="s1">&#39;not_quant_pattern&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;skip_quant&#39;</span><span class="p">],</span>
+    <span class="c1"># ops of type in quantize_op_types, will be quantized</span>
+    <span class="s1">&#39;quantize_op_types&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;conv2d&#39;</span><span class="p">,</span> <span class="s1">&#39;depthwise_conv2d&#39;</span><span class="p">,</span> <span class="s1">&#39;mul&#39;</span><span class="p">],</span>
+    <span class="c1"># data type after quantization, such as &#39;uint8&#39;, &#39;int8&#39;, etc. default is &#39;int8&#39;</span>
+    <span class="s1">&#39;dtype&#39;</span><span class="p">:</span> <span class="s1">&#39;int8&#39;</span><span class="p">,</span>
+    <span class="c1"># window size for &#39;range_abs_max&#39; quantization. defaulf is 10000</span>
+    <span class="s1">&#39;window_size&#39;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">,</span>
+    <span class="c1"># The decay coefficient of moving average, default is 0.9</span>
+    <span class="s1">&#39;moving_rate&#39;</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">,</span>
+    <span class="c1"># if True, &#39;quantize_op_types&#39; will be TENSORRT_OP_TYPES</span>
+    <span class="s1">&#39;for_tensorrt&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="c1"># if True, &#39;quantoze_op_types&#39; will be TRANSFORM_PASS_OP_TYPES + QUANT_DEQUANT_PASS_OP_TYPES</span>
+    <span class="s1">&#39;is_full_quantize&#39;</span><span class="p">:</span> <span class="bp">False</span>
+<span class="p">}</span>
 </pre></div>
-</td></tr></table>
 
 <p><strong>参数：</strong></p>
 <ul>
-<li><strong>weight_quantize_type(str)</strong> - 参数量化方式。可选<code>'abs_max'</code>,  <code>'channel_wise_abs_max'</code>, <code>'range_abs_max'</code>, <code>'moving_average_abs_max'</code>。 默认<code>'abs_max'</code>。</li>
-<li><strong>activation_quantize_type(str)</strong> - 激活量化方式，可选<code>'abs_max'</code>, <code>'range_abs_max'</code>, <code>'moving_average_abs_max'</code>，默认<code>'abs_max'</code>。</li>
+<li><strong>weight_quantize_type(str)</strong> - 参数量化方式。可选<code>'abs_max'</code>,  <code>'channel_wise_abs_max'</code>, <code>'range_abs_max'</code>, <code>'moving_average_abs_max'</code>。如果使用<code>TensorRT</code>加载量化后的模型来预测，请使用<code>'channel_wise_abs_max'</code>。 默认<code>'channel_wise_abs_max'</code>。</li>
+<li><strong>activation_quantize_type(str)</strong> - 激活量化方式，可选<code>'abs_max'</code>, <code>'range_abs_max'</code>, <code>'moving_average_abs_max'</code>。如果使用<code>TensorRT</code>加载量化后的模型来预测，请使用<code>'range_abs_max', 'moving_average_abs_max'</code>。，默认<code>'moving_average_abs_max'</code>。</li>
 <li><strong>weight_bits(int)</strong> - 参数量化bit数，默认8, 推荐设为8。</li>
 <li><strong>activation_bits(int)</strong> -  激活量化bit数，默认8， 推荐设为8。</li>
 <li><strong>not_quant_pattern(str | list[str])</strong> - 所有<code>name_scope</code>包含<code>'not_quant_pattern'</code>字符串的<code>op</code>，都不量化, 设置方式请参考<a href="https://www.paddlepaddle.org.cn/documentation/docs/zh/api_cn/fluid_cn/name_scope_cn.html#name-scope"><em>fluid.name_scope</em></a>。</li>
@@ -226,6 +236,14 @@
 <li><strong>dtype(int8)</strong> - 量化后的参数类型，默认 <code>int8</code>, 目前仅支持<code>int8</code>。</li>
 <li><strong>window_size(int)</strong> -  <code>'range_abs_max'</code>量化方式的<code>window size</code>，默认10000。</li>
 <li><strong>moving_rate(int)</strong> - <code>'moving_average_abs_max'</code>量化方式的衰减系数，默认 0.9。</li>
+<li><strong>for_tensorrt(bool)</strong> - 量化后的模型是否使用<code>TensorRT</code>进行预测。如果是的话，量化op类型为：<code>TENSORRT_OP_TYPES</code>。默认值为False.</li>
+<li><strong>is_full_quantize(bool)</strong> - 是否量化所有可支持op类型。默认值为False.</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">注意事项</p>
+</div>
+<ul>
+<li>目前<code>Paddle-Lite</code>有int8 kernel来加速的op只有 <code>['conv2d', 'depthwise_conv2d', 'mul']</code>, 其他op的int8 kernel将陆续支持。</li>
 </ul>
 <h2 id="quant_aware">quant_aware<a class="headerlink" href="#quant_aware" title="Permanent link">#</a></h2>
 <dl>
@@ -281,43 +299,7 @@
 </div>
 <p>因为该接口会对<code>op</code>和<code>Variable</code>做相应的删除和修改，所以此接口只能在训练完成之后调用。如果想转化训练的中间模型，可加载相应的参数之后再使用此接口。</p>
 <p><strong>代码示例</strong></p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1">#encoding=utf8</span>
+<div class="codehilite"><pre><span></span><span class="c1">#encoding=utf8</span>
 <span class="kn">import</span> <span class="nn">paddle.fluid</span> <span class="kn">as</span> <span class="nn">fluid</span>
 <span class="kn">import</span> <span class="nn">paddleslim.quant</span> <span class="kn">as</span> <span class="nn">quant</span>
 
@@ -355,12 +337,11 @@
 
 <span class="n">inference_prog</span> <span class="o">=</span> <span class="n">quant</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">quant_eval_program</span><span class="p">,</span> <span class="n">place</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
 </pre></div>
-</td></tr></table>
 
 <p>更详细的用法请参考 <a href='https://github.com/PaddlePaddle/PaddleSlim/tree/develop/demo/quant/quant_aware'>量化训练demo</a>。</p>
 <h2 id="quant_post">quant_post<a class="headerlink" href="#quant_post" title="Permanent link">#</a></h2>
 <dl>
-<dt>paddleslim.quant.quant_post(executor, model_dir, quantize_model_path,sample_generator, model_filename=None, params_filename=None, batch_size=16,batch_nums=None, scope=None, algo='KL', quantizable_op_type=["conv2d", "depthwise_conv2d", "mul"])<a href="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/paddleslim/quant/quanter.py">[源代码]</a></dt>
+<dt>paddleslim.quant.quant_post(executor, model_dir, quantize_model_path,sample_generator, model_filename=None, params_filename=None, batch_size=16,batch_nums=None, scope=None, algo='KL', quantizable_op_type=["conv2d", "depthwise_conv2d", "mul"], is_full_quantize=False, is_use_cache_file=False, cache_dir="./temp_post_training")<a href="https://github.com/PaddlePaddle/PaddleSlim/blob/develop/paddleslim/quant/quanter.py">[源代码]</a></dt>
 <dd>
 <p>对保存在<code>${model_dir}</code>下的模型进行量化，使用<code>sample_generator</code>的数据进行参数校正。</p>
 </dd>
@@ -378,34 +359,24 @@
 <li><strong>scope(fluid.Scope, optional)</strong> - 用来获取和写入<code>Variable</code>, 如果设置为<code>None</code>,则使用<a href="https://www.paddlepaddle.org.cn/documentation/docs/zh/develop/api_cn/executor_cn/global_scope_cn.html"><em>fluid.global_scope()</em></a>. 默认值是<code>None</code>.</li>
 <li><strong>algo(str)</strong> - 量化时使用的算法名称，可为<code>'KL'</code>或者<code>'direct'</code>。该参数仅针对激活值的量化，因为参数值的量化使用的方式为<code>'channel_wise_abs_max'</code>. 当<code>algo</code> 设置为<code>'direct'</code>时，使用校正数据的激活值的绝对值的最大值当作<code>Scale</code>值，当设置为<code>'KL'</code>时，则使用<code>KL</code>散度的方法来计算<code>Scale</code>值。默认值为<code>'KL'</code>。</li>
 <li><strong>quantizable_op_type(list[str])</strong> -  需要量化的<code>op</code>类型列表。默认值为<code>["conv2d", "depthwise_conv2d", "mul"]</code>。</li>
+<li><strong>is_full_quantize(bool)</strong> - 是否量化所有可支持的op类型。如果设置为False, 则按照 <code>'quantizable_op_type'</code> 的设置进行量化。</li>
+<li><strong>is_use_cache_file(bool)</strong> - 是否使用硬盘对中间结果进行存储。如果为False, 则将中间结果存储在内存中。</li>
+<li><strong>cache_dir(str)</strong> - 如果 <code>'is_use_cache_file'</code>为True, 则将中间结果存储在此参数设置的路径下。</li>
 </ul>
 <p><strong>返回</strong></p>
 <p>无。</p>
 <div class="admonition note">
 <p class="admonition-title">注意事项</p>
 </div>
-<p>因为该接口会收集校正数据的所有的激活值，所以使用的校正图片不能太多。<code>'KL'</code>散度的计算也比较耗时。</p>
+<ul>
+<li>因为该接口会收集校正数据的所有的激活值，当校正图片比较多时，请设置<code>'is_use_cache_file'</code>为True, 将中间结果存储在硬盘中。另外，<code>'KL'</code>散度的计算比较耗时。</li>
+<li>目前<code>Paddle-Lite</code>有int8 kernel来加速的op只有 <code>['conv2d', 'depthwise_conv2d', 'mul']</code>, 其他op的int8 kernel将陆续支持。</li>
+</ul>
 <p><strong>代码示例</strong></p>
 <blockquote>
 <p>注： 此示例不能直接运行，因为需要加载<code>${model_dir}</code>下的模型，所以不能直接运行。</p>
 </blockquote>
-<p><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">paddle.fluid</span> <span class="kn">as</span> <span class="nn">fluid</span>
+<p><div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">paddle.fluid</span> <span class="kn">as</span> <span class="nn">fluid</span>
 <span class="kn">import</span> <span class="nn">paddle.dataset.mnist</span> <span class="kn">as</span> <span class="nn">reader</span>
 <span class="kn">from</span> <span class="nn">paddleslim.quant</span> <span class="kn">import</span> <span class="n">quant_post</span>
 <span class="n">val_reader</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
@@ -423,7 +394,6 @@
         <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
         <span class="n">batch_nums</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
-</td></tr></table>
 更详细的用法请参考 <a href='https://github.com/PaddlePaddle/PaddleSlim/tree/develop/demo/quant/quant_post'>离线量化demo</a>。</p>
 <h2 id="quant_embedding">quant_embedding<a class="headerlink" href="#quant_embedding" title="Permanent link">#</a></h2>
 <dl>
@@ -449,28 +419,7 @@
 <p><strong>返回类型</strong></p>
 <p><code>fluid.Program</code></p>
 <p><strong>代码示例</strong>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">paddle.fluid</span> <span class="kn">as</span> <span class="nn">fluid</span>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">paddle.fluid</span> <span class="kn">as</span> <span class="nn">fluid</span>
 <span class="kn">import</span> <span class="nn">paddleslim.quant</span> <span class="kn">as</span> <span class="nn">quant</span>
 
 <span class="n">train_program</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">Program</span><span class="p">()</span>
@@ -492,8 +441,7 @@
 
 <span class="n">config</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;params_name&#39;</span><span class="p">:</span> <span class="s1">&#39;emb&#39;</span><span class="p">,</span> <span class="s1">&#39;quantize_type&#39;</span><span class="p">:</span> <span class="s1">&#39;abs_max&#39;</span><span class="p">}</span>
 <span class="hll"><span class="n">quant_program</span> <span class="o">=</span> <span class="n">quant</span><span class="o">.</span><span class="n">quant_embedding</span><span class="p">(</span><span class="n">infer_program</span><span class="p">,</span> <span class="n">place</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
-</span></pre></div>
-</td></tr></table></p>
+</span></pre></div></p>
 <p>更详细的用法请参考 <a href='https://github.com/PaddlePaddle/PaddleSlim/tree/develop/demo/quant/quant_embedding'>Embedding量化demo</a>。</p>
               
             </div>

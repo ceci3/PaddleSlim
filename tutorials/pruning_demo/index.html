@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <link href="../../extra.css" rel="stylesheet">
   
   <script>
     // Current page data
@@ -51,6 +52,11 @@
             <li class="toctree-l1">
 		
     <a class="" href="../..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../model_zoo/">模型库</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -168,20 +174,16 @@
 <p>该示例使用了<code>paddleslim.Pruner</code>工具类，用户接口使用介绍请参考：<a href="https://paddlepaddle.github.io/PaddleSlim/api/prune_api/">API文档</a></p>
 <h2 id="_3">确定待裁参数<a class="headerlink" href="#_3" title="Permanent link">#</a></h2>
 <p>不同模型的参数命名不同，在剪裁前需要确定待裁卷积层的参数名称。可通过以下方法列出所有参数名：</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">for</span> <span class="nv">param</span> <span class="nv">in</span> <span class="nv">program</span>.<span class="nv">global_block</span><span class="ss">()</span>.<span class="nv">all_parameters</span><span class="ss">()</span>:
-    <span class="nv">print</span><span class="ss">(</span><span class="s2">&quot;</span><span class="s">param name: {}; shape: {}</span><span class="s2">&quot;</span>.<span class="nv">format</span><span class="ss">(</span><span class="nv">param</span>.<span class="nv">name</span>, <span class="nv">param</span>.<span class="nv">shape</span><span class="ss">))</span>
+<div class="codehilite"><pre><span></span><span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">program</span><span class="o">.</span><span class="n">global_block</span><span class="p">()</span><span class="o">.</span><span class="n">all_parameters</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;param name: {}; shape: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
 </pre></div>
-</td></tr></table>
 
 <p>在<code>train.py</code>脚本中，提供了<code>get_pruned_params</code>方法，根据用户设置的选项<code>--model</code>确定要裁剪的参数。</p>
 <h2 id="_4">启动裁剪任务<a class="headerlink" href="#_4" title="Permanent link">#</a></h2>
 <p>通过以下命令启动裁剪任务：</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">export</span> <span class="n">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="mi">0</span>
-<span class="n">python</span> <span class="n">train</span><span class="p">.</span><span class="n">py</span>
+<div class="codehilite"><pre><span></span><span class="n">export</span> <span class="n">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">python</span> <span class="n">train</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
-</td></tr></table>
 
 <p>执行<code>python train.py --help</code>查看更多选项。</p>
 <h2 id="_5">注意<a class="headerlink" href="#_5" title="Permanent link">#</a></h2>

@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <link href="../../extra.css" rel="stylesheet">
   
   <script>
     // Current page data
@@ -51,6 +52,11 @@
             <li class="toctree-l1">
 		
     <a class="" href="../..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../model_zoo/">模型库</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -190,15 +196,13 @@
 <p>在当前文件夹下创建<code>'pretrain'</code>文件夹，将<code>mobilenetv1</code>模型在该文件夹下解压，解压后的目录为<code>pretrain/MobileNetV1_pretrained</code></p>
 <h3 id="_6">导出模型<a class="headerlink" href="#_6" title="Permanent link">#</a></h3>
 <p>通过运行以下命令可将模型转化为离线量化接口可用的模型：
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">python</span> <span class="n">export_model</span><span class="p">.</span><span class="n">py</span> <span class="c1">--model &quot;MobileNet&quot; --pretrained_model ./pretrain/MobileNetV1_pretrained --data imagenet</span>
+<div class="codehilite"><pre><span></span>python export_model.py --model <span class="s2">&quot;MobileNet&quot;</span> --pretrained_model ./pretrain/MobileNetV1_pretrained --data imagenet
 </pre></div>
-</td></tr></table>
 转化之后的模型存储在<code>inference_model/MobileNet/</code>文件夹下，可看到该文件夹下有<code>'model'</code>, <code>'weights'</code>两个文件。</p>
 <h3 id="_7">离线量化<a class="headerlink" href="#_7" title="Permanent link">#</a></h3>
 <p>接下来对导出的模型文件进行离线量化，离线量化的脚本为<a href="./quant_post.py">quant_post.py</a>，脚本中使用接口<code>paddleslim.quant.quant_post</code>对模型进行离线量化。运行命令为：
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">python</span> <span class="n">quant_post</span><span class="p">.</span><span class="n">py</span> <span class="c1">--model_path ./inference_model/MobileNet --save_path ./quant_model_train/MobileNet --model_filename model --params_filename weights</span>
-</pre></div>
-</td></tr></table></p>
+<div class="codehilite"><pre><span></span>python quant_post.py --model_path ./inference_model/MobileNet --save_path ./quant_model_train/MobileNet --model_filename model --params_filename weights
+</pre></div></p>
 <ul>
 <li><code>model_path</code>: 需要量化的模型坐在的文件夹</li>
 <li><code>save_path</code>: 量化后的模型保存的路径</li>
@@ -212,22 +216,18 @@
 <h3 id="_8">测试精度<a class="headerlink" href="#_8" title="Permanent link">#</a></h3>
 <p>使用<a href="./eval.py">eval.py</a>脚本对量化前后的模型进行测试，得到模型的分类精度进行对比。</p>
 <p>首先测试量化前的模型的精度，运行以下命令：
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">python</span> <span class="n">eval</span><span class="p">.</span><span class="n">py</span> <span class="c1">--model_path ./inference_model/MobileNet --model_name model --params_name weights</span>
+<div class="codehilite"><pre><span></span>python eval.py --model_path ./inference_model/MobileNet --model_name model --params_name weights
 </pre></div>
-</td></tr></table>
 精度输出为:
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">top1_acc</span><span class="o">/</span><span class="n">top5_acc</span><span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">.</span><span class="mi">70913923</span> <span class="mi">0</span><span class="p">.</span><span class="mi">89548034</span><span class="p">]</span>
-</pre></div>
-</td></tr></table></p>
+<div class="codehilite"><pre><span></span>top1_acc/top5_acc= [0.70913923 0.89548034]
+</pre></div></p>
 <p>使用以下命令测试离线量化后的模型的精度：</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">python</span> <span class="n">eval</span><span class="p">.</span><span class="n">py</span> <span class="c1">--model_path ./quant_model_train/MobileNet</span>
+<div class="codehilite"><pre><span></span>python eval.py --model_path ./quant_model_train/MobileNet
 </pre></div>
-</td></tr></table>
 
 <p>精度输出为
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">top1_acc</span><span class="o">/</span><span class="n">top5_acc</span><span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">.</span><span class="mi">70141864</span> <span class="mi">0</span><span class="p">.</span><span class="mi">89086477</span><span class="p">]</span>
+<div class="codehilite"><pre><span></span>top1_acc/top5_acc= [0.70141864 0.89086477]
 </pre></div>
-</td></tr></table>
 从以上精度对比可以看出，对<code>mobilenet</code>在<code>imagenet</code>上的分类模型进行离线量化后 <code>top1</code>精度损失为<code>0.77%</code>， <code>top5</code>精度损失为<code>0.46%</code>. </p>
               
             </div>
@@ -239,7 +239,7 @@
         <a href="../quant_aware_demo/" class="btn btn-neutral float-right" title="量化训练">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../.." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../model_zoo/" class="btn btn-neutral" title="模型库"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -267,7 +267,7 @@
           <a href="https://github.com/PaddlePaddle/PaddleSlim/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../.." style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../../model_zoo/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
         <span style="margin-left: 15px"><a href="../quant_aware_demo/" style="color: #fcfcfc">Next &raquo;</a></span>

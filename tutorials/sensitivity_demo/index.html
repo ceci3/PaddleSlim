@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <link href="../../extra.css" rel="stylesheet">
   
   <script>
     // Current page data
@@ -51,6 +52,11 @@
             <li class="toctree-l1">
 		
     <a class="" href="../..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../model_zoo/">模型库</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -171,11 +177,9 @@
 </ul>
 <h2 id="2">2. 运行示例<a class="headerlink" href="#2" title="Permanent link">#</a></h2>
 <p>在路径<code>PaddleSlim/demo/sensitive</code>下执行以下代码运行示例：</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">export</span> <span class="n">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="mi">0</span>
-<span class="n">python</span> <span class="n">train</span><span class="p">.</span><span class="n">py</span> <span class="c1">--model &quot;MobileNetV1&quot;</span>
+<div class="codehilite"><pre><span></span><span class="nb">export</span> <span class="nv">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="m">0</span>
+python train.py --model <span class="s2">&quot;MobileNetV1&quot;</span>
 </pre></div>
-</td></tr></table>
 
 <p>通过<code>python train.py --help</code>查看更多选项。</p>
 <h2 id="3">3. 重要步骤说明<a class="headerlink" href="#3" title="Permanent link">#</a></h2>
@@ -184,53 +188,35 @@
 <p>调用<code>paddleslim.prune.sensitivity</code>接口计算敏感度。敏感度信息会追加到<code>sensitivities_file</code>选项所指定的文件中，如果需要重新计算敏感度，需要先删除<code>sensitivities_file</code>文件。</p>
 <p>如果模型评估速度较慢，可以通过多进程的方式加速敏感度计算过程。比如在进程1中设置<code>pruned_ratios=[0.1, 0.2, 0.3, 0.4]</code>，并将敏感度信息存放在文件<code>sensitivities_0.data</code>中，然后在进程2中设置<code>pruned_ratios=[0.5, 0.6, 0.7]</code>，并将敏感度信息存储在文件<code>sensitivities_1.data</code>中。这样每个进程只会计算指定剪切率下的敏感度信息。多进程可以运行在单机多卡，或多机多卡。</p>
 <p>代码如下：</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3
-4
-5
-6
-7
-8</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="o">#</span> <span class="err">进程</span><span class="mi">1</span>
+<div class="codehilite"><pre><span></span><span class="c1"># 进程1</span>
 <span class="n">sensitivity</span><span class="p">(</span>
     <span class="n">val_program</span><span class="p">,</span>
     <span class="n">place</span><span class="p">,</span>
     <span class="n">params</span><span class="p">,</span>
     <span class="n">test</span><span class="p">,</span>
-    <span class="n">sensitivities_file</span><span class="o">=</span><span class="ss">&quot;sensitivities_0.data&quot;</span><span class="p">,</span>
-    <span class="n">pruned_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">4</span><span class="p">])</span>
+    <span class="n">sensitivities_file</span><span class="o">=</span><span class="s2">&quot;sensitivities_0.data&quot;</span><span class="p">,</span>
+    <span class="n">pruned_ratios</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">])</span>
 </pre></div>
-</td></tr></table>
 
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3
-4
-5
-6
-7
-8</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="o">#</span> <span class="err">进程</span><span class="mi">2</span>
+<div class="codehilite"><pre><span></span><span class="c1"># 进程2</span>
 <span class="n">sensitivity</span><span class="p">(</span>
     <span class="n">val_program</span><span class="p">,</span>
     <span class="n">place</span><span class="p">,</span>
     <span class="n">params</span><span class="p">,</span>
     <span class="n">test</span><span class="p">,</span>
-    <span class="n">sensitivities_file</span><span class="o">=</span><span class="ss">&quot;sensitivities_1.data&quot;</span><span class="p">,</span>
-    <span class="n">pruned_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">7</span><span class="p">])</span>
+    <span class="n">sensitivities_file</span><span class="o">=</span><span class="s2">&quot;sensitivities_1.data&quot;</span><span class="p">,</span>
+    <span class="n">pruned_ratios</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">])</span>
 </pre></div>
-</td></tr></table>
 
 <h3 id="32">3.2 合并敏感度<a class="headerlink" href="#32" title="Permanent link">#</a></h3>
 <p>如果用户通过上一节多进程的方式生成了多个存储敏感度信息的文件，可以通过<code>paddleslim.prune.merge_sensitive</code>将其合并，合并后的敏感度信息存储在一个<code>dict</code>中。代码如下：</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">sens</span> <span class="o">=</span> <span class="n">merge_sensitive</span><span class="p">([</span><span class="ss">&quot;./sensitivities_0.data&quot;</span><span class="p">,</span> <span class="ss">&quot;./sensitivities_1.data&quot;</span><span class="p">])</span>
+<div class="codehilite"><pre><span></span><span class="n">sens</span> <span class="o">=</span> <span class="n">merge_sensitive</span><span class="p">([</span><span class="s2">&quot;./sensitivities_0.data&quot;</span><span class="p">,</span> <span class="s2">&quot;./sensitivities_1.data&quot;</span><span class="p">])</span>
 </pre></div>
-</td></tr></table>
 
 <h3 id="33">3.3 计算剪裁率<a class="headerlink" href="#33" title="Permanent link">#</a></h3>
 <p>调用<code>paddleslim.prune.get_ratios_by_loss</code>接口计算一组剪裁率。</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">ratios</span> <span class="o">=</span> <span class="n">get_ratios_by_loss</span><span class="p">(</span><span class="n">sens</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">01</span><span class="p">)</span>
+<div class="codehilite"><pre><span></span><span class="n">ratios</span> <span class="o">=</span> <span class="n">get_ratios_by_loss</span><span class="p">(</span><span class="n">sens</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
 </pre></div>
-</td></tr></table>
 
 <p>其中，<code>0.01</code>为一个阈值，对于任意卷积层，其剪裁率为使精度损失低于阈值<code>0.01</code>的最大剪裁率。</p>
 <p>用户在计算出一组剪裁率之后可以通过接口<code>paddleslim.prune.Pruner</code>剪裁网络，并用接口<code>paddleslim.analysis.flops</code>计算<code>FLOPs</code>。如果<code>FLOPs</code>不满足要求，调整阈值重新计算出一组剪裁率。</p>

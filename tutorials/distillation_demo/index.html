@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <link href="../../extra.css" rel="stylesheet">
   
   <script>
     // Current page data
@@ -51,6 +52,11 @@
             <li class="toctree-l1">
 		
     <a class="" href="../..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../model_zoo/">模型库</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -189,17 +195,7 @@
 <p>一般情况下，模型参数量越多，结构越复杂，其性能越好，但运算量和资源消耗也越大。<strong>知识蒸馏</strong> 就是一种将大模型学习到的有用信息（Dark Knowledge）压缩进更小更快的模型，而获得可以匹敌大模型结果的方法。</p>
 <p>在本示例中精度较高的大模型被称为teacher，精度稍逊但速度更快的小模型被称为student。</p>
 <h3 id="1-student_program">1. 定义student_program<a class="headerlink" href="#1-student_program" title="Permanent link">#</a></h3>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">student_program</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">Program</span><span class="p">()</span>
+<div class="codehilite"><pre><span></span><span class="n">student_program</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">Program</span><span class="p">()</span>
 <span class="n">student_startup</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">Program</span><span class="p">()</span>
 <span class="k">with</span> <span class="n">fluid</span><span class="o">.</span><span class="n">program_guard</span><span class="p">(</span><span class="n">student_program</span><span class="p">,</span> <span class="n">student_startup</span><span class="p">):</span>
     <span class="n">image</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">data</span><span class="p">(</span>
@@ -211,29 +207,11 @@
     <span class="n">cost</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">cross_entropy</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="n">out</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
     <span class="n">avg_cost</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">cost</span><span class="p">)</span>
 </pre></div>
-</td></tr></table>
 
 <h3 id="2-teacher_program">2. 定义teacher_program<a class="headerlink" href="#2-teacher_program" title="Permanent link">#</a></h3>
 <p>在定义好<code>teacher_program</code>后，可以一并加载训练好的pretrained_model。</p>
 <p>在<code>teacher_program</code>内需要加上<code>with fluid.unique_name.guard():</code>，保证teacher的变量命名不被<code>student_program</code>影响，从而能够正确地加载预训练参数。</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">teacher_program</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">Program</span><span class="p">()</span>
+<div class="codehilite"><pre><span></span><span class="n">teacher_program</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">Program</span><span class="p">()</span>
 <span class="n">teacher_startup</span> <span class="o">=</span> <span class="n">fluid</span><span class="o">.</span><span class="n">Program</span><span class="p">()</span>
 <span class="k">with</span> <span class="n">fluid</span><span class="o">.</span><span class="n">program_guard</span><span class="p">(</span><span class="n">teacher_program</span><span class="p">,</span> <span class="n">teacher_startup</span><span class="p">):</span>
     <span class="k">with</span> <span class="n">fluid</span><span class="o">.</span><span class="n">unique_name</span><span class="o">.</span><span class="n">guard</span><span class="p">():</span>
@@ -252,28 +230,10 @@
     <span class="n">main_program</span><span class="o">=</span><span class="n">teacher_program</span><span class="p">,</span>
     <span class="n">predicate</span><span class="o">=</span><span class="n">if_exist</span><span class="p">)</span>
 </pre></div>
-</td></tr></table>
 
 <h3 id="3">3.选择特征图<a class="headerlink" href="#3" title="Permanent link">#</a></h3>
 <p>定义好<code>student_program</code>和<code>teacher_program</code>后，我们需要从中两两对应地挑选出若干个特征图，留待后续为其添加知识蒸馏损失函数。</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="c1"># get all student variables</span>
+<div class="codehilite"><pre><span></span><span class="c1"># get all student variables</span>
 <span class="n">student_vars</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">student_program</span><span class="o">.</span><span class="n">list_vars</span><span class="p">():</span>
     <span class="k">try</span><span class="p">:</span>
@@ -292,29 +252,18 @@
 <span class="k">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">50</span><span class="o">+</span><span class="s2">&quot;teacher_model_vars&quot;</span><span class="o">+</span><span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">50</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="n">teacher_vars</span><span class="p">)</span>
 </pre></div>
-</td></tr></table>
 
 <h3 id="4-programmerge">4. 合并Program（merge）<a class="headerlink" href="#4-programmerge" title="Permanent link">#</a></h3>
 <p>PaddlePaddle使用Program来描述计算图，为了同时计算student和teacher两个Program，这里需要将其两者合并（merge）为一个Program。</p>
 <p>merge过程操作较多，具体细节请参考<a href="https://paddlepaddle.github.io/PaddleSlim/api/single_distiller_api/#merge">merge API文档</a>。</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">data_name_map</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="s1">&#39;image&#39;</span><span class="p">}</span>
-<span class="n">student_program</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">teacher_program</span><span class="p">,</span> <span class="n">student_program</span><span class="p">,</span> <span class="n">data_name_map</span><span class="p">,</span> <span class="n">place</span><span class="p">)</span>
+<div class="codehilite"><pre><span></span><span class="n">data_name_map</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="s1">&#39;image&#39;</span><span class="p">}</span>
+<span class="n">merge</span><span class="p">(</span><span class="n">teacher_program</span><span class="p">,</span> <span class="n">student_program</span><span class="p">,</span> <span class="n">data_name_map</span><span class="p">,</span> <span class="n">place</span><span class="p">)</span>
 </pre></div>
-</td></tr></table>
 
 <h3 id="5loss">5.添加蒸馏loss<a class="headerlink" href="#5loss" title="Permanent link">#</a></h3>
 <p>在添加蒸馏loss的过程中，可能还会引入部分变量（Variable），为了避免命名重复这里可以使用<code>with fluid.name_scope("distill"):</code>为新引入的变量加一个命名作用域。</p>
 <p>另外需要注意的是，merge过程为<code>teacher_program</code>的变量统一加了名称前缀，默认是<code>"teacher_"</code>, 这里在添加<code>l2_loss</code>时也要为teacher的变量加上这个前缀。</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
-2
-3
-4
-5
-6
-7
-8
-9</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="k">with</span> <span class="n">fluid</span><span class="o">.</span><span class="n">program_guard</span><span class="p">(</span><span class="n">student_program</span><span class="p">,</span> <span class="n">student_startup</span><span class="p">):</span>
+<div class="codehilite"><pre><span></span><span class="k">with</span> <span class="n">fluid</span><span class="o">.</span><span class="n">program_guard</span><span class="p">(</span><span class="n">student_program</span><span class="p">,</span> <span class="n">student_startup</span><span class="p">):</span>
     <span class="k">with</span> <span class="n">fluid</span><span class="o">.</span><span class="n">name_scope</span><span class="p">(</span><span class="s2">&quot;distill&quot;</span><span class="p">):</span>
         <span class="n">distill_loss</span> <span class="o">=</span> <span class="n">l2_loss</span><span class="p">(</span><span class="s1">&#39;teacher_bn5c_branch2b.output.1.tmp_3&#39;</span><span class="p">,</span>
             <span class="s1">&#39;depthwise_conv2d_11.tmp_0&#39;</span><span class="p">,</span> <span class="n">student_program</span><span class="p">)</span>
@@ -324,7 +273,6 @@
         <span class="n">opt</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
 <span class="n">exe</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">student_startup</span><span class="p">)</span>
 </pre></div>
-</td></tr></table>
 
 <p>至此，我们就得到了用于蒸馏训练的<code>student_program</code>，后面就可以使用一个普通program一样对其开始训练和评估。</p>
               
