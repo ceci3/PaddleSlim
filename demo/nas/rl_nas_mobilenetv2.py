@@ -8,8 +8,10 @@ import argparse
 import ast
 import logging
 import paddle
-import paddle.fluid as fluid
-from paddle.fluid.param_attr import ParamAttr
+import paddle.nn as nn
+import paddle.static as static
+import paddle.nn.functional as F
+import paddle.vision.transforms as T
 from paddleslim.nas import RLNAS
 from paddleslim.common import get_logger
 from optimizer import create_optimizer
@@ -86,6 +88,17 @@ def search_mobilenetv2(config, args, image_size, is_server=True):
             is_server=False)
 
     image_shape = [3, image_size, image_size]
+    if args.data == 'cifar10':
+        transform = T.Compose([T.Transpose(), T.Normalize([127.5], [127.5])])
+        train_dataset = paddle.vision.datasets.Cifar10(
+            mode='train', transform=transform, backend='cv2')
+        val_dataset = paddle.vision.datasets.Cifar10(
+            mode='test', transform=transform, backend='cv2')
+
+    elif args.data == 'imagenet':
+        train_dataset = imagenet_reader.ImageNetDataset(mode='train')
+        val_dataset = imagenet_reader.ImageNetDataset(mode='val')
+
     for step in range(args.search_steps):
         archs = rl_nas.next_archs(1)[0][0]
 

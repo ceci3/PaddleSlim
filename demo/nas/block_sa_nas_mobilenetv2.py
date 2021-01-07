@@ -6,8 +6,11 @@ import ast
 import logging
 import time
 import paddle
-import paddle.fluid as fluid
-from paddle.fluid.param_attr import ParamAttr
+import paddle.nn as nn
+import paddle.nn.functional as F
+import paddle.vision.transforms as T
+import paddle.static as static
+from paddle import ParamAttr
 from paddleslim.analysis import flops
 from paddleslim.nas import SANAS
 from paddleslim.common import get_logger
@@ -61,6 +64,19 @@ def conv_bn_layer(input,
 
 def search_mobilenetv2_block(config, args, image_size):
     image_shape = [3, image_size, image_size]
+    transform = T.Compose([T.Transpose(), T.Normalize([127.5], [127.5])])
+    if args.data == 'cifar10':
+        train_dataset = paddle.vision.datasets.Cifar10(
+            mode='train', transform=transform, backend='cv2')
+        val_dataset = paddle.vision.datasets.Cifar10(
+            mode='test', transform=transform, backend='cv2')
+
+    elif args.data == 'imagenet':
+        train_dataset = imagenet_reader.ImageNetDataset(mode='train')
+        val_dataset = imagenet_reader.ImageNetDataset(mode='val')
+
+    places = static.cuda_places() if args.use_gpu else static.cpu_places()
+    place = places[0]
     if args.is_server:
         sa_nas = SANAS(
             config,
